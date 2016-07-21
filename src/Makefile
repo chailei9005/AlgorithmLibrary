@@ -1,8 +1,10 @@
 OBJS = main.o DisjointSet.o
+
 CC = g++ -std=c++11
+
 APP_NAME = demo
 
-demo: $(OBJS)
+$(APP_NAME): $(OBJS)
 	$(CC) -o $(APP_NAME) $(OBJS)
 
 $(OBJS): %.o: %.cpp
