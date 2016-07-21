@@ -1,16 +1,15 @@
-# Objects
 OBJS = main.o DisjointSet.o
-
-# Compiler
 CC = g++ -std=c++11
+APP_NAME = demo
 
 demo: $(OBJS)
-	$(CC) -o demo $(OBJS)
+	$(CC) -o $(APP_NAME) $(OBJS)
 
-%.o: %.c
+$(OBJS): %.o: %.cpp
+	$(CC) -c $< -o $@
 
 clean:
-	rm demo ${OBJS}
+	rm $(APP_NAME) ${OBJS}
 
 run:
-	@./demo
+	@./$(APP_NAME)
