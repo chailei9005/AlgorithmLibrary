@@ -1,5 +1,5 @@
 # Objects
-OBJS = main.o 
+OBJS = main.o DisjointSet.o
 
 # Compiler
 CC = g++ -std=c++11
@@ -7,11 +7,10 @@ CC = g++ -std=c++11
 demo: $(OBJS)
 	$(CC) -o demo $(OBJS)
 
-main.o: main.cpp
-	$(CC) -c main.cpp
+%.o: %.c
 
 clean:
 	rm demo ${OBJS}
 
 run:
-	./demo
+	@./demo
