@@ -11,6 +11,12 @@ $ make run
 $ make clean
 ```
 
+## Data Structures
+
+| Name | Source |
+| ---- | ------ |
+|Disjoint Set|[DisjointSet.h](./src/DisjointSet.h)  [DisjointSet.cpp](./src/DisjointSet.cpp)|
+
 ## License
 
 Copyright 2016 ChuyangLiu
