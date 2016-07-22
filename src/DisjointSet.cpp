@@ -39,22 +39,26 @@ const int& DisjointSet::operator[](const unsigned &i) const {
 }
 
 unsigned DisjointSet::size() const {
-    return arr.size();
+    return (unsigned)arr.size();
 }
 
 void DisjointSet::test() {
-    DisjointSet s(9);
-
-    cout << "Input two numbers you want to add to the disjoint set: (input -1 -1 to end)\n";
-    int a, b;
-    while (cin >> a >> b) {
+    DisjointSet s(10);
+    while (true) {
+        cout << "Input two numbers you want to add to the same set: (-1 to end)\n";
+        int a, b;
+        cin >> a >> b;
         if (a == -1 || b == -1) break;
         s.union_(a, b);
     }
-
-    cout << "Set content:\n";
+    cout << "\nBefore path compression:\n";
     for (unsigned i = 0; i < s.size(); ++i) {
-        cout << s[i] << " ";
+        cout << "Array[" << i << "] = " << s[i];
+        cout << " / Root of vertex " << i << ": " << s.find(i) << endl;
     }
-    cout << endl;
+    cout << "\nAfter path compression:\n";
+    for (unsigned i = 0; i < s.size(); ++i) {
+        cout << "Array[" << i << "] = " << s[i];
+        cout << " / Root of vertex " << i << ": " << s.find(i) << endl;
+    }
 }

@@ -36,16 +36,16 @@ public:
     unsigned size() const;
 
     /*
-    Test program.
+    Test the function of the class.
 
-    Sample #1 (size = 9):
-    5 6
-    7 8
-    6 8
-    5 7
-    2 3
-    3 7
-    8 4
+    Sample #1 (size = 10):
+    2 0
+    2 4
+    3 5
+    3 6
+    5 9
+    7 4
+    4 6
     -1 -1
     */
     static void test();
