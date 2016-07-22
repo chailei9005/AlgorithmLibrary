@@ -15,7 +15,7 @@ $ make clean
 
 | Name | Source |
 | ---- | ------ |
-|Disjoint Set|[DisjointSet.h](./src/DisjointSet.h) [DisjointSet.cpp](./src/DisjointSet.cpp)|
+|[Disjoint Set](https://en.wikipedia.org/wiki/Disjoint-set_data_structure)|[DisjointSet.h](./src/DisjointSet.h) [DisjointSet.cpp](./src/DisjointSet.cpp)|
 
 ## License
 
