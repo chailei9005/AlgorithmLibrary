@@ -11,8 +11,10 @@ using std::cin;
 namespace sl {
 
 /*
-A min-heap.
-Type T must overload operator< function.
+A min-root heap.
+Precondition: Type T must overload operator< function.
+              To run BinaryHeap<T>::test(), operator>>
+              and operator<< must also be implemented.
 */
 template <typename T>
 class BinaryHeap {
@@ -108,18 +110,16 @@ public:
     Test the function of the class.
 
     Sample #1:
-    21 16 36 65 32 24 31 19 68 13 0
+    21 16 36 65 32 24 31 19 68 13
 
     Sample #2:
-    150 80 40 30 10 70 110 100 20 90 60 50 120 140 130 0
+    150 80 40 30 10 70 110 100 20 90 60 50 120 140 130
     */
     static void test() {
         BinaryHeap<T> h(100);
-        cout << "Input elements to insert to the binary heap: (0 to end)" << endl;
-        while (1) {
-            T tmp;
-            cin >> tmp;
-            if (tmp == 0) break;
+        cout << "Input elements to insert to the binary heap: (EOF to end)" << endl;
+        T tmp;
+        while (cin >> tmp) {
             h.push(tmp);
         }
         cout << "\nHeap array content:" << endl;

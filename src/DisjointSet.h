@@ -10,7 +10,8 @@ public:
     ~DisjointSet();
 
     /*
-    Union two numbers
+    Union two numbers to the same set.
+    (union by size)
 
     @param a the first number
     @param b the second number
