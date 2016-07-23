@@ -1,6 +1,6 @@
 # DataStructureAndAlgorithm
 
-A library that contains useful data structures and algorithms.
+A library that contains useful data structures and algorithms written in c/c++.
 
 ## Compile and Run
 
