@@ -11,10 +11,12 @@ using std::cin;
 namespace sl {
 
 /*
-A min-root heap.
+A min-root heap data structure.
 Precondition: Type T must overload operator< function.
               To run BinaryHeap<T>::test(), operator>>
               and operator<< must also be implemented.
+
+For usage, see function test().
 */
 template <typename T>
 class BinaryHeap {

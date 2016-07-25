@@ -4,6 +4,11 @@
 
 namespace sl {
 
+/*
+A disjoint set data structure.
+
+For usage, see function test().
+*/
 class DisjointSet {
 public:
     DisjointSet(const unsigned &size);
