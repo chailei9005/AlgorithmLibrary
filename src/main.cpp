@@ -7,7 +7,7 @@ using namespace sl;
 void test() {
     //DisjointSet::test();
     //BinaryHeap<int>::test();
-    AVLTree<int>::test();
+    //AVLTree<int>::test();
 }
 
 int main() {

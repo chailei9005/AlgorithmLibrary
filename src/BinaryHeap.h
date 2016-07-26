@@ -19,6 +19,8 @@ Type T must overload:
 3. operator >> for running test. (not compulsory)
 
 For usage, see function test().
+
+TODO make the size of the heap mutable.
 */
 template <typename T>
 class BinaryHeap {
@@ -114,29 +116,51 @@ public:
     Test the function of the class.
 
     Sample #1:
-    21 16 36 65 32 24 31 19 68 13
-
-    Sample #2:
-    150 80 40 30 10 70 110 100 20 90 60 50 120 140 130
+    push 3
+    push 2
+    push 7
+    push 1
+    push 9
+    push 8
+    push 4
+    push 0
+    push 5
+    push 6
     */
     static void test() {
-        BinaryHeap<T> h(100);
-        cout << "Input elements to insert to the binary heap: (EOF to end)" << endl;
+        BinaryHeap<T> heap(100);
         T tmp;
-        while (cin >> tmp) {
-            h.push(tmp);
+        std::string oper;
+        cout << "Operations available:\n"
+            << "1. push x (push element x)\n"
+            << "2. front  (get front element)\n"
+            << "3. pop    (pop an element)\n"
+            << "4. size   (get the number of elements in the heap)\n"
+            << "5. sort   (front and pop until the heap is empty)\n"
+            << endl;
+        while (1) {
+            cout << "Input operation: ";
+            cin >> oper;
+            if (oper == "push") {
+                cin >> tmp;
+                heap.push(tmp);
+            } else if (oper == "front") {
+                cout << heap.front() << endl;
+            } else if (oper == "pop") {
+                heap.pop();
+            } else if (oper == "size") {
+                cout << heap.size() << endl;
+            } else if (oper == "sort") {
+                while (!heap.isEmpty()) {
+                    T ele = heap.front();
+                    cout << ele << " ";
+                    heap.pop();
+                }
+                cout << endl;
+            } else {
+                cout << "Invalid operation." << endl;
+            }
         }
-        cout << "\nHeap array content:" << endl;
-        for (unsigned i = 0; i <= h.size(); ++i) {
-            cout << "arr[" << i << "] = " << h.arr[i] << endl;
-        }
-        cout << "\nPop until the heap is empty:" << endl;
-        while (!h.isEmpty()) {
-            T ele = h.front();
-            cout << ele << " ";
-            h.pop();
-        }
-        cout << endl;
     }
 
 private:
