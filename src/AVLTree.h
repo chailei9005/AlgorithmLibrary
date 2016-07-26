@@ -1,19 +1,24 @@
 #pragma once
 
 #include <functional>
+#include <stdexcept>
+#include <new>
+#include <algorithm>
 
 namespace sl {
 
 /*
 An AVL-Tree data structure.
 
-The definition of balance:
-abs(Height(left subtree) - Height(right subtree)) <= 1
+Definition of a balanced tree:
+abs(height(left-subtree) - height(right-subtree)) <= 1
 
-Precondition: Type T must overload operator< and 
-              operator== function.
-              To run AVLTree<T>::test(), operator>>
-              and operator<< must also be implemented.
+Type T must overload:
+1. operator <  for comparing.
+1. operator >  for comparing.
+2. operator == for comparing.
+3. operator << for running test. (not compulsory)
+4. operator >> for running test. (not compulsory)
 
 For usage, see function test().
 */
@@ -83,14 +88,31 @@ public:
     @param ele the element to be inserted.
     */
     void insert(const T &ele) {
-        // TODO insert
+        root = balancedInsert(ele, root);
+    }
+
+    /*
+    Remove an element from the tree.
+
+    @param ele the element to be removed.
+    */
+    void remove(const T &ele) {
+        root = balancedRemove(ele, root);
     }
 
     /*
     Test the function of the class.
 
     Sample #1:
-    3 2 1 4 5 6 7 16 15 14 13 12 11 10 8 9 0
+    3 2 1 4 5 6 7 16 15 14 13 12 11 10 8 9
+
+    Result:
+    Postorder:
+    1 3 2 5 6 4 8 10 9 12 11 14 16 15 13 7
+    Inorder:
+    1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+    Preorder:
+    7 4 2 1 3 6 5 13 11 9 8 10 12 15 14 16
     */
     static void test() {
         AVLTree<T> tree;
@@ -99,7 +121,7 @@ public:
         while (cin >> tmp) {
             tree.insert(tmp);
         }
-        auto f = [&](const T &ele) {
+        auto f = [](const T &ele) {
             cout << ele << " ";
         };
         cout << "\nPostorder: \n";
@@ -118,6 +140,14 @@ public:
             } else {
                 cout << "Element " << tmp << " not found.\n";
             }
+            cout << "Input element you want to remove: ";
+            cin >> tmp;
+            if (tree.has(tmp)) {
+                tree.remove(tmp);
+                cout << "Element " << tmp << " removed.\n";
+            } else {
+                cout << "Element " << tmp << " not found.\n";
+            }
         }
     }
 
@@ -133,6 +163,15 @@ private:
     */
     int height(TreeNode *root) const {
         return root ? root->height : -1;
+    }
+
+    /*
+    Update the height of the tree.
+
+    @param root the root of the tree.
+    */
+    void updateHeight(TreeNode *root) {
+        root->height = 1 + std::max(height(root->left), height(root->right));
     }
 
     /*
@@ -198,6 +237,112 @@ private:
             preorder(root->left, f);
             preorder(root->right, f);
         }
+    }
+
+    /*
+    Insert an element to the tree and maintain the balance.
+
+    @param e the element to insert
+    @param root the root of the current tree
+    @return the new root of the tree that has
+            inserted the element.
+    */
+    TreeNode* balancedInsert(const T &e, TreeNode *root) {
+        if (root == nullptr) {
+            root = new (std::nothrow) TreeNode(e);
+            if (!root) {
+                throw std::bad_alloc();
+            }
+        } else if (e < root->val) {
+            root->left = balancedInsert(e, root->left);
+            if (height(root->left) - height(root->right) == 2) {  // Balance is broken
+                if (e < root->left->val) {
+                    root = rotateSingleLeft(root);
+                } else if (e > root->left->val) {
+                    root = rotateDoubleLeft(root);
+                }
+            }
+        } else if (e > root->val) {
+            root->right = balancedInsert(e, root->right);
+            if (height(root->right) - height(root->left) == 2) {  // Balance is broken
+                if (e > root->right->val) {
+                    root = rotateSingleRight(root);
+                } else if (e < root->right->val) {
+                    root = rotateDoubleRight(root);
+                }
+            }
+        }
+        updateHeight(root);
+        return root;
+    }
+
+    /*
+    Remove an element from the tree and maintain the balance.
+
+    @param e the element to remove
+    @param root the root of the current tree
+    @return the new root of the tree that has
+            removed the element.
+    */
+    TreeNode* balancedRemove(const T &e, TreeNode *root) {
+        // TODO remove
+        return root;
+    }
+
+    /*
+    Single rotation with left when inserting into
+    the left subtree of the left child.
+
+    @param param root the root of the tree to be rotated
+    @return the new root of the tree after rotation
+    */
+    TreeNode* rotateSingleLeft(TreeNode* root) {
+        TreeNode* leftChild = root->left;
+        root->left = leftChild->right;
+        leftChild->right = root;
+        updateHeight(root);
+        updateHeight(leftChild);
+        return leftChild;
+    }
+
+    /*
+    Single rotation with right when inserting into
+    the right subtree of the right child.
+
+    @param param root the root of the tree to be rotated
+    @return the new root of the tree after rotation
+    */
+    TreeNode* rotateSingleRight(TreeNode* root) {
+        TreeNode* rightChild = root->right;
+        root->right = rightChild->left;
+        rightChild->left = root;
+        updateHeight(root);
+        updateHeight(rightChild);
+        return rightChild;
+    }
+
+    /*
+    Double rotation with left when inserting into
+    the right subtree of the left child.
+
+    @param param root the root of the tree to be rotated
+    @return the new root of the tree after rotation
+    */
+    TreeNode* rotateDoubleLeft(TreeNode* root) {
+        root->left = rotateSingleRight(root->left);
+        return rotateSingleLeft(root);
+    }
+
+    /*
+    Double rotation with right when inserting into
+    the left subtree of the right child.
+
+    @param param root the root of the tree to be rotated
+    @return the new root of the tree after rotation
+    */
+    TreeNode* rotateDoubleRight(TreeNode* root) {
+        root->right = rotateSingleLeft(root->right);
+        return rotateSingleRight(root);
     }
 
     /*

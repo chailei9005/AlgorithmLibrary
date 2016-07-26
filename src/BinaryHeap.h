@@ -12,9 +12,11 @@ namespace sl {
 
 /*
 A min-root heap data structure.
-Precondition: Type T must overload operator< function.
-              To run BinaryHeap<T>::test(), operator>>
-              and operator<< must also be implemented.
+
+Type T must overload:
+1. operator <  for comparing.
+2. operator << for running test. (not compulsory)
+3. operator >> for running test. (not compulsory)
 
 For usage, see function test().
 */
