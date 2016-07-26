@@ -63,6 +63,33 @@ public:
     }
 
     /*
+    Return whether the tree is empty.
+    */
+    bool isEmpty() const {
+        return !root;
+    }
+
+    /*
+    Return the minimum element of the tree.
+    */
+    T min() const {
+        if (isEmpty()) {
+            throw std::range_error("AVLTree.min(): Tree is empty");
+        }
+        return findMin(root)->val;
+    }
+
+    /*
+    Return the maximum element of the tree.
+    */
+    T max() const {
+        if (isEmpty()) {
+            throw std::range_error("AVLTree.max(): Tree is empty");
+        }
+        return findMax(root)->val;
+    }
+
+    /*
     Traverse the tree in postorder.
     */
     void traverseInPostorder(const std::function<void(const T&)> &f) const {
@@ -144,9 +171,11 @@ public:
             << "4. post (print the tree in postorder)\n"
             << "5. in   (print the tree in inorder)\n"
             << "6. pre  (print the tree in preorder)\n"
+            << "7. min  (print the minimum element of the tree)\n"
+            << "8. max  (print the maximum element of the tree)\n"
             << endl;
         while (1) {
-            cout << "Input operation:\n";
+            cout << "Input operation: ";
             cin >> oper;
             if (oper == "i") {
                 cin >> tmp;
@@ -175,6 +204,12 @@ public:
             } else if (oper == "pre") {
                 tree.traverseInPreorder(f);
                 cout << endl;
+            } else if (oper == "min") {
+                cout << tree.min() << endl;
+            } else if (oper == "max") {
+                cout << tree.max() << endl;
+            } else {
+                cout << "Invalid operation." << endl;
             }
         }
     }
@@ -212,7 +247,7 @@ private:
             the tree.
     */
     TreeNode* find(const T &ele, TreeNode *root) const {
-        if (root == nullptr || root->val == ele) {
+        if (!root || root->val == ele) {
             return root;
         } else if (ele < root->val) {
             return find(ele, root->left);
@@ -247,7 +282,7 @@ private:
         if (!root || root->right == nullptr) {
             return root;
         } else {
-            return findMin(root->right);
+            return findMax(root->right);
         }
     }
 
@@ -280,6 +315,7 @@ private:
             inorder(root->right, f);
         }
     }
+
     /*
     Traverse the tree in preorder.
 
