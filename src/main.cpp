@@ -2,8 +2,6 @@
 #include "BinaryHeap.h"
 #include "AVLTree.h"
 
-#include <string>
-
 using namespace sl;
 
 void test() {

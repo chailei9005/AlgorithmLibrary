@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <new>
 #include <algorithm>
+#include <string>
 
 namespace sl {
 
@@ -104,7 +105,22 @@ public:
     Test the function of the class.
 
     Sample #1:
-    3 2 1 4 5 6 7 16 15 14 13 12 11 10 8 9
+    i 3
+    i 2
+    i 1
+    i 4
+    i 5
+    i 6
+    i 7
+    i 16
+    i 15
+    i 14
+    i 13
+    i 12 
+    i 11
+    i 10 
+    i 8
+    i 9
 
     Result:
     Postorder:
@@ -116,37 +132,49 @@ public:
     */
     static void test() {
         AVLTree<T> tree;
-        cout << "Input elements to be inserted into the AVL tree: (EOF to end)" << endl;
         T tmp;
-        while (cin >> tmp) {
-            tree.insert(tmp);
-        }
+        std::string oper;
         auto f = [](const T &ele) {
             cout << ele << " ";
         };
-        cout << "\nPostorder: \n";
-        tree.traverseInPostorder(f);
-        cout << "\nInorder: \n";
-        tree.traverseInInorder(f);
-        cout << "\nPreorder: \n";
-        tree.traverseInPreorder(f);
-        cout << "\n" << endl;
-        cin.clear();
-        while (cin) {
-            cout << "Input element you want to find: ";
-            cin >> tmp;
-            if (tree.has(tmp)) {
-                cout << "Element " << tmp << " found.\n";
-            } else {
-                cout << "Element " << tmp << " not found.\n";
-            }
-            cout << "Input element you want to remove: ";
-            cin >> tmp;
-            if (tree.has(tmp)) {
-                tree.remove(tmp);
-                cout << "Element " << tmp << " removed.\n";
-            } else {
-                cout << "Element " << tmp << " not found.\n";
+        cout << "Operations available:\n"
+            << "1. i x  (insert element x)\n"
+            << "2. f x  (find element x)\n"
+            << "3. r x  (remove element x)\n"
+            << "4. post (print the tree in postorder)\n"
+            << "5. in   (print the tree in inorder)\n"
+            << "6. pre  (print the tree in preorder)\n"
+            << endl;
+        while (1) {
+            cout << "Input operation:\n";
+            cin >> oper;
+            if (oper == "i") {
+                cin >> tmp;
+                tree.insert(tmp);
+            } else if (oper == "f") {
+                cin >> tmp;
+                if (tree.has(tmp)) {
+                    cout << "Element " << tmp << " found\n";
+                } else {
+                    cout << "Element " << tmp << " not found\n";
+                }
+            } else if (oper == "r") {
+                cin >> tmp;
+                if (tree.has(tmp)) {
+                    tree.remove(tmp);
+                    cout << "Element " << tmp << " removed\n";
+                } else {
+                    cout << "Element " << tmp << " not found\n";
+                }
+            } else if (oper == "post") {
+                tree.traverseInPostorder(f);
+                cout << endl;
+            } else if (oper == "in") {
+                tree.traverseInInorder(f);
+                cout << endl;
+            } else if (oper == "pre") {
+                tree.traverseInPreorder(f);
+                cout << endl;
             }
         }
     }
@@ -192,6 +220,34 @@ private:
             return find(ele, root->right);
         } else {
             return nullptr;
+        }
+    }
+
+    /*
+    Find the minimum element in the tree.
+
+    @param root the root of current tree.
+    @return the position of the minimum element in the tree.
+    */
+    TreeNode* findMin(TreeNode *root) const {
+        if (!root || root->left == nullptr) {
+            return root;
+        } else {
+            return findMin(root->left);
+        }
+    }
+
+    /*
+    Find the maximum element in the tree.
+
+    @param root the root of current tree.
+    @return the position of the maximum element in the tree.
+    */
+    TreeNode* findMax(TreeNode *root) const {
+        if (!root || root->right == nullptr) {
+            return root;
+        } else {
+            return findMin(root->right);
         }
     }
 
@@ -285,7 +341,32 @@ private:
             removed the element.
     */
     TreeNode* balancedRemove(const T &e, TreeNode *root) {
-        // TODO remove
+        if (!root) {
+            throw std::range_error("AVLTree.balancedRemove(): Element not found");
+        } else if (e < root->val) {
+            root->left = balancedRemove(e, root->left);
+        } else if (e > root->val) {
+            root->right = balancedRemove(e, root->right);
+        } else if (e == root->val) {
+            if (root->left && root->right) {  // Two child
+                TreeNode* node = findMin(root->right);
+                root->val = node->val;
+                root->right = balancedRemove(node->val, root->right);
+            } else {  // One or zero child
+                TreeNode* del = root;
+                if (root->left == nullptr) {  // Also handle the zero child situation
+                    root = root->right;
+                } else if (root->right == nullptr) {
+                    root = root->left;
+                }
+                delete del;
+            }
+
+        }
+        if (root) {
+            updateHeight(root);
+        }
+        // TODO maintain balance
         return root;
     }
 
