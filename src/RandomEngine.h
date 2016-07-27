@@ -1,8 +1,5 @@
 #pragma once
 
-#include <ctime>
-#include <cstdlib>
-
 namespace sl {
 
 /*
@@ -29,20 +26,18 @@ public:
     static double random();
 
     /*
-    Return a random double number
-    between min and max (exclude min and max)
+    Return a random double number in (min, max)
     */
     static double randDouble(const double min, const double max);
 
     /*
-    Return a random integer number
-    between min and max (include min and max)
+    Return a random integer number in [min, max]
     */
-    static int randInt(const int min, const int max);
+    static unsigned long long randInt(const unsigned long long min,
+                                      const unsigned long long max);
 
     /*
-    Return a random integer number
-    between min and max (include min and max) using library methods.
+    Return a random integer number in [min, max] using library methods.
     */
     static unsigned randLib(const unsigned min, const unsigned max);
     

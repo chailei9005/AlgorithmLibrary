@@ -1,5 +1,6 @@
 #include "RandomEngine.h"
 #include <iostream>
+#include <ctime>
 
 using sl::RandomEngine;
 using std::cout;
@@ -26,8 +27,9 @@ double RandomEngine::randDouble(const double min, const double max) {
     return random() * (max - min) + min;
 }
 
-int RandomEngine::randInt(const int min, const int max) {
-    return static_cast<int>(random() * (max - min + 1) + min);
+unsigned long long RandomEngine::randInt(const unsigned long long min,
+                                         const unsigned long long max) {
+    return static_cast<unsigned long long>(random() * (max - min + 1) + min);
 }
 
 unsigned RandomEngine::randLib(const unsigned min, const unsigned max) {
@@ -44,11 +46,24 @@ void RandomEngine::setSeed(value_type seed_) {
 }
 
 void RandomEngine::test() {
-    unsigned min, max, cnt = 0;
+    unsigned min, max, cnt = 0, n = 10;
     cout << "Input the range of the random number: ";
     cin >> min >> max;
-    while ((++cnt) <= 20) {
-        double num = RandomEngine::randDouble(min, max);
+    cout << "\nGenerate " << n << " integers:" << endl;
+    while ((++cnt) <= n) {
+        auto num = RandomEngine::randInt(min, max);
+        cout << num << endl;
+    }
+    cnt = 0;
+    cout << "\nGenerate " << n << " integers using library methods:" << endl;
+    while ((++cnt) <= n) {
+        auto num = RandomEngine::randInt(min, max);
+        cout << num << endl;
+    }
+    cnt = 0;
+    cout << "\nGenerate " << n << " double numbers:" << endl;
+    while ((++cnt) <= n) {
+        auto num = RandomEngine::randDouble(min, max);
         cout << num << endl;
     }
 }
