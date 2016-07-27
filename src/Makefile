@@ -1,4 +1,4 @@
-OBJS = main.o DisjointSet.o
+OBJS = main.o DisjointSet.o ArithmeticExpression.o
 
 CC = g++ -std=c++11
 
