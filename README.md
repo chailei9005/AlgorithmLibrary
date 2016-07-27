@@ -24,6 +24,7 @@ $ make clean
 | Name | Source |
 | ---- | ------ |
 |Sorting|[SortHelper.h](./src/SortHelper.h)|
+|Arithmetic expression calculation|[ArithmeticExpression.h](./src/ArithmeticExpression.h) [ArithmeticExpression.cpp](./src/ArithmeticExpression.cpp)|
 
 ## License
 
