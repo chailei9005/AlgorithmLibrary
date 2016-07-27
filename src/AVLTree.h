@@ -27,7 +27,7 @@ template <typename T>
 class AVLTree {
 public:
     /*
-    Definition of tree node.
+    Definition of the tree node.
     */
     struct TreeNode {
         T val;
@@ -38,19 +38,19 @@ public:
             : val(v), left(l), right(r), height(0) {}
     };
 
-    /*
-    Forbid copy.
-    */
-    AVLTree(const AVLTree<T> &tree) = delete;;
-    AVLTree<T>& operator=(const AVLTree<T> &tree) = delete;
-
-    AVLTree() {
+    AVLTree() : root(nullptr) {
     }
 
     ~AVLTree() {
         release(root);
         root = nullptr;
     }
+
+    /*
+    Forbid copy.
+    */
+    AVLTree(const AVLTree<T> &tree) = delete;;
+    AVLTree<T>& operator=(const AVLTree<T> &tree) = delete;
 
     /*
     Check if element ele is in the tree.
@@ -215,7 +215,7 @@ public:
     }
 
 private:
-    TreeNode *root = nullptr;
+    TreeNode *root;
 
     /*
     Compute the height of a tree.

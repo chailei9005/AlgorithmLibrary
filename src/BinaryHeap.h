@@ -19,24 +19,14 @@ Type T must overload:
 3. operator >> for running test. (not compulsory)
 
 For usage, see function test().
-
-TODO make the size of the heap mutable.
 */
 template <typename T>
 class BinaryHeap {
 public:
-    BinaryHeap(const unsigned &maxSize)
-        : capacity_(maxSize), size_(0), arr(maxSize + 1) {
+    BinaryHeap() : size_(0), arr(1) {
     }
 
     ~BinaryHeap() {
-    }
-
-    /*
-    Return the capacity of the binary heap
-    */
-    unsigned capacity() const {
-        return capacity_;
     }
 
     /*
@@ -50,7 +40,7 @@ public:
     Return whether the heap is full.
     */
     bool isFull() const {
-        return size_ == capacity_;
+        return size_ + 1 == arr.size();
     }
 
     /*
@@ -67,7 +57,7 @@ public:
     */
     void push(const T &x) {
         if (isFull()) {
-            throw std::range_error("BinaryHeap.push(): Heap is full");
+            arr.resize(size_ + 2);  // Expand space
         }
         // Element 'x' percolates up in the heap
         int i;
@@ -128,7 +118,7 @@ public:
     push 6
     */
     static void test() {
-        BinaryHeap<T> heap(100);
+        BinaryHeap<T> heap;
         T tmp;
         std::string oper;
         cout << "Operations available:\n"
@@ -164,7 +154,6 @@ public:
     }
 
 private:
-    unsigned capacity_;
     unsigned size_;
 
     /*
@@ -172,7 +161,7 @@ private:
     For each arr[i]:
     1. arr[2 * i] is the left child.
     2. arr[2 * i + 1] is the right child.
-    3. arr[i / 2] is a[i]'s father.
+    3. arr[floor(i / 2)] is a[i]'s father.
     */
     std::vector<T> arr;
 };
