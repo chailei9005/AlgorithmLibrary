@@ -128,94 +128,6 @@ public:
         root = balancedRemove(ele, root);
     }
 
-    /*
-    Test the function of the class.
-
-    Sample #1:
-    i 3
-    i 2
-    i 1
-    i 4
-    i 5
-    i 6
-    i 7
-    i 16
-    i 15
-    i 14
-    i 13
-    i 12 
-    i 11
-    i 10 
-    i 8
-    i 9
-
-    Result:
-    Postorder:
-    1 3 2 5 6 4 8 10 9 12 11 14 16 15 13 7
-    Inorder:
-    1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
-    Preorder:
-    7 4 2 1 3 6 5 13 11 9 8 10 12 15 14 16
-    */
-    static void test() {
-        cout << "Test AVLTree:\n" << endl;
-        cin.clear();
-        AVLTree<T> tree;
-        T tmp;
-        std::string oper;
-        auto f = [](const T &ele) {
-            cout << ele << " ";
-        };
-        cout << "Operations available:\n"
-            << "1. i x  (insert element x)\n"
-            << "2. f x  (find element x)\n"
-            << "3. r x  (remove element x)\n"
-            << "4. post (print the tree in postorder)\n"
-            << "5. in   (print the tree in inorder)\n"
-            << "6. pre  (print the tree in preorder)\n"
-            << "7. min  (print the minimum element of the tree)\n"
-            << "8. max  (print the maximum element of the tree)\n"
-            << endl;
-        while (1) {
-            cout << "Input operation: ";
-            cin >> oper;
-            if (oper == "i") {
-                cin >> tmp;
-                tree.insert(tmp);
-            } else if (oper == "f") {
-                cin >> tmp;
-                if (tree.has(tmp)) {
-                    cout << "Element " << tmp << " found\n";
-                } else {
-                    cout << "Element " << tmp << " not found\n";
-                }
-            } else if (oper == "r") {
-                cin >> tmp;
-                if (tree.has(tmp)) {
-                    tree.remove(tmp);
-                    cout << "Element " << tmp << " removed\n";
-                } else {
-                    cout << "Element " << tmp << " not found\n";
-                }
-            } else if (oper == "post") {
-                tree.traverseInPostorder(f);
-                cout << endl;
-            } else if (oper == "in") {
-                tree.traverseInInorder(f);
-                cout << endl;
-            } else if (oper == "pre") {
-                tree.traverseInPreorder(f);
-                cout << endl;
-            } else if (oper == "min") {
-                cout << tree.min() << endl;
-            } else if (oper == "max") {
-                cout << tree.max() << endl;
-            } else {
-                cout << "Invalid operation." << endl;
-            }
-        }
-    }
-
 private:
     TreeNode *root;
 
@@ -491,6 +403,95 @@ private:
             release(root->left);
             release(root->right);
             delete root;
+        }
+    }
+
+public:
+    /*
+    Test the function of the class.
+
+    Sample #1:
+    i 3
+    i 2
+    i 1
+    i 4
+    i 5
+    i 6
+    i 7
+    i 16
+    i 15
+    i 14
+    i 13
+    i 12
+    i 11
+    i 10
+    i 8
+    i 9
+
+    Result:
+    Postorder:
+    1 3 2 5 6 4 8 10 9 12 11 14 16 15 13 7
+    Inorder:
+    1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+    Preorder:
+    7 4 2 1 3 6 5 13 11 9 8 10 12 15 14 16
+    */
+    static void test() {
+        cout << "Test AVLTree:\n" << endl;
+        cin.clear();
+        AVLTree<T> tree;
+        T tmp;
+        std::string oper;
+        auto f = [](const T &ele) {
+            cout << ele << " ";
+        };
+        cout << "Operations available:\n"
+            << "1. i x  (insert element x)\n"
+            << "2. f x  (find element x)\n"
+            << "3. r x  (remove element x)\n"
+            << "4. post (print the tree in postorder)\n"
+            << "5. in   (print the tree in inorder)\n"
+            << "6. pre  (print the tree in preorder)\n"
+            << "7. min  (print the minimum element of the tree)\n"
+            << "8. max  (print the maximum element of the tree)\n"
+            << endl;
+        while (1) {
+            cout << "Input operation: ";
+            cin >> oper;
+            if (oper == "i") {
+                cin >> tmp;
+                tree.insert(tmp);
+            } else if (oper == "f") {
+                cin >> tmp;
+                if (tree.has(tmp)) {
+                    cout << "Element " << tmp << " found\n";
+                } else {
+                    cout << "Element " << tmp << " not found\n";
+                }
+            } else if (oper == "r") {
+                cin >> tmp;
+                if (tree.has(tmp)) {
+                    tree.remove(tmp);
+                    cout << "Element " << tmp << " removed\n";
+                } else {
+                    cout << "Element " << tmp << " not found\n";
+                }
+            } else if (oper == "post") {
+                tree.traverseInPostorder(f);
+                cout << endl;
+            } else if (oper == "in") {
+                tree.traverseInInorder(f);
+                cout << endl;
+            } else if (oper == "pre") {
+                tree.traverseInPreorder(f);
+                cout << endl;
+            } else if (oper == "min") {
+                cout << tree.min() << endl;
+            } else if (oper == "max") {
+                cout << tree.max() << endl;
+            } else {
+                cout << "Invalid operation." << endl;
+            }
         }
     }
 };

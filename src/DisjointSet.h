@@ -41,6 +41,10 @@ public:
     */
     unsigned size() const;
 
+private:
+    std::vector<int> arr;
+
+public:
     /*
     Test the function of the class.
 
@@ -55,9 +59,6 @@ public:
     -1 -1
     */
     static void test();
-
-private:
-    std::vector<int> arr;
 };
 
 }

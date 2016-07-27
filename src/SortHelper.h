@@ -131,57 +131,6 @@ public:
         return arr[k];
     }
 
-    /*
-    Test the function of the class.
-
-    Sample #1:
-    8 79 6 56 2 0 5 44 29 31 157 31
-    */
-    static void test() {
-        cout << "Test SortHelper:\n" << endl;
-        cin.clear();
-        std::vector<T> origin, arr;
-        T tmp;
-        cout << "Input elements for sorting: (EOF to end):\n";
-        while (cin >> tmp) {
-            origin.push_back(tmp);
-        }
-        arr = origin;
-        insertionSort(arr);
-        cout << "Insertion sort result:" << endl;
-        print(arr);
-        arr = origin;
-        selectionSort(arr);
-        cout << "Selection sort result:" << endl;
-        print(arr);
-        arr = origin;
-        shellSort(arr);
-        cout << "Shell sort result:" << endl;
-        print(arr);
-        arr = origin;
-        mergeSort(arr);
-        cout << "Merge sort result:" << endl;
-        print(arr);
-        arr = origin;
-        quickSort(arr);
-        cout << "Quick sort result:" << endl;
-        print(arr);
-        cin.clear();
-        while (1) {
-            unsigned k;
-            cout << "Input kth element you want to find: ";
-            cin >> k;
-            if (arr.size() >= k + 1) {
-                arr = origin;
-                auto res = quickSelect(arr, k);
-                cout << "The " << k << "th smallest element: "
-                    << res << endl;
-            } else {
-                cout << "Out of range." << endl;
-            }
-        }
-    }
-
 private:
 
     /*
@@ -397,6 +346,58 @@ private:
                     }
                     a[j] = tmp;
                 }
+            }
+        }
+    }
+
+public:
+    /*
+    Test the function of the class.
+
+    Sample #1:
+    8 79 6 56 2 0 5 44 29 31 157 31
+    */
+    static void test() {
+        cout << "Test SortHelper:\n" << endl;
+        cin.clear();
+        std::vector<T> origin, arr;
+        T tmp;
+        cout << "Input elements for sorting: (EOF to end):\n";
+        while (cin >> tmp) {
+            origin.push_back(tmp);
+        }
+        arr = origin;
+        insertionSort(arr);
+        cout << "Insertion sort result:" << endl;
+        print(arr);
+        arr = origin;
+        selectionSort(arr);
+        cout << "Selection sort result:" << endl;
+        print(arr);
+        arr = origin;
+        shellSort(arr);
+        cout << "Shell sort result:" << endl;
+        print(arr);
+        arr = origin;
+        mergeSort(arr);
+        cout << "Merge sort result:" << endl;
+        print(arr);
+        arr = origin;
+        quickSort(arr);
+        cout << "Quick sort result:" << endl;
+        print(arr);
+        cin.clear();
+        while (1) {
+            unsigned k;
+            cout << "Input kth element you want to find: ";
+            cin >> k;
+            if (arr.size() >= k + 1) {
+                arr = origin;
+                auto res = quickSelect(arr, k);
+                cout << "The " << k << "th smallest element: "
+                    << res << endl;
+            } else {
+                cout << "Out of range." << endl;
             }
         }
     }

@@ -102,6 +102,19 @@ public:
         arr[i] = lastEle;
     }
 
+private:
+    unsigned size_;
+
+    /*
+    The first element stores at index 1.
+    For each arr[i]:
+    1. arr[2 * i] is the left child.
+    2. arr[2 * i + 1] is the right child.
+    3. arr[floor(i / 2)] is a[i]'s father.
+    */
+    std::vector<T> arr;
+
+public:
     /*
     Test the function of the class.
 
@@ -154,18 +167,6 @@ public:
             }
         }
     }
-
-private:
-    unsigned size_;
-
-    /*
-    The first element stores at index 1.
-    For each arr[i]:
-    1. arr[2 * i] is the left child.
-    2. arr[2 * i + 1] is the right child.
-    3. arr[floor(i / 2)] is a[i]'s father.
-    */
-    std::vector<T> arr;
 };
 
 }
