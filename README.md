@@ -19,6 +19,12 @@ $ make clean
 |[Binary Heap](https://en.wikipedia.org/wiki/Binary_heap)|[BinaryHeap.h](./src/BinaryHeap.h)|
 |[AVL Tree](https://en.wikipedia.org/wiki/AVL_tree)|[AVLTree.h](./src/AVLTree.h)|
 
+## Algorithms
+
+| Name | Source |
+| ---- | ------ |
+|Sorting|[SortEngine.h](./src/SortEngine.h)|
+
 ## License
 
 Copyright 2016 ChuyangLiu
