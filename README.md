@@ -23,7 +23,7 @@ $ make clean
 
 | Name | Source |
 | ---- | ------ |
-|Sorting|[SortEngine.h](./src/SortEngine.h)|
+|Sorting|[SortHelper.h](./src/SortHelper.h)|
 
 ## License
 

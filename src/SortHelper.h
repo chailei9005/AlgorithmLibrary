@@ -15,7 +15,7 @@ Type T must overload:
 For usage, see function test().
 */
 template <typename T>
-class SortEngine {
+class SortHelper {
 public:
     /*
     Insertion sort.

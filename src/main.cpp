@@ -1,7 +1,7 @@
 #include "DisjointSet.h"
 #include "BinaryHeap.h"
 #include "AVLTree.h"
-#include "SortEngine.h"
+#include "SortHelper.h"
 
 using namespace sl;
 
@@ -9,7 +9,7 @@ void test() {
     //DisjointSet::test();
     //BinaryHeap<int>::test();
     //AVLTree<int>::test();
-    //SortEngine<int>::test();
+    //SortHelper<int>::test();
 }
 
 int main() {
