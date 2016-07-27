@@ -120,22 +120,22 @@ public:
     }
 
     /*
-    Quick select: find kth smallest element in array
-
-    After execution, arr[k] is the kth smallest element
+    Quick select: find the kth smallest element in array (k starts at 0)
 
     @param arr the array to find
     @param k the k in the description
+    @return the kth smallest element
     */
-    static void quickSelect(std::vector<T> &arr, int k) {
+    static T quickSelect(std::vector<T> &arr, int k) {
         quickSelect(arr, 0, arr.size() - 1, k);
+        return arr[k];
     }
 
     /*
     Test the function of the class.
 
     Sample #1:
-    8 79 6 56 2 0 5 44 29 31 157
+    8 79 6 56 2 0 5 44 29 31 157 31
     */
     static void test() {
         std::vector<T> origin, arr;
@@ -171,9 +171,9 @@ public:
             cin >> k;
             if (arr.size() >= k + 1) {
                 arr = origin;
-                quickSelect(arr, k);
+                auto res = quickSelect(arr, k);
                 cout << "The " << k << "th smallest element: "
-                    << arr[k] << endl;
+                    << res << endl;
             } else {
                 cout << "Out of range." << endl;
             }
@@ -215,9 +215,9 @@ private:
     @param tmpArr a temp array used for sorting
     */
     static void mergeSortArray(std::vector<T> &arr,
-                        int left,
-                        int right,
-                        std::vector<T> &tmpArr) {
+                               int left,
+                               int right,
+                               std::vector<T> &tmpArr) {
         if (left < right) {
             int mid = (left + right) / 2;
             mergeSortArray(arr, left, mid, tmpArr);
@@ -262,12 +262,12 @@ private:
             mid = mid->next;
             tmp = tmp->next->next;
         }
-        ListNode *secondStart = mid->next;
+        ListNode *firstHalf, *secondHalf;
+        secondHalf = mid->next;
         mid->next = nullptr;  // Cut down the list into two half
-        ListNode *firstHalf = mergeSortList(h);
-        ListNode *secondHalf = mergeSortList(secondStart);
-        h = mergeTwoList(firstHalf, secondHalf);
-        return h;
+        firstHalf = mergeSortList(h);
+        secondHalf = mergeSortList(secondHalf);
+        return mergeTwoList(firstHalf, secondHalf);
     }
 
     /*
@@ -298,7 +298,7 @@ private:
 
     Algorithm: Median-of-Three Partitioning
     Let a[left] <= a[mid] <= a[right]
-    Pivot element stores in a[right - 1]
+    and store pivot element in a[right - 1].
 
     @param a the array to sort
     @param left the start index of the array to sort
@@ -358,16 +358,13 @@ private:
     }
 
     /*
-    Quick select: find kth smallest element in array
-
+    Quick select: find the kth smallest element in array (k starts at 0)
     After execution, a[k] is the kth smallest element
 
     @param a the array to sort
     @param left the start index of the array to sort
     @param right the end index of the array to sort
     @param k the k in the description
-
-    TODO fix bugs
     */
     static void quickSelect(std::vector<T> &a, int left, int right, int k) {
         if (left + 10 <= right) {
@@ -383,10 +380,10 @@ private:
                 }
             }
             swap(a[i], a[right - 1]);
-            if (k <= i) {
+            if (k < i) {
                 quickSelect(a, left, i - 1, k);
-            } else if (k >= i + 2) {
-                quickSelect(a, i + 1, right, k - i - 1);
+            } else if (k > i) {
+                quickSelect(a, i + 1, right, k);
             }
         } else {  // Use insertion sort for small array
             for (int i = left + 1; i <= right; ++i) {
