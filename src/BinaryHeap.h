@@ -118,6 +118,8 @@ public:
     push 6
     */
     static void test() {
+        cout << "Test BinaryHeap:\n" << endl;
+        cin.clear();
         BinaryHeap<T> heap;
         T tmp;
         std::string oper;

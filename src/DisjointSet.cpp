@@ -43,6 +43,8 @@ unsigned DisjointSet::size() const {
 }
 
 void DisjointSet::test() {
+    cout << "Test DisjointSet:\n" << endl;
+    cin.clear();
     DisjointSet s(10);
     while (true) {
         cout << "Input two numbers you want to add to the same set: (-1 to end)\n";

@@ -158,6 +158,8 @@ public:
     7 4 2 1 3 6 5 13 11 9 8 10 12 15 14 16
     */
     static void test() {
+        cout << "Test AVLTree:\n" << endl;
+        cin.clear();
         AVLTree<T> tree;
         T tmp;
         std::string oper;

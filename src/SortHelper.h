@@ -138,6 +138,8 @@ public:
     8 79 6 56 2 0 5 44 29 31 157 31
     */
     static void test() {
+        cout << "Test SortHelper:\n" << endl;
+        cin.clear();
         std::vector<T> origin, arr;
         T tmp;
         cout << "Input elements for sorting: (EOF to end):\n";
