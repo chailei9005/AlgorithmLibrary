@@ -347,7 +347,8 @@ private:
             }
         } else if (e < root->val) {
             root->left = balancedInsert(e, root->left);
-            if (height(root->left) - height(root->right) == 2) {  // Balance is broken
+            // Maintain balance
+            if (height(root->left) - height(root->right) == 2) {
                 if (e < root->left->val) {
                     root = rotateSingleLeft(root);
                 } else if (e > root->left->val) {
@@ -356,7 +357,8 @@ private:
             }
         } else if (e > root->val) {
             root->right = balancedInsert(e, root->right);
-            if (height(root->right) - height(root->left) == 2) {  // Balance is broken
+            // Maintain balance
+            if (height(root->right) - height(root->left) == 2) {
                 if (e > root->right->val) {
                     root = rotateSingleRight(root);
                 } else if (e < root->right->val) {
@@ -400,9 +402,24 @@ private:
 
         }
         if (root) {
+            // Maintain balance
+            if (height(root->right) - height(root->left) == 2) {
+                if (height(root->right->right)
+                    >= height(root->right->left)) {
+                    root = rotateSingleRight(root);
+                } else {
+                    root = rotateDoubleRight(root);
+                }
+            } else if (height(root->left) - height(root->right) == 2) {
+                if (height(root->left->left)
+                    >= height(root->left->right)) {
+                    root = rotateSingleLeft(root);
+                } else {
+                    root = rotateDoubleLeft(root);
+                }
+            }
             updateHeight(root);
         }
-        // TODO maintain balance
         return root;
     }
 
