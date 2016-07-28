@@ -46,24 +46,34 @@ void RandomEngine::setSeed(value_type seed_) {
 }
 
 void RandomEngine::test() {
-    unsigned min, max, cnt = 0, n = 10;
+    unsigned min, max, n = 10;
     cout << "Input the range of the random number: ";
     cin >> min >> max;
     cout << "\nGenerate " << n << " integers:" << endl;
-    while ((++cnt) <= n) {
+    for (unsigned i = 0; i < n; ++i) {
         auto num = RandomEngine::randInt(min, max);
         cout << num << endl;
     }
-    cnt = 0;
     cout << "\nGenerate " << n << " integers using library methods:" << endl;
-    while ((++cnt) <= n) {
+    for (unsigned i = 0; i < n; ++i) {
         auto num = RandomEngine::randInt(min, max);
         cout << num << endl;
     }
-    cnt = 0;
     cout << "\nGenerate " << n << " double numbers:" << endl;
-    while ((++cnt) <= n) {
+    for (unsigned i = 0; i < n; ++i) {
         auto num = RandomEngine::randDouble(min, max);
         cout << num << endl;
+    }
+    cout << "\nRandomly rearrange an array of size 10:\n";
+    for (unsigned i = 0; i < n; ++i) {
+        std::vector<int> arr;
+        for (int i = 0; i < 10; ++i) {
+            arr.push_back(i);
+        }
+        RandomEngine::randomChange(arr);
+        for (unsigned j = 0; j < arr.size(); ++j) {
+            cout << arr[j] << " ";
+        }
+        cout << endl;
     }
 }

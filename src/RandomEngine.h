@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 namespace sl {
 
 /*
@@ -45,6 +47,21 @@ public:
     Set the seed value.
     */
     static void setSeed(value_type seed_);
+
+    /*
+    Randomly rearrange the elements in an array.
+
+    @param arr the array to rearrange
+    */
+    template <typename T>
+    static void randomChange(std::vector<T> &arr) {
+        for (unsigned i = 1; i < arr.size(); ++i) {
+            unsigned pos = randLib(0, i);
+            T tmp = arr[i];
+            arr[i] = arr[pos];
+            arr[pos] = tmp;
+        }
+    }
 
 private:
     static value_type seed;
