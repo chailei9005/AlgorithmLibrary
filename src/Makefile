@@ -1,4 +1,5 @@
-OBJS = main.o DisjointSet.o ArithmeticExpression.o RandomEngine.o
+OBJS = main.o DisjointSet.o ArithmeticExpression.o RandomEngine.o \
+Algorithms.o
 
 CC = g++ -std=c++11
 

@@ -46,6 +46,8 @@ void RandomEngine::setSeed(value_type seed_) {
 }
 
 void RandomEngine::test() {
+    std::cout << "Test RandomEngine:\n\n";
+    std::cin.clear();
     unsigned min, max, n = 10;
     cout << "Input the range of the random number: ";
     cin >> min >> max;

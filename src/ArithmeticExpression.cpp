@@ -2,6 +2,8 @@
 #include <stack>
 #include <sstream>
 #include <algorithm>
+#include <vector>
+#include <iostream>
 
 using sl::ArithmeticExpression;
 using std::string;
@@ -226,6 +228,8 @@ string ArithmeticExpression::parseInfixExpre(string &expre) {
 }
 
 void ArithmeticExpression::test() {
+    std::cout << "Test ArithmeticExpression:\n\n";
+    std::cin.clear();
     while (1) {
         cout << "Input the type of the expression (0->Postfix, 1->Infix): ";
         unsigned type;

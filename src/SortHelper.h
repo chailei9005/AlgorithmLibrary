@@ -152,9 +152,9 @@ private:
     */
     static void print(std::vector<T> arr) {
         for (const auto &e : arr) {
-            cout << e << " ";
+            std::cout << e << " ";
         }
-        cout << endl;
+        std::cout << std::endl;
     }
 
     /*
@@ -358,46 +358,46 @@ public:
     8 79 6 56 2 0 5 44 29 31 157 31
     */
     static void test() {
-        cout << "Test SortHelper:\n" << endl;
-        cin.clear();
+        std::cout << "Test SortHelper:\n\n";
+        std::cin.clear();
         std::vector<T> origin, arr;
         T tmp;
-        cout << "Input elements for sorting: (EOF to end):\n";
-        while (cin >> tmp) {
+        std::cout << "Input elements for sorting: (EOF to end):\n";
+        while (std::cin >> tmp) {
             origin.push_back(tmp);
         }
         arr = origin;
         insertionSort(arr);
-        cout << "Insertion sort result:" << endl;
+        std::cout << "Insertion sort result:\n";
         print(arr);
         arr = origin;
         selectionSort(arr);
-        cout << "Selection sort result:" << endl;
+        std::cout << "Selection sort result:\n";
         print(arr);
         arr = origin;
         shellSort(arr);
-        cout << "Shell sort result:" << endl;
+        std::cout << "Shell sort result:\n";
         print(arr);
         arr = origin;
         mergeSort(arr);
-        cout << "Merge sort result:" << endl;
+        std::cout << "Merge sort result:\n";
         print(arr);
         arr = origin;
         quickSort(arr);
-        cout << "Quick sort result:" << endl;
+        std::cout << "Quick sort result:\n";
         print(arr);
-        cin.clear();
+        std::cin.clear();
         while (1) {
             unsigned k;
-            cout << "Input kth element you want to find: ";
-            cin >> k;
+            std::cout << "Input kth element you want to find: ";
+            std::cin >> k;
             if (arr.size() >= k + 1) {
                 arr = origin;
                 auto res = quickSelect(arr, k);
-                cout << "The " << k << "th smallest element: "
-                    << res << endl;
+                std::cout << "The " << k << "th smallest element: "
+                    << res << std::endl;
             } else {
-                cout << "Out of range." << endl;
+                std::cout << "Out of range." << std::endl;
             }
         }
     }

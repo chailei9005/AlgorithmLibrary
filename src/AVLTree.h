@@ -437,15 +437,15 @@ public:
     7 4 2 1 3 6 5 13 11 9 8 10 12 15 14 16
     */
     static void test() {
-        cout << "Test AVLTree:\n" << endl;
-        cin.clear();
+        std::cout << "Test AVLTree:\n\n";
+        std::cin.clear();
         AVLTree<T> tree;
         T tmp;
         std::string oper;
         auto f = [](const T &ele) {
-            cout << ele << " ";
+            std::cout << ele << " ";
         };
-        cout << "Operations available:\n"
+        std::cout << "Operations available:\n"
             << "1. i x  (insert element x)\n"
             << "2. f x  (find element x)\n"
             << "3. r x  (remove element x)\n"
@@ -454,43 +454,43 @@ public:
             << "6. pre  (print the tree in preorder)\n"
             << "7. min  (print the minimum element of the tree)\n"
             << "8. max  (print the maximum element of the tree)\n"
-            << endl;
+            << std::endl;
         while (1) {
-            cout << "Input operation: ";
-            cin >> oper;
+            std::cout << "Input operation: ";
+            std::cin >> oper;
             if (oper == "i") {
-                cin >> tmp;
+                std::cin >> tmp;
                 tree.insert(tmp);
             } else if (oper == "f") {
-                cin >> tmp;
+                std::cin >> tmp;
                 if (tree.has(tmp)) {
-                    cout << "Element " << tmp << " found\n";
+                    std::cout << "Element " << tmp << " found\n";
                 } else {
-                    cout << "Element " << tmp << " not found\n";
+                    std::cout << "Element " << tmp << " not found\n";
                 }
             } else if (oper == "r") {
-                cin >> tmp;
+                std::cin >> tmp;
                 if (tree.has(tmp)) {
                     tree.remove(tmp);
-                    cout << "Element " << tmp << " removed\n";
+                    std::cout << "Element " << tmp << " removed\n";
                 } else {
-                    cout << "Element " << tmp << " not found\n";
+                    std::cout << "Element " << tmp << " not found\n";
                 }
             } else if (oper == "post") {
                 tree.traverseInPostorder(f);
-                cout << endl;
+                std::cout << std::endl;
             } else if (oper == "in") {
                 tree.traverseInInorder(f);
-                cout << endl;
+                std::cout << std::endl;
             } else if (oper == "pre") {
                 tree.traverseInPreorder(f);
-                cout << endl;
+                std::cout << std::endl;
             } else if (oper == "min") {
-                cout << tree.min() << endl;
+                std::cout << tree.min() << std::endl;
             } else if (oper == "max") {
-                cout << tree.max() << endl;
+                std::cout << tree.max() << std::endl;
             } else {
-                cout << "Invalid operation." << endl;
+                std::cout << "Invalid operation." << std::endl;
             }
         }
     }

@@ -4,10 +4,6 @@
 #include <iostream>
 #include <stdexcept>
 
-using std::cout;
-using std::endl;
-using std::cin;
-
 namespace sl {
 
 /*
@@ -131,39 +127,39 @@ public:
     push 6
     */
     static void test() {
-        cout << "Test BinaryHeap:\n" << endl;
-        cin.clear();
+        std::cout << "Test BinaryHeap:\n\n";
+        std::cin.clear();
         BinaryHeap<T> heap;
         T tmp;
         std::string oper;
-        cout << "Operations available:\n"
+        std::cout << "Operations available:\n"
             << "1. push x (push element x)\n"
             << "2. front  (get front element)\n"
             << "3. pop    (pop an element)\n"
             << "4. size   (get the number of elements in the heap)\n"
             << "5. sort   (front and pop until the heap is empty)\n"
-            << endl;
+            << std::endl;
         while (1) {
-            cout << "Input operation: ";
-            cin >> oper;
+            std::cout << "Input operation: ";
+            std::cin >> oper;
             if (oper == "push") {
-                cin >> tmp;
+                std::cin >> tmp;
                 heap.push(tmp);
             } else if (oper == "front") {
-                cout << heap.front() << endl;
+                std::cout << heap.front() << std::endl;
             } else if (oper == "pop") {
                 heap.pop();
             } else if (oper == "size") {
-                cout << heap.size() << endl;
+                std::cout << heap.size() << std::endl;
             } else if (oper == "sort") {
                 while (!heap.isEmpty()) {
                     T ele = heap.front();
-                    cout << ele << " ";
+                    std::cout << ele << " ";
                     heap.pop();
                 }
-                cout << endl;
+                std::cout << std::endl;
             } else {
-                cout << "Invalid operation." << endl;
+                std::cout << "Invalid operation." << std::endl;
             }
         }
     }
