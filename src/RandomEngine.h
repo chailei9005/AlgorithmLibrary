@@ -5,6 +5,8 @@
 namespace sl {
 
 /*
+Contain algorithms for generating random numbers.
+
 Randomize equation: X(i+1) = A*X(i) mod M
 A = 48271
 M = 2147483647 (2^31-1)
