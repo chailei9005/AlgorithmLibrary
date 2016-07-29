@@ -5,6 +5,7 @@
 #include "ArithmeticExpression.h"
 #include "RandomEngine.h"
 #include "Algorithm.h"
+#include "Graph.h"
 
 using namespace sl;
 
@@ -16,6 +17,7 @@ void test() {
     //ArithmeticExpression::test();
     //RandomEngine::test();
     //Algorithm::test();
+    //Graph::test();
 }
 
 int main() {
