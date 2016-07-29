@@ -218,7 +218,7 @@ void Graph::print() const {
 void Graph::test() {
     cout << "Test Graph:\n\n";
     cin.clear();
-    cout << "Input max node numbers: ";
+    cout << "Input max node number: ";
     num_type size;
     cin >> size;
     cout << endl;

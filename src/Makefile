@@ -1,5 +1,5 @@
 OBJS = main.o DisjointSet.o ArithmeticExpression.o RandomEngine.o \
-Algorithm.o Graph.o
+Graph.o Algorithm.o AlgorithmGraph.o 
 
 CC = g++ -std=c++11
 

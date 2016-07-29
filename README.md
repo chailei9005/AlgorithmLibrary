@@ -30,6 +30,7 @@ $ make clean
 |[Binary Search](https://en.wikipedia.org/wiki/Binary_search_algorithm)|[Algorithm.h](./src/Algorithm.h) [Algorithm.cpp](./src/Algorithm.cpp) (Algorithm.binarySearch())|
 |[Permutation](https://en.wikipedia.org/wiki/Permutation)|[Algorithm.h](./src/Algorithm.h) [Algorithm.cpp](./src/Algorithm.cpp) (Algorithm.nextPermutation())|
 |[Combination](https://en.wikipedia.org/wiki/Combination)|[Algorithm.h](./src/Algorithm.h) [Algorithm.cpp](./src/Algorithm.cpp) (Algorithm.printCombinations())|
+|[Topological Sort](https://en.wikipedia.org/wiki/Topological_sorting)|[AlgorithmGraph.h](./src/AlgorithmGraph.h) [AlgorithmGraph.cpp](./src/AlgorithmGraph.cpp) (AlgorithmGraph.topoSort())|
 
 ## License
 
