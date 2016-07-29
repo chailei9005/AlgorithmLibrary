@@ -15,8 +15,12 @@ public:
     // Type for node number value
     typedef unsigned num_type;
 
-    // Type for edge weight
+    // Type for edge getWeight
     typedef long weight_type;
+
+    // Weight value for adjacent matrix
+    // if there is not edge between two nodes
+    static const weight_type NONE_EDGE_WEIGHT;
 
     /*
     Definition of the storage type of the graph.
@@ -52,13 +56,53 @@ public:
     void print() const;
 
     /*
+    Return the max node number of the graph.
+    */
+    num_type size() const;
+
+    /*
     Get the adjacent nodes of one node.
 
     @param n the node to find
     @param nodes the result will be stored in this field
     */
-    void getNeighbours(const num_type &n,
-                         std::vector<num_type> &nodes) const;
+    void getNeighbours(const num_type &n, std::vector<num_type> &nodes) const;
+
+    /*
+    Get the getWeight of the edge between two nodes.
+
+    @param from the start node
+    @param to the end node
+    @return the weight value. If no edge exists,
+            return NONE_EDGE_WEIGHT
+    */
+    weight_type getWeight(const num_type &from, const num_type &to) const;
+
+    /*
+    Set the getWeight of the edge between two nodes.
+
+    @param from the start node
+    @param to the end node
+    @param w the new weight value
+    */
+    void setWeight(const num_type &from, const num_type &to, const weight_type &w);
+
+    /*
+    Add an edge between two nodes.
+
+    @param from the start node
+    @param to the end node
+    @param w the getWeight of the edge
+    */
+    void addEdge(const num_type &from, const num_type &to, const weight_type &w = 0);
+
+    /*
+    Remove an edge between two nodes.
+
+    @param from the start node
+    @param to the end node
+    */
+    void removeEdge(const num_type &from, const num_type &to);
 
 private:
     /*
@@ -68,9 +112,8 @@ private:
         num_type num;
         weight_type weight;
 
-        AdjNode(const num_type num_, const weight_type w = 0)
-            : num(num_), weight(w) {
-        }
+        AdjNode(const num_type num_, const weight_type w = NONE_EDGE_WEIGHT)
+            : num(num_), weight(w) {}
     };
 
     /*
@@ -79,8 +122,7 @@ private:
     struct HeadNode {
         std::list<AdjNode> *adjNodes;
 
-        HeadNode() : adjNodes(new std::list<AdjNode>()) {
-        }
+        HeadNode() : adjNodes(nullptr) {}
     };
 
     std::vector<HeadNode> adjList;
@@ -104,6 +146,20 @@ public:
     Test the function of the class.
 
     Sample #1:
+    8
+    add 1 0 1
+    add 1 2 2
+    add 1 4 1
+    add 2 4 3
+    add 2 5 10
+    add 3 1 4
+    add 3 6 5
+    add 4 3 2
+    add 4 6 8
+    add 4 7 4
+    add 4 5 2
+    add 5 7 6
+    add 7 6 1
     */
     static void test();
 };
