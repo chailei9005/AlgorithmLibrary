@@ -4,7 +4,7 @@
 #include "SortHelper.h"
 #include "ArithmeticExpression.h"
 #include "RandomEngine.h"
-#include "Algorithms.h"
+#include "Algorithm.h"
 
 using namespace sl;
 
@@ -15,7 +15,7 @@ void test() {
     //SortHelper<int>::test();
     //ArithmeticExpression::test();
     //RandomEngine::test();
-    //Algorithms::test();
+    //Algorithm::test();
 }
 
 int main() {

@@ -7,7 +7,7 @@ Contains some useful algorithms.
 
 For usage, see function test().
 */
-class Algorithms {
+class Algorithm {
 public:
     /*
     Test the function of the class.

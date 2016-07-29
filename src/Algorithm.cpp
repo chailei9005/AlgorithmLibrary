@@ -1,4 +1,4 @@
-#include "Algorithms.h"
+#include "Algorithm.h"
 #include <algorithm>
 #include <iostream>
 #include <vector>
@@ -7,15 +7,15 @@ using std::cout;
 using std::endl;
 using std::cin;
 using std::vector;
-using sl::Algorithms;
+using sl::Algorithm;
 
-void Algorithms::test() {
+void Algorithm::test() {
     //testBinarySearch();
     //testPermutation();
     //testCombination();
 }
 
-int Algorithms::binarySearch(const int a[], const int n, const int x) {
+int Algorithm::binarySearch(const int a[], const int n, const int x) {
     // Standard
     int low = 0, high = n - 1;
     while (low <= high) {
@@ -65,7 +65,7 @@ int Algorithms::binarySearch(const int a[], const int n, const int x) {
     //}
 }
 
-void Algorithms::testBinarySearch(void) {
+void Algorithm::testBinarySearch(void) {
     cout << "Test binary search:\n" << endl;
     cin.clear();
     int a[100], n;
@@ -90,7 +90,7 @@ void Algorithms::testBinarySearch(void) {
     }
 }
 
-bool Algorithms::nextPermutation(int a[], const int n) {
+bool Algorithm::nextPermutation(int a[], const int n) {
     int i;
     for (i = n - 2; i >= 0; --i) {
         if (a[i] < a[i + 1]) {
@@ -124,7 +124,7 @@ bool Algorithms::nextPermutation(int a[], const int n) {
     return i != -1;
 }
 
-void Algorithms::testPermutation() {
+void Algorithm::testPermutation() {
     cout << "Test permutation:\n" << endl;
     cin.clear();
     int a[100], n;
@@ -146,7 +146,7 @@ void Algorithms::testPermutation() {
     std::next_permutation(a, a + n);
 }
 
-void Algorithms::printCombinations(const int a[], const int n, const int k) {
+void Algorithm::printCombinations(const int a[], const int n, const int k) {
     // Initialize 01 array.
     // 1 means to choose, 0 means not to choose
     vector<int> mark(n, 0);
@@ -195,7 +195,7 @@ void Algorithms::printCombinations(const int a[], const int n, const int k) {
     }
 }
 
-void Algorithms::testCombination() {
+void Algorithm::testCombination() {
     cout << "Test combination:\n" << endl;
     cin.clear();
     int a[100], n, k;
