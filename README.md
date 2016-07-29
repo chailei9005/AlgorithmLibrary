@@ -27,6 +27,8 @@ $ make clean
 |[Random Generation](https://en.wikipedia.org/wiki/Random_number_generation)|[RandomEngine.h](./src/RandomEngine.h) [RandomEngine.cpp](./src/RandomEngine.cpp)|
 |[Arithmetic Expression](https://en.wikipedia.org/wiki/Shunting-yard_algorithm)|[ArithmeticExpression.h](./src/ArithmeticExpression.h) [ArithmeticExpression.cpp](./src/ArithmeticExpression.cpp)|
 |[Binary Search](https://en.wikipedia.org/wiki/Binary_search_algorithm)|[Algorithms.h](./src/Algorithms.h) [Algorithms.cpp](./src/Algorithms.cpp) (Algorithms.binarySearch())|
+|[Permutation](https://en.wikipedia.org/wiki/Permutation)|[Algorithms.h](./src/Algorithms.h) [Algorithms.cpp](./src/Algorithms.cpp) (Algorithms.nextPermutation())|
+|[Permutation](https://en.wikipedia.org/wiki/Combination)|[Algorithms.h](./src/Algorithms.h) [Algorithms.cpp](./src/Algorithms.cpp) (Algorithms.printCombinations())|
 
 ## License
 
