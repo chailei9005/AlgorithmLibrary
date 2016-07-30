@@ -76,7 +76,7 @@ public:
     @param g the graph object
     @param src the start node number
 
-    Sample #1 (start at node 1):
+    Sample #1:
     8 0
     1 0 1
     1 2 2
@@ -91,7 +91,7 @@ public:
     4 5 2
     5 7 6
     7 6 1
-    1
+    {1|2}
 
     Ans:
     The shortest path:
@@ -103,10 +103,63 @@ public:
     From node 1 to 5 (length: 3): 1 -> 4 -> 5
     From node 1 to 6 (length: 6): 1 -> 4 -> 7 -> 6
     From node 1 to 7 (length: 5): 1 -> 4 -> 7
+
+    The shortest path:
+    From node 2 to 0 (length: 10): 2 -> 4 -> 3 -> 1 -> 0
+    From node 2 to 1 (length: 9): 2 -> 4 -> 3 -> 1
+    From node 2 to 2 (length: 0): 2
+    From node 2 to 3 (length: 5): 2 -> 4 -> 3
+    From node 2 to 4 (length: 3): 2 -> 4
+    From node 2 to 5 (length: 5): 2 -> 4 -> 5
+    From node 2 to 6 (length: 8): 2 -> 4 -> 7 -> 6
+    From node 2 to 7 (length: 7): 2 -> 4 -> 7
     */
     static void dijkstra(Graph *g, const num_type &src);
     static void printPathTo(const std::vector<num_type> &prev_, const num_type &des);
     static void testDijkstra(Graph *g);
+
+    /*
+    prim's algorithm to find minimum
+    spanning tree (undirected graph).
+
+    A minimun spanning tree exists iff
+    the undirected graph is connected.
+
+    Sample #1: (each edge is added twice to construct an undirected graph):
+    8 0
+    0 1 3
+    1 0 3
+    1 2 2
+    2 1 2
+    1 4 1
+    4 1 1
+    1 3 4
+    3 1 4
+    2 4 3
+    4 2 3
+    2 5 10
+    5 2 10
+    3 4 2
+    4 3 2
+    4 5 7
+    5 4 7
+    3 6 5
+    6 3 5
+    4 6 8
+    6 4 8
+    4 7 4
+    7 4 4
+    5 7 6
+    7 5 6
+    6 7 1
+    7 6 1
+
+    Ans:
+    The edges of the minimum spanning tree:
+    (0, 1), (1, 2), (4, 3), (1, 4), (7, 5), (7, 6), (4, 7),
+    */
+    static void prim(Graph *g);
+    static void testPrim(Graph *g);
 
 private:
     /*
@@ -124,16 +177,6 @@ private:
     static std::vector<num_type> prev;
 
     /*
-    A comparator used in a min-root priority queue.
-    */
-    struct cmpMinRoot {
-        bool operator()(const num_type &a,
-                        const num_type &b) const {
-            return dist[a] > dist[b];
-        }
-    };
-
-    /*
     Create a graph object from command input.
 
     @return a pointer to the graph created
@@ -144,6 +187,16 @@ private:
     Initialize global arrays.
     */
     static void initGlobals(const num_type &nodeNum);
+
+    /*
+    Check if all the nodes have been visited.
+    */
+    static bool isAllVisit();
+
+    /*
+    Get an un-visited node that has the smallest dist value.
+    */
+    static num_type getMinNotVisit(const Graph *g);
 
 };
 

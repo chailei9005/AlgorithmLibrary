@@ -28,7 +28,8 @@ void AlgorithmGraph::test() {
 
     // Test once algorithm at each time
     //testTopoSort(g);
-    testDijkstra(g);
+    //testDijkstra(g);
+    testPrim(g);
 
     delete g;
 }
@@ -57,6 +58,28 @@ Graph* AlgorithmGraph::createGraphFromCommand() {
     }
     cout << endl;
     return g;
+}
+
+bool AlgorithmGraph::isAllVisit() {
+    bool res = true;
+    for (const auto &v : visit) {
+        if (!v) {
+            res = false;
+        }
+    }
+    return res;
+}
+
+AlgorithmGraph::num_type AlgorithmGraph::getMinNotVisit(const Graph *g) {
+    num_type n;
+    weight_type min = INF;
+    for (num_type i = 0; i < g->size(); ++i) {
+        if (!visit[i] && dist[i] < min) {
+            min = dist[i];
+            n = i;
+        }
+    }
+    return n;
 }
 
 bool AlgorithmGraph::topoSort(Graph *g, vector<num_type> &res) {
@@ -102,36 +125,17 @@ void AlgorithmGraph::testTopoSort(Graph *g) {
 }
 
 void AlgorithmGraph::dijkstra(Graph *g, const num_type &src) {
-    // Priority queue to find the vertex with the minimum dist
-    priority_queue<num_type, vector<num_type>, cmpMinRoot> q;
     dist[src] = 0;
-    q.push(src);
-    while (!q.empty()) {
-        num_type n = q.top();
-        q.pop();
-
-        // Get a vertex which hasn't been visited
-        while (!q.empty() && visit[n]) {
-            n = q.top();
-            q.pop();
-        }
-        // If all vertexes have been visited, exit
-        if (q.empty() && visit[n]) {
-            break;
-        }
-
+    while (!isAllVisit()) {
+        num_type n = getMinNotVisit(g);
         visit[n] = true;
         vector<num_type> adjNodes;
         g->getNeighbours(n, adjNodes);
         for (const auto &adjN : adjNodes) {
-            // Calculate weight may be time-consuming
-            // when using adjacent list to store the graph.
-            // For code readability, ignore optimization.
             weight_type w = g->getWeight(n, adjN);
-            if (!visit[adjN] && (dist[n] + w < dist[adjN])) {
+            if (!visit[adjN] && dist[n] + w < dist[adjN]) {
                 dist[adjN] = dist[n] + w;
                 prev[adjN] = n;
-                q.push(adjN);
             }
         }
     }
@@ -161,4 +165,34 @@ void AlgorithmGraph::testDijkstra(Graph *g) {
         printPathTo(prev, i);
         cout << endl;
     }
+}
+
+void AlgorithmGraph::prim(Graph *g) {
+    dist[0] = 0;
+    while (!isAllVisit()) {
+        num_type n = getMinNotVisit(g);
+        visit[n] = true;
+        vector<num_type> adjNodes;
+        g->getNeighbours(n, adjNodes);
+        for (const auto &adjN : adjNodes) {
+            weight_type w = g->getWeight(n, adjN);
+            if (!visit[adjN] && w < dist[adjN]) {
+                dist[adjN] = w;
+                prev[adjN] = n;
+            }
+        }
+    }
+}
+
+void AlgorithmGraph::testPrim(Graph *g) {
+    cout << "Test prim:\n\n";
+    cin.clear();
+    prim(g);
+    cout << "The edges of the minimum spanning tree:" << endl;
+    for (num_type i = 0; i < g->size(); ++i) {
+        if (prev[i] != NOT_NODE) {
+            cout << "(" << prev[i] << ", " << i << "), ";
+        }
+    }
+    cout << endl;
 }
