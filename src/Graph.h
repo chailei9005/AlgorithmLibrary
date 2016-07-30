@@ -13,7 +13,7 @@ For usage, see function test().
 class Graph {
 public:
     // Type for node number value
-    typedef unsigned num_type;
+    typedef long num_type;
 
     // Type for edge getWeight
     typedef long weight_type;
