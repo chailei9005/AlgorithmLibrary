@@ -1,10 +1,11 @@
 #pragma once
 
+#include "Base.h"
 #include <iostream>
 #include <stdexcept>
 #include <functional>
 
-namespace sl {
+NS_BEGIN
 
 /*
 A linked-list data structure.
@@ -287,4 +288,4 @@ public:
     }
 };
 
-}
+NS_END

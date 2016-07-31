@@ -1,10 +1,11 @@
 #pragma once
 
+#include "Base.h"
 #include <vector>
 #include <iostream>
 #include <stdexcept>
 
-namespace sl {
+NS_BEGIN
 
 /*
 A min-root heap data structure.
@@ -165,4 +166,4 @@ public:
     }
 };
 
-}
+NS_END

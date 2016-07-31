@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Base.h"
 #include <vector>
 
-namespace sl {
+NS_BEGIN
 
 /*
 Puzzle node definition.
@@ -34,4 +35,4 @@ public:
     static void test();
 };
 
-}
+NS_END

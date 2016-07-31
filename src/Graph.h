@@ -1,9 +1,10 @@
 #pragma once
 
+#include "Base.h"
 #include <list>
 #include <vector>
 
-namespace sl {
+NS_BEGIN
 
 /*
 A graph data structure.
@@ -164,4 +165,4 @@ public:
     static void test();
 };
 
-}
+NS_END

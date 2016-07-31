@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Base.h"
 #include <vector>
 
-namespace sl {
+NS_BEGIN
 
 /*
 A disjoint set data structure.
@@ -61,4 +62,4 @@ public:
     static void test();
 };
 
-}
+NS_END

@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Base.h"
 #include <vector>
 
-namespace sl {
+NS_BEGIN
 
 /*
 Contain algorithms for generating random numbers.
@@ -79,4 +80,4 @@ public:
     static void test();
 };
 
-}
+NS_END

@@ -1,6 +1,8 @@
 #pragma once
 
-namespace sl {
+#include "Base.h"
+
+NS_BEGIN
 
 /*
 Contains some useful algorithms.
@@ -68,4 +70,4 @@ private:
 
 };
 
-}
+NS_END

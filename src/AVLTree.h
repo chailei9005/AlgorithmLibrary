@@ -1,12 +1,13 @@
 #pragma once
 
+#include "Base.h"
 #include <functional>
 #include <stdexcept>
 #include <new>
 #include <algorithm>
 #include <string>
 
-namespace sl {
+NS_BEGIN
 
 /*
 An AVL-Tree data structure.
@@ -496,4 +497,4 @@ public:
     }
 };
 
-}
+NS_END

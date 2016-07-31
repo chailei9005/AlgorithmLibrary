@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Base.h"
 #include <string>
 
-namespace sl {
+NS_BEGIN
 
 /*
 Class for calculating arithmetic expression
@@ -129,4 +130,4 @@ public:
     static void test();
 };
 
-}
+NS_END

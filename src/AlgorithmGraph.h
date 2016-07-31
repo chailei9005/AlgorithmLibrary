@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Base.h"
 #include "Graph.h"
 
-namespace sl {
+NS_BEGIN
 
 /*
 Contains algorithms for graph.
@@ -200,4 +201,4 @@ private:
 
 };
 
-}
+NS_END

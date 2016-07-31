@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Base.h"
 #include <vector>
 
-namespace sl {
+NS_BEGIN
 
 /*
 Contain algorithms for sorting.
@@ -341,4 +342,4 @@ public:
     }
 };
 
-}
+NS_END
