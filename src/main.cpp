@@ -4,8 +4,9 @@
 #include "DisjointSet.h"
 #include "Graph.h"
 #include "SortHelper.h"
-#include "ArithmeticExpression.h"
 #include "RandomEngine.h"
+#include "ArithmeticExpression.h"
+#include "NPuzzle.h"
 #include "Algorithm.h"
 #include "AlgorithmGraph.h"
 
@@ -18,8 +19,9 @@ void test() {
     //DisjointSet::test();
     //Graph::test();
     //SortHelper<int>::test();
-    //ArithmeticExpression::test();
     //RandomEngine::test();
+    //ArithmeticExpression::test();
+    NPuzzle::test();
     //Algorithm::test();
     //AlgorithmGraph::test();
 }
