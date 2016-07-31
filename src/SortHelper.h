@@ -81,29 +81,13 @@ public:
 
     /*
     Merge sort for array.
+    Sort algorithm for linked list is in LinkedList.h
 
     @param arr the array to sort
     */
     static void mergeSort(std::vector<T> &arr) {
         std::vector<T> tmpArr(arr.size());
         mergeSortArray(arr, 0, arr.size() - 1, tmpArr);
-    }
-
-    /*
-    List node declaration
-    */
-    struct ListNode {
-        T val;
-        ListNode* next;
-    };
-
-    /*
-    Merge sort for list.
-
-    @param h the head of the list to sort
-    */
-    static void mergeSort(ListNode *&h) {
-        h = mergeSortList(h);
     }
 
     /*
@@ -196,52 +180,6 @@ private:
                 arr[rightEnd] = tmpArr[rightEnd];
             }
         }
-    }
-
-    /*
-    Merge sort for list.
-
-    @param h the head of the list to sort
-    @return the new head pointer after sorting
-    */
-    static ListNode* mergeSortList(ListNode *h) {
-        if (!h || !h->next) {
-            return h;
-        }
-        ListNode *mid = h, *tmp = h->next;
-        while (tmp && tmp->next) {
-            mid = mid->next;
-            tmp = tmp->next->next;
-        }
-        ListNode *firstHalf, *secondHalf;
-        secondHalf = mid->next;
-        mid->next = nullptr;  // Cut down the list into two half
-        firstHalf = mergeSortList(h);
-        secondHalf = mergeSortList(secondHalf);
-        return mergeTwoList(firstHalf, secondHalf);
-    }
-
-    /*
-    Merge two lists.
-
-    @param a the first list
-    @param b the second list
-    @return the head of the list after merging
-    */
-    static ListNode* mergeTwoList(ListNode *a, ListNode *b) {
-        if (!a) {
-            return b;
-        } else if (!b) {
-            return a;
-        }
-        if (!(a->val < b->val)) {
-            ListNode *tmp = b->next;
-            b->next = a;
-            a = b;
-            b = tmp;
-        }
-        a->next = mergeTwoLists(a->next, b);
-        return a;
     }
 
     /*

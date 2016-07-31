@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <functional>
 
 namespace sl {
 
@@ -82,7 +83,7 @@ public:
     */
     const T& get(const unsigned &pos) const {
         checkValid(pos);
-        return getNode(pos)->val;
+        return getPrevNode(pos)->next->val;
     }
 
     /*
@@ -109,6 +110,16 @@ public:
     */
     T removeBack() {
         return remove(size_ - 1);
+    }
+
+    /*
+    Sort the list using merge sort algorithm.
+
+    @param cmp the comparator used in sorting
+    */
+    void sort(const std::function<bool(const T &a, const T &b)> &cmp
+              = [](const T &a, const T &b) { return a < b; }) {
+        head->next = mergeSortList(head->next, cmp);
     }
 
 private:
@@ -163,23 +174,70 @@ private:
     }
 
     /*
-    Get the node at a given position.
-    (Two version for const and non-const 'this' pointer)
+    Merge sort for list.
 
-    @param pos the position
-    @return the pointer to the node.
+    @param h the head of the list to sort
+    @param cmp the comparator used in sorting
+    @return the new head pointer after sorting
     */
-    ListNode* getNode(const unsigned &pos) {
-        return getPrevNode(pos)->next;
+    ListNode* mergeSortList(ListNode *h,
+                            const std::function<bool(const T &a, const T &b)> &cmp) const {
+        if (!h || !h->next) {
+            return h;
+        }
+        ListNode *mid = h, *tmp = h->next;
+        while (tmp && tmp->next) {
+            mid = mid->next;
+            tmp = tmp->next->next;
+        }
+        ListNode *firstHalf, *secondHalf;
+        secondHalf = mid->next;
+        mid->next = nullptr;  // Cut down the list into two half
+        firstHalf = mergeSortList(h, cmp);
+        secondHalf = mergeSortList(secondHalf, cmp);
+        return mergeTwoList(firstHalf, secondHalf, cmp);
     }
 
-    const ListNode* getNode(const unsigned &pos) const {
-        return getPrevNode(pos)->next;
+    /*
+    Merge two lists.
+
+    @param a the first list
+    @param b the second list
+    @param cmp the comparator used in sorting
+    @return the head of the list after merging
+    */
+    ListNode* mergeTwoList(ListNode *a,
+                           ListNode *b,
+                           const std::function<bool(const T &a, const T &b)> &cmp) const {
+        if (!a) {
+            return b;
+        } else if (!b) {
+            return a;
+        }
+        if (!cmp(a->val, b->val)) {
+            ListNode *tmp = b->next;
+            b->next = a;
+            a = b;
+            b = tmp;
+        }
+        a->next = mergeTwoList(a->next, b, cmp);
+        return a;
     }
 
 public:
     /*
     Test the function of the class.
+
+    Sample #1:
+    i 0 1
+    i 0 2
+    i 0 3
+    i 0 4
+    i 0 5
+    i 0 6
+    i 0 7
+    i 0 8
+    i 0 9
     */
     static void test() {
         std::cout << "Test LinkedList:\n\n";
@@ -195,6 +253,7 @@ public:
                 << "4. rb    (remove element at the end of the list)\n"
                 << "5. size  (get the number of elements in the list)\n"
                 << "6. p     (print the list content)\n"
+                << "7. sort  (sort the list)\n"
                 << std::endl;
         while (1) {
             std::cout << "Input operation: ";
@@ -219,6 +278,8 @@ public:
                     std::cout << l.get(i) << " ";
                 }
                 std::cout << std::endl;
+            } else if (oper == "sort") {
+                l.sort();
             } else {
                 std::cout << "Invalid operation." << std::endl;
             }
