@@ -70,13 +70,6 @@ public:
     bool hasAdjNode(const Direction &direc) const;
 
     /*
-    Move the value 0 at the given direction.
-
-    @param direc the direction
-    */
-    void move(const Direction &direc);
-
-    /*
     Get the row number of the index
 
     @param index the index
@@ -125,6 +118,13 @@ private:
     @return the index value. If move failed, return -1
     */
     int getIndex(const Direction &direc) const;
+
+    /*
+    Move the value 0 at the given direction.
+
+    @param direc the direction
+    */
+    void move(const Direction &direc);
 };
 
 /*

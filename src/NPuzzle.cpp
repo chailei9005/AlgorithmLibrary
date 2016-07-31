@@ -43,6 +43,7 @@ void NPuzzleNode::checkValid(const value_type &val_,
 }
 
 void NPuzzleNode::setVal(const value_type &val_) {
+    checkValid(val_, row, col);
     val = val_;
 }
 
@@ -136,7 +137,7 @@ NPuzzle::~NPuzzle() {
 void NPuzzle::test() {
     cout << "Test N-Puzzle:\n\n";
     cin.clear();
-    NPuzzleNode goal({8, 1, 2, 3, 4, 5, 6, 7, 0}, 2, 4);
+    NPuzzleNode goal({9, 1, 2, 3, 4, 5, 6, 7, 8, 0}, 3, 3);
     vector<NPuzzleNode> adjs;
     auto node = goal.getAdjNode(NPuzzleNode::Direction(1)).getAdjNode(NPuzzleNode::Direction(0));
     node.getAllAdjNodes(adjs);
