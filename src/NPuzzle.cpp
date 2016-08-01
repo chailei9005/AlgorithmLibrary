@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+#include <algorithm>
 
 using std::cout;
 using std::cin;
@@ -11,25 +12,29 @@ using std::vector;
 using std::stringstream;
 using sl::NPuzzleNode;
 using sl::NPuzzle;
+using sl::Direction;
 
 NPuzzleNode::NPuzzleNode() {
 }
 
 NPuzzleNode::NPuzzleNode(const value_type &val_,
-                         const unsigned row_,
-                         const unsigned col_) {
+                         const int row_,
+                         const int col_) {
     checkValid(val_, row_, col_);
     val = val_;
     row = row_;
     col = col_;
+    h = 0;
+    g = 0;
+    parent = NONE;
 }
 
 NPuzzleNode::~NPuzzleNode() {
 }
 
 void NPuzzleNode::checkValid(const value_type &val_,
-                             const unsigned row_,
-                             const unsigned col_) const {
+                             const int row_,
+                             const int col_) const {
     if (row_ < 2 || col_ < 2) {
         throw std::range_error("NPuzzleNode.checkValid(): dimension is at least 2*2");
     }
@@ -52,66 +57,49 @@ const NPuzzleNode::value_type& NPuzzleNode::getVal() const {
 }
 
 void NPuzzleNode::move(const Direction &direc) {
-    int goal = getIndex(direc);
-    unsigned cur = val[0];
-    unsigned tmp = val[cur];
-    val[cur] = val[goal];
-    val[goal] = tmp;
-    val[0] = goal;
+    int goalPos = val[0] + getDisplacement(direc);
+    std::swap(val[val[0]], val[goalPos]);
+    val[0] = goalPos;
 }
 
-void NPuzzleNode::getAllAdjNodes(std::vector<NPuzzleNode> &adjNodes) const {
-    adjNodes.clear();
-    for (int i = 0; i < 4; ++i) {
-        Direction d = static_cast<Direction>(i);
-        if (hasAdjNode(d)) {
-            adjNodes.push_back(getAdjNode(d));
-        }
-    }
-}
-
-NPuzzleNode NPuzzleNode::getAdjNode(const Direction &direc) const {
-    auto res = *this;
-    res.move(direc);
-    return res;
-}
-
-bool NPuzzleNode::hasAdjNode(const Direction &direc) const {
-    return getIndex(direc) != -1;
-}
-
-int NPuzzleNode::getIndex(const Direction &direc) const {
-    int res, d;
+bool NPuzzleNode::canMove(const Direction &direc) const {
     switch (direc) {
         case LEFT:
-            d = -1;
-            break;
+            return getCol(val[0]) != 0;
         case UP:
-            d = -static_cast<int>(col);
-            break;
+            return getRow(val[0]) != 0;
         case RIGHT:
-            d = 1;
-            break;
+            return getCol(val[0]) != col - 1;
         case DOWN:
-            d = col;
-            break;
+            return getRow(val[0]) != row - 1;
+        case NONE:
+            return true;
         default:
-            break;
+            return false;
     }
-    res = val[0] + d;
-    if (!(res >= 1 && res <= static_cast<int>(row * col))) {
-        res = -1;
-    } else if ((d == -1 || d == 1) && (getRow(val[0]) != getRow(res))) {
-        res = -1;
-    }
-    return res;
 }
 
-unsigned NPuzzleNode::getRow(const unsigned &index) const {
+int NPuzzleNode::getDisplacement(const Direction &direc) const {
+    switch (direc) {
+        case LEFT:
+            return -1;
+        case UP:
+            return -col;
+        case RIGHT:
+            return 1;
+        case DOWN:
+            return col;
+        case NONE:
+        default:
+            return 0;
+    }
+}
+
+int NPuzzleNode::getRow(const int &index) const {
     return (index - 1) / col;
 }
 
-unsigned NPuzzleNode::getCol(const unsigned &index) const {
+int NPuzzleNode::getCol(const int &index) const {
     return (index - 1) % col;
 }
 
@@ -122,10 +110,44 @@ string NPuzzleNode::toString() const {
         if (i) ss << ",";
         ss << val[i];
     }
-    ss << "}";
-    string res;
-    ss >> res;
+    ss << "} g:" << g << " h:" << h << "\n";
+    string res, tmp;
+    while (ss >> tmp) {
+        res += tmp + " ";
+    }
     return res;
+}
+
+bool operator==(const NPuzzleNode &a, const NPuzzleNode &b) {
+    return a.getVal() == b.getVal();
+}
+
+void NPuzzleNode::setG(const dist_type g_) {
+    g = g_;
+}
+
+void NPuzzleNode::setH(const dist_type h_) {
+    h = h_;
+}
+
+void NPuzzleNode::setParent(const Direction &d) {
+    parent = d;
+}
+
+NPuzzleNode::dist_type NPuzzleNode::getG() const {
+    return g;
+}
+
+NPuzzleNode::dist_type NPuzzleNode::getH() const {
+    return h;
+}
+
+NPuzzleNode::dist_type NPuzzleNode::getF() const {
+    return g + h;
+}
+
+Direction NPuzzleNode::getParent() const {
+    return parent;
 }
 
 NPuzzle::NPuzzle() {
@@ -138,10 +160,12 @@ void NPuzzle::test() {
     cout << "Test N-Puzzle:\n\n";
     cin.clear();
     NPuzzleNode goal({9, 1, 2, 3, 4, 5, 6, 7, 8, 0}, 3, 3);
-    vector<NPuzzleNode> adjs;
-    auto node = goal.getAdjNode(NPuzzleNode::Direction(1)).getAdjNode(NPuzzleNode::Direction(0));
-    node.getAllAdjNodes(adjs);
-    for (const auto &n : adjs) {
-        cout << n.toString() << endl;
+    for (int i = 1; i <= 4; ++i) {
+        NPuzzleNode tmp = goal;
+        auto direc = Direction(i);
+        if (tmp.canMove(direc)) {
+            tmp.move(direc);
+            cout << tmp.toString() << endl;
+        }
     }
 }
