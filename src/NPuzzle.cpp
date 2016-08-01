@@ -1,8 +1,10 @@
 #include "NPuzzle.h"
+#include "RandomEngine.h"
 #include <sstream>
 #include <stdexcept>
 #include <algorithm>
 #include <cstdio>
+#include <cmath>
 
 using std::string;
 using std::vector;
@@ -26,6 +28,7 @@ NPuzzleNode::NPuzzleNode(const value_type &val_,
     h = 0;
     g = 0;
     parent = nullptr;
+    direc = NONE;
 }
 
 NPuzzleNode::~NPuzzleNode() {
@@ -119,6 +122,15 @@ int NPuzzleNode::getCol(const int &index) const {
     return (index - 1) % col;
 }
 
+void NPuzzleNode::shuffle() {
+    for (int i = 0; i < 300; ++i) {
+        Direction d = static_cast<Direction>(RandomEngine::randLib(1, 4));
+        if (canMove(d)) {
+            move(d);
+        }
+    }
+}
+
 string NPuzzleNode::toString() const {
     stringstream ss;
     ss << "{";
@@ -171,6 +183,10 @@ void NPuzzleNode::setParent(const node_ptr &p) {
     parent = p;
 }
 
+void NPuzzleNode::setDirection(const Direction &d) {
+    direc = d;
+}
+
 NPuzzleNode::dist_type NPuzzleNode::getG() const {
     return g;
 }
@@ -185,6 +201,10 @@ NPuzzleNode::dist_type NPuzzleNode::getF() const {
 
 NPuzzleNode::node_ptr NPuzzleNode::getParent() const {
     return parent;
+}
+
+Direction NPuzzleNode::getDirection() const {
+    return direc;
 }
 
 NPuzzle::NPuzzle(const node_ptr &src_, const node_ptr &des_)
@@ -217,7 +237,8 @@ void NPuzzle::run() {
         printSearchInfo(cur);
 
         if (*cur == *des) {
-            //constructPath();
+            des = cur;
+            constructPath();
             break;
         }
 
@@ -227,6 +248,7 @@ void NPuzzle::run() {
             auto adj = cur->getAdjNode(d);
             if (adj && closeList.find(adj) == closeList.end()) {
                 adj->setParent(cur);
+                adj->setDirection(d);
                 adj->setG(cur->getG() + 1);
                 adj->setH(estimateH(adj));
                 openList.push(adj);
@@ -235,25 +257,133 @@ void NPuzzle::run() {
     }
 }
 
+void NPuzzle::constructPath() {
+    path.clear();
+    node_ptr tmp = des, p = nullptr;
+    while (p = tmp->getParent()) {
+        path.push_front(tmp->getDirection());
+        tmp = p;
+    }
+}
+
 void NPuzzle::printSearchInfo(const node_ptr &cur) const {
     printf("Current node: %s ", cur->toString().c_str());
     printf("searched number: %lld\n", searchNodeCnt);
 }
 
-NPuzzleNode::dist_type NPuzzle::estimateH(const node_ptr &n) const {
-    int s = 0;  // Number of nodes whose next node is in wrong position
-    int rows = n->getRow(), cols = n->getCol();
-    for (int i = 1; i < rows * cols; ++i) {
-        if (n->getVal()[i] + 1 != n->getVal()[i + 1]) {
-            ++s;
+int NPuzzle::getManhattenDist(const node_ptr &n) const {
+    // Sum up the manhatten distance of each value
+    int dist = 0;
+    auto rows = n->getRow(), cols = n->getCol();
+    const auto &val = n->getVal();
+    for (int i = 1; i <= rows * cols; ++i) {
+        if (val[i]) {  // Escape value 0
+            int curR = n->getRow(i);
+            int curC = n->getCol(i);
+            int desR = n->getRow(val[i]);
+            int desC = n->getCol(val[i]);
+            int dR = abs(curR - desR);
+            int dC = abs(curC - desC);
+            dist += dR + dC;
         }
     }
-    return s;
+    return dist;
+}
+
+int NPuzzle::getGeometricDist(const node_ptr &n) const {
+    // Sum up the geometric distance of each value
+    int dist = 0;
+    auto rows = n->getRow(), cols = n->getCol();
+    const auto &val = n->getVal();
+    for (int i = 1; i <= rows * cols; ++i) {
+        if (val[i]) {  // Escape value 0
+            int curR = n->getRow(i);
+            int curC = n->getCol(i);
+            int desR = n->getRow(val[i]);
+            int desC = n->getCol(val[i]);
+            int dR = abs(curR - desR);
+            int dC = abs(curC - desC);
+            dist += static_cast<int>(sqrt(dR * dR + dC * dC));
+        }
+    }
+    return dist;
+}
+
+NPuzzleNode::dist_type NPuzzle::estimateH(const node_ptr &n) const {
+    const auto &val = n->getVal();
+    const auto &desVal = des->getVal();
+    auto rows = n->getRow(), cols = n->getCol();
+
+    // Number of nodes which are in a wrong position
+    int w = 0;
+    for (int i = 1; i <= rows * cols; ++i) {
+        if (val[i] != desVal[i]) {
+            ++w;
+        }
+    }
+
+    int m = getManhattenDist(n);
+    int g = getGeometricDist(n);
+
+    return 1 * w + 1 * m + 1 * g;
+}
+
+const std::list<Direction>& NPuzzle::getPath() const {
+    return path;
 }
 
 void NPuzzle::test() {
     printf("Test N-Puzzle:\n\n");
-    auto src = shared_ptr<NPuzzleNode>(new NPuzzleNode({5, 1, 2, 3, 4, 0, 6, 7, 5, 8}, 3, 3));
-    auto des = shared_ptr<NPuzzleNode>(new NPuzzleNode({9, 1, 2, 3, 4, 5, 6, 7, 8, 0}, 3, 3));
-    NPuzzle(src, des).run();
+
+    // 3*3
+    auto src = shared_ptr<NPuzzleNode>(new NPuzzleNode(
+               {4, 1, 2, 3, 0, 4, 6, 7, 5, 8}, 3, 3));
+    auto des = shared_ptr<NPuzzleNode>(new NPuzzleNode(
+               {9, 1, 2, 3, 4, 5, 6, 7, 8, 0}, 3, 3));
+
+    // 4*4
+    //auto src = shared_ptr<NPuzzleNode>(new NPuzzleNode(
+    //           {15, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15}, 4, 4));
+    //auto des = shared_ptr<NPuzzleNode>(new NPuzzleNode(
+    //           {16, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0}, 4, 4));
+
+    // 5*5
+    //auto src = shared_ptr<NPuzzleNode>(new NPuzzleNode(
+    //           {24, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0, 24}, 5, 5));
+    //auto des = shared_ptr<NPuzzleNode>(new NPuzzleNode(
+    //           {25, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0}, 5, 5));
+
+    // Rearrage
+    //src->shuffle();
+
+    NPuzzle puzzle(src, des);
+    puzzle.run();
+    // Print path
+    auto path = puzzle.getPath();
+    printf("\nPath: (length: %d)\n", int(path.size()));
+    for (const auto &d : path) {
+        switch (d) {
+            case LEFT:
+                printf("L ");
+                break;
+            case UP:
+                printf("U ");
+                break;
+            case RIGHT:
+                printf("R ");
+                break;
+            case DOWN:
+                printf("D ");
+                break;
+            default:
+                break;
+        }
+    }
+    printf("\n");
+    // Test path correctness
+    for (const auto &d : path) {
+        src->move(d);
+    }
+    bool suc = (*src == *des);
+    printf("Path correctness test: %s\n", suc ? "pass" : "failed");
 }

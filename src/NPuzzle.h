@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <queue>
+#include <list>
 #include <unordered_set>
 #include <functional>
 #include <memory>
@@ -72,6 +73,28 @@ public:
     node_ptr getAdjNode(const Direction &direc) const;
 
     /*
+    Move the empty grid toward the direction
+    Precondition: can move toward the direcion
+
+    @param direc the direction
+    */
+    void move(const Direction &direc);
+
+    /*
+    Check whether the empty grid can move toward the direction
+
+    @param direc the direction
+    @return whether can move
+    */
+    bool canMove(const Direction &direc) const;
+
+    /*
+    Randomly rearrange the node value.
+    (Make sure a solution exists)
+    */
+    void shuffle();
+
+    /*
     Get the total row number of the node
 
     @return the total row number
@@ -136,10 +159,12 @@ public:
     void setG(const dist_type g_);
     void setH(const dist_type h_);
     void setParent(const node_ptr &p);
+    void setDirection(const Direction &d);
     dist_type getG() const;
     dist_type getH() const;
     dist_type getF() const;
     node_ptr getParent() const;
+    Direction getDirection() const;
 
 private:
     value_type val;
@@ -152,6 +177,7 @@ private:
     dist_type g;       // The distance from beginning node to current node
     dist_type h;       // The distance from current node to goal node (heuristic)
     node_ptr parent;   // Parent node
+    Direction direc;   // Direction from parent node to this node
 
     /*
     Check if the content of the node value
@@ -173,22 +199,6 @@ private:
     @return the index displacement
     */
     int getDisplacement(const Direction &direc) const;
-
-    /*
-    Move the empty grid toward the direction
-    Precondition: can move toward the direcion
-
-    @param direc the direction
-    */
-    void move(const Direction &direc);
-
-    /*
-    Check whether the empty grid can move toward the direction
-
-    @param direc the direction
-    @return whether can move
-    */
-    bool canMove(const Direction &direc) const;
 };
 
 /*
@@ -246,12 +256,18 @@ public:
     */
     void run();
 
+    /*
+    Get the solution path.
+    */
+    const std::list<Direction>& getPath() const;
+
 private:
     node_ptr src;
     node_ptr des;
     long long searchNodeCnt;  // Counter for the nodes that has been searched
     min_heap openList;
     hash_table closeList;
+    std::list<Direction> path;
 
     /*
     Estimate the heuristic value
@@ -266,6 +282,29 @@ private:
     Print the information of the current searching node.
     */
     void printSearchInfo(const node_ptr &cur) const;
+
+    /*
+    Construct the path from src to des.
+    */
+    void constructPath();
+
+    /*
+    Calculate the manhatten distance
+    from the curernt node to des node.
+
+    @param n the current node
+    @return the manhatten distance between two nodes
+    */
+    int getManhattenDist(const node_ptr &n) const;
+
+    /*
+    Calculate the geometric distance
+    from the curernt node to des node.
+
+    @param n the current node
+    @return the geometric distance between two nodes
+    */
+    int getGeometricDist(const node_ptr &n) const;
 
 public:
     /*
