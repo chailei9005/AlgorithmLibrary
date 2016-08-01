@@ -1,5 +1,6 @@
 #include "NPuzzle.h"
 #include "RandomEngine.h"
+#include "Timer.h"
 #include <sstream>
 #include <stdexcept>
 #include <algorithm>
@@ -355,9 +356,12 @@ void NPuzzle::test() {
 
     // Rearrage
     src->shuffle();
-
     NPuzzle puzzle(src, des);
+
+    Timer timer;
     puzzle.run();
+    printf("\nTime elapsed: %.0lf ms\n", timer.elapse());
+
     // Print path
     auto path = puzzle.getPath();
     printf("\nPath: (length: %d)\n", int(path.size()));
