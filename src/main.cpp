@@ -28,5 +28,8 @@ void test() {
 
 int main() {
     test();
+#ifdef _MSC_VER
+    _CrtDumpMemoryLeaks();
+#endif
     return 0;
 }

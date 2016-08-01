@@ -137,7 +137,7 @@ public:
     @param p the node to hash
     @return the hash value of the node
     */
-    static unsigned hash(const node_ptr &p);
+    static unsigned hash(const node_ptr p);
 
     /*
     Check if two nodes equal.
@@ -158,7 +158,7 @@ public:
     */
     void setG(const dist_type g_);
     void setH(const dist_type h_);
-    void setParent(const node_ptr &p);
+    void setParent(const node_ptr p);
     void setDirection(const Direction &d);
     dist_type getG() const;
     dist_type getH() const;
@@ -214,7 +214,7 @@ public:
     A comparator used in min-root heap.
     */
     struct cmpMinHeap {
-        bool operator()(const node_ptr &a, const node_ptr &b) const {
+        bool operator()(const node_ptr a, const node_ptr b) const {
             return (*a) > (*b);
         }
     };
@@ -223,7 +223,7 @@ public:
     A comparator used in set.
     */
     struct cmpSet {
-        bool operator()(const node_ptr &a, const node_ptr &b) const {
+        bool operator()(const node_ptr a, const node_ptr b) const {
             return (*a) == (*b);
         }
     };
@@ -247,7 +247,7 @@ public:
     @param src_ the start node
     @param des_ the goal node
     */
-    NPuzzle(const node_ptr &src_, const node_ptr &des_);
+    NPuzzle(const node_ptr src_, const node_ptr des_);
 
     ~NPuzzle();
 
@@ -264,10 +264,12 @@ public:
 private:
     node_ptr src;
     node_ptr des;
-    long long searchNodeCnt;  // Counter for the nodes that has been searched
     min_heap openList;
     hash_table closeList;
     std::list<Direction> path;
+
+    // Counter for the nodes that has been searched
+    long long searchNodeCnt;
 
     /*
     Estimate the heuristic value
@@ -276,12 +278,12 @@ private:
     @param n the current node
     @return heuristic value from node n to the goal.
     */
-    NPuzzleNode::dist_type estimateH(const node_ptr &n) const;
+    NPuzzleNode::dist_type estimateH(const node_ptr n) const;
 
     /*
     Print the information of the current searching node.
     */
-    void printSearchInfo(const node_ptr &cur) const;
+    void printSearchInfo(const node_ptr cur) const;
 
     /*
     Construct the path from src to des.
@@ -295,7 +297,7 @@ private:
     @param n the current node
     @return the manhatten distance between two nodes
     */
-    int getManhattenDist(const node_ptr &n) const;
+    int getManhattenDist(const node_ptr n) const;
 
     /*
     Calculate the geometric distance
@@ -304,7 +306,7 @@ private:
     @param n the current node
     @return the geometric distance between two nodes
     */
-    int getGeometricDist(const node_ptr &n) const;
+    int getGeometricDist(const node_ptr n) const;
 
 public:
     /*

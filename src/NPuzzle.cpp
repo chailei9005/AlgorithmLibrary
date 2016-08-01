@@ -146,7 +146,7 @@ string NPuzzleNode::toString() const {
     return res;
 }
 
-unsigned NPuzzleNode::hash(const node_ptr &p) {
+unsigned NPuzzleNode::hash(const node_ptr p) {
     std::hash<int> h;
     return p->val[0] * h(p->val[p->row * p->col / 2]);
 }
@@ -179,7 +179,7 @@ void NPuzzleNode::setH(const dist_type h_) {
     h = h_;
 }
 
-void NPuzzleNode::setParent(const node_ptr &p) {
+void NPuzzleNode::setParent(const node_ptr p) {
     parent = p;
 }
 
@@ -207,7 +207,7 @@ Direction NPuzzleNode::getDirection() const {
     return direc;
 }
 
-NPuzzle::NPuzzle(const node_ptr &src_, const node_ptr &des_)
+NPuzzle::NPuzzle(const node_ptr src_, const node_ptr des_)
     : src(src_), des(des_), searchNodeCnt(0), closeList(100, NPuzzleNode::hash) {
 }
 
@@ -266,12 +266,12 @@ void NPuzzle::constructPath() {
     }
 }
 
-void NPuzzle::printSearchInfo(const node_ptr &cur) const {
+void NPuzzle::printSearchInfo(const node_ptr cur) const {
     printf("Current node: %s ", cur->toString().c_str());
     printf("searched number: %lld\n", searchNodeCnt);
 }
 
-int NPuzzle::getManhattenDist(const node_ptr &n) const {
+int NPuzzle::getManhattenDist(const node_ptr n) const {
     // Sum up the manhatten distance of each value
     int dist = 0;
     auto rows = n->getRow(), cols = n->getCol();
@@ -290,7 +290,7 @@ int NPuzzle::getManhattenDist(const node_ptr &n) const {
     return dist;
 }
 
-int NPuzzle::getGeometricDist(const node_ptr &n) const {
+int NPuzzle::getGeometricDist(const node_ptr n) const {
     // Sum up the geometric distance of each value
     int dist = 0;
     auto rows = n->getRow(), cols = n->getCol();
@@ -309,7 +309,7 @@ int NPuzzle::getGeometricDist(const node_ptr &n) const {
     return dist;
 }
 
-NPuzzleNode::dist_type NPuzzle::estimateH(const node_ptr &n) const {
+NPuzzleNode::dist_type NPuzzle::estimateH(const node_ptr n) const {
     const auto &val = n->getVal();
     const auto &desVal = des->getVal();
     auto rows = n->getRow(), cols = n->getCol();
@@ -354,7 +354,7 @@ void NPuzzle::test() {
     //           {25, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0}, 5, 5));
 
     // Rearrage
-    //src->shuffle();
+    src->shuffle();
 
     NPuzzle puzzle(src, des);
     puzzle.run();
