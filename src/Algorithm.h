@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Base.h"
+#include <vector>
 
 NS_BEGIN
 
@@ -28,6 +29,11 @@ public:
         a = b;
         b = tmp;
     }
+
+    /*
+    Calculate factorial.
+    */
+    unsigned long long factorial(unsigned n);
 
     /*
     Binary search
@@ -65,6 +71,25 @@ public:
     */
     static void printCombinations(const int a[], const int n, const int k);
     static void testCombination();
+
+    /*
+    Cantor expansion.
+    Mapping a permutation to an integer.
+
+    @param n the size of the permutation
+    @param arr the permutation array (element range: 0 to n - 1)
+    @return the expansion value
+
+    The inverse of cantor expansion.
+    Mapping an integer to a permutation.
+
+    @param n the size of the permutation
+    @param val the expansion value
+    @return the permutation array (element range: 0 to n - 1)
+    */
+    static unsigned long long cantorExpand(const int n, const std::vector<int> &p);
+    static std::vector<int> cantorExpandInverse(const int n, const unsigned long long val);
+    static void testCantorExpand();
 
 private:
 

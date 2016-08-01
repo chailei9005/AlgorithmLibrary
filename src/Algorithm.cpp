@@ -13,6 +13,15 @@ void Algorithm::test() {
     //testBinarySearch();
     //testPermutation();
     //testCombination();
+    testCantorExpand();
+}
+
+unsigned long long Algorithm::factorial(unsigned n) {
+    unsigned long long res = 1;
+    for (; n > 1; --n) {
+        res *= n;
+    }
+    return res;
 }
 
 int Algorithm::binarySearch(const int a[], const int n, const int x) {
@@ -209,4 +218,16 @@ void Algorithm::testCombination() {
     }
     cout << "\nCombinations:" << endl;
     printCombinations(a, n, k);
+}
+
+unsigned long long Algorithm::cantorExpand(const int n, const vector<int> &p) {
+    // TODO
+}
+
+vector<int> Algorithm::cantorExpandInverse(const int n, const unsigned long long val) {
+    // TODO
+}
+
+void Algorithm::testCantorExpand() {
+    // TODO
 }
