@@ -261,15 +261,17 @@ public:
     */
     const std::list<Direction>& getPath() const;
 
+    /*
+    Get the total searched number
+    */
+    int getSearchCount() const;
+
 private:
     node_ptr src;
     node_ptr des;
     min_heap openList;
     hash_table closeList;
     std::list<Direction> path;
-
-    // Counter for the nodes that has been searched
-    long long searchNodeCnt;
 
     /*
     Estimate the heuristic value

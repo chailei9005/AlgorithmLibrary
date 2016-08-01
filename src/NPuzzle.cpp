@@ -139,10 +139,10 @@ string NPuzzleNode::toString() const {
         if (i) ss << ",";
         ss << val[i];
     }
-    ss << "} g:" << g << " h:" << h;
+    ss << "}";
     string res, tmp;
     while (ss >> tmp) {
-        res += tmp + " ";
+        res += tmp;
     }
     return res;
 }
@@ -209,53 +209,18 @@ Direction NPuzzleNode::getDirection() const {
 }
 
 NPuzzle::NPuzzle(const node_ptr src_, const node_ptr des_)
-    : src(src_), des(des_), searchNodeCnt(0), closeList(100, NPuzzleNode::hash) {
+    : src(src_), des(des_), closeList(100, NPuzzleNode::hash) {
 }
 
 NPuzzle::~NPuzzle() {
 }
 
-void NPuzzle::run() {
-    src->setG(0);
-    openList.push(src);
-    while (!openList.empty()) {
-        // Loop until the open list is empty or finding
-        // a node that is not in the close list.
-        node_ptr cur;
-        do {
-            cur = openList.top();
-            openList.pop();
-        } while (!openList.empty() && closeList.find(cur) != closeList.end());
+const std::list<Direction>& NPuzzle::getPath() const {
+    return path;
+}
 
-        // If all the nodes on the map is in the close list,
-        // then there is no available path between the two
-        // nodes.
-        if (openList.empty() && closeList.find(cur) != closeList.end()) {
-            break;
-        }
-
-        ++searchNodeCnt;
-        printSearchInfo(cur);
-
-        if (*cur == *des) {
-            des = cur;
-            constructPath();
-            break;
-        }
-
-        closeList.insert(cur);
-        for (int i = 1; i <= 4; ++i) {
-            Direction d = static_cast<Direction>(i);
-            auto adj = cur->getAdjNode(d);
-            if (adj && closeList.find(adj) == closeList.end()) {
-                adj->setParent(cur);
-                adj->setDirection(d);
-                adj->setG(cur->getG() + 1);
-                adj->setH(estimateH(adj));
-                openList.push(adj);
-            }
-        }
-    }
+int NPuzzle::getSearchCount() const {
+    return closeList.size();
 }
 
 void NPuzzle::constructPath() {
@@ -265,11 +230,6 @@ void NPuzzle::constructPath() {
         path.push_front(tmp->getDirection());
         tmp = p;
     }
-}
-
-void NPuzzle::printSearchInfo(const node_ptr cur) const {
-    printf("Current node: %s ", cur->toString().c_str());
-    printf("searched number: %lld\n", searchNodeCnt);
 }
 
 int NPuzzle::getManhattenDist(const node_ptr n) const {
@@ -310,10 +270,64 @@ int NPuzzle::getGeometricDist(const node_ptr n) const {
     return dist;
 }
 
+void NPuzzle::printSearchInfo(const node_ptr cur) const {
+    printf("Searching: %s total: %d\n", cur->toString().c_str(), getSearchCount());
+}
+
+void NPuzzle::run() {
+    src->setG(0);
+    openList.push(src);
+    node_ptr cur;
+    while (!openList.empty()) {
+        // Loop until the open list is empty or finding
+        // a node that is not in the close list.
+        do {
+            cur = openList.top();
+            openList.pop();
+        } while (!openList.empty() && closeList.find(cur) != closeList.end());
+
+        // If all the nodes on the map is in the close list,
+        // then there is no available path between the two
+        // nodes.
+        if (openList.empty() && closeList.find(cur) != closeList.end()) {
+            break;
+        }
+
+        closeList.insert(cur);
+        printSearchInfo(cur);
+
+        if (*cur == *des) {
+            des = cur;
+            constructPath();
+            break;
+        }
+
+        for (int i = 1; i <= 4; ++i) {
+            Direction d = static_cast<Direction>(i);
+            auto adj = cur->getAdjNode(d);
+            if (adj && closeList.find(adj) == closeList.end()) {
+                adj->setParent(cur);
+                adj->setDirection(d);
+                adj->setG(cur->getG() + 1);
+                adj->setH(estimateH(adj));
+                openList.push(adj);
+            }
+        }
+    }
+}
+
 NPuzzleNode::dist_type NPuzzle::estimateH(const node_ptr n) const {
     const auto &val = n->getVal();
     const auto &desVal = des->getVal();
     auto rows = n->getRow(), cols = n->getCol();
+
+    // Number of nodes whose next node is in a wrong position
+    int s = 0;
+    for (int i = 1; i < rows * cols; i++) {
+        if (val[i] + 1 != val[i + 1]) {
+            s++;
+        }
+    }
 
     // Number of nodes which are in a wrong position
     int w = 0;
@@ -326,11 +340,7 @@ NPuzzleNode::dist_type NPuzzle::estimateH(const node_ptr n) const {
     int m = getManhattenDist(n);
     int g = getGeometricDist(n);
 
-    return 1 * w + 1 * m + 1 * g;
-}
-
-const std::list<Direction>& NPuzzle::getPath() const {
-    return path;
+    return 1 * s + 0 * w + 0 * m + 0 * g;
 }
 
 void NPuzzle::test() {
@@ -338,7 +348,7 @@ void NPuzzle::test() {
 
     // 3*3
     auto src = shared_ptr<NPuzzleNode>(new NPuzzleNode(
-               {4, 1, 2, 3, 0, 4, 6, 7, 5, 8}, 3, 3));
+               {5, 1, 5, 2, 7, 0, 4, 6, 3, 8}, 3, 3));
     auto des = shared_ptr<NPuzzleNode>(new NPuzzleNode(
                {9, 1, 2, 3, 4, 5, 6, 7, 8, 0}, 3, 3));
 
@@ -356,38 +366,39 @@ void NPuzzle::test() {
 
     // Rearrage
     src->shuffle();
-    NPuzzle puzzle(src, des);
 
+    // Run
+    NPuzzle puzzle(src, des);
     Timer timer;
     puzzle.run();
-    printf("\nTime elapsed: %.0lf ms\n", timer.elapse());
-
-    // Print path
+    auto time = timer.elapse();
     auto path = puzzle.getPath();
-    printf("\nPath: (length: %d)\n", int(path.size()));
+
+    // Print result
+    printf("\nSearching finished.\n");
+    printf(" Begin node: %s\n", src->toString().c_str());
+    printf("   End node: %s\n", des->toString().c_str());
+    printf("Time elapse: %.2lf ms\n", time);
+    printf("Searched number: %d\n", puzzle.getSearchCount());
+    printf("Path length: %d\n", (int)path.size());
+    printf("Path of directions:\n");
     for (const auto &d : path) {
         switch (d) {
             case LEFT:
-                printf("L ");
-                break;
+                printf("L "); break;
             case UP:
-                printf("U ");
-                break;
+                printf("U "); break;
             case RIGHT:
-                printf("R ");
-                break;
+                printf("R "); break;
             case DOWN:
-                printf("D ");
-                break;
-            default:
-                break;
+                printf("D "); break;
+            default: break;
         }
     }
-    printf("\n");
     // Test path correctness
     for (const auto &d : path) {
         src->move(d);
     }
-    bool suc = (*src == *des);
-    printf("Path correctness test: %s\n", suc ? "pass" : "failed");
+    printf("\nPath correctness check: %s\n",
+           *src == *des ? "pass" : "failed");
 }
