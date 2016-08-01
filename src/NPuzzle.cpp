@@ -340,7 +340,7 @@ NPuzzleNode::dist_type NPuzzle::estimateH(const node_ptr n) const {
     int m = getManhattenDist(n);
     int g = getGeometricDist(n);
 
-    return 1 * s + 0 * w + 0 * m + 0 * g;
+    return 1 * s + 1 * w + 1 * m + 1 * g;
 }
 
 void NPuzzle::test() {
