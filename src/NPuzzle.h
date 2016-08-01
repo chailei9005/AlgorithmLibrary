@@ -3,6 +3,10 @@
 #include "Base.h"
 #include <vector>
 #include <string>
+#include <queue>
+#include <unordered_set>
+#include <functional>
+#include <memory>
 
 NS_BEGIN
 
@@ -20,7 +24,7 @@ enum Direction {
 /*
 Puzzle node definition.
 
-The value of the node must like this:
+The value of the node must be like this:
 {9, 1, 2, 3, 4, 5, 6, 7, 8, 0} (row = 3, col = 3)
 value 0 indicates the empty grid in the
 puzzle the the first element stores the
@@ -31,6 +35,7 @@ class NPuzzleNode {
 public:
     typedef std::vector<int> value_type;
     typedef long long dist_type;
+    typedef std::shared_ptr<NPuzzleNode> node_ptr;
 
     /*
     Initialize the node.
@@ -57,20 +62,21 @@ public:
     const value_type& getVal() const;
 
     /*
-    Move the empty grid toward the direction
-    Precondition: can move toward the direcion
+    Get the adjacent node at the direction
 
     @param direc the direction
+    @return the adjacent node pointer. If no
+            adjacent node at the direction,
+            return nullptr.
     */
-    void move(const Direction &direc);
+    node_ptr getAdjNode(const Direction &direc) const;
 
     /*
-    Check whether the empty grid can move toward the direction
+    Get the total row number of the node
 
-    @param direc the direction
-    @return whether can move
+    @return the total row number
     */
-    bool canMove(const Direction &direc) const;
+    int getRow() const;
 
     /*
     Get the row number of the index
@@ -79,6 +85,13 @@ public:
     @return the row number (range: 0 to (row - 1))
     */
     int getRow(const int &index) const;
+
+    /*
+    Get the total col number of the node
+
+    @return the total col number
+    */
+    int getCol() const;
 
     /*
     Get the column number of the index
@@ -96,9 +109,25 @@ public:
     std::string toString() const;
 
     /*
+    Hash function for a node
+
+    @param p the node to hash
+    @return the hash value of the node
+    */
+    static unsigned hash(const node_ptr &p);
+
+    /*
     Check if two nodes equal.
     */
-    friend bool operator==(const NPuzzleNode &a, const NPuzzleNode &b);
+    bool operator==(const NPuzzleNode &a) const;
+
+    /*
+    Operators compared by f value.
+    */
+    bool operator<(const NPuzzleNode &a) const;
+    bool operator>(const NPuzzleNode &a) const;
+    bool operator<=(const NPuzzleNode &a) const;
+    bool operator>=(const NPuzzleNode &a) const;
 
     /*
     Getters and setters for fields
@@ -106,11 +135,11 @@ public:
     */
     void setG(const dist_type g_);
     void setH(const dist_type h_);
-    void setParent(const Direction &d);
+    void setParent(const node_ptr &p);
     dist_type getG() const;
     dist_type getH() const;
     dist_type getF() const;
-    Direction getParent() const;
+    node_ptr getParent() const;
 
 private:
     value_type val;
@@ -122,7 +151,7 @@ private:
     */
     dist_type g;       // The distance from beginning node to current node
     dist_type h;       // The distance from current node to goal node (heuristic)
-    Direction parent;  // Parent node direction toward current node
+    node_ptr parent;   // Parent node
 
     /*
     Check if the content of the node value
@@ -144,6 +173,22 @@ private:
     @return the index displacement
     */
     int getDisplacement(const Direction &direc) const;
+
+    /*
+    Move the empty grid toward the direction
+    Precondition: can move toward the direcion
+
+    @param direc the direction
+    */
+    void move(const Direction &direc);
+
+    /*
+    Check whether the empty grid can move toward the direction
+
+    @param direc the direction
+    @return whether can move
+    */
+    bool canMove(const Direction &direc) const;
 };
 
 /*
@@ -153,11 +198,74 @@ For usage, see function test().
 */
 class NPuzzle {
 public:
-    NPuzzle();
+    typedef NPuzzleNode::node_ptr node_ptr;
+
+    /*
+    A comparator used in min-root heap.
+    */
+    struct cmpMinHeap {
+        bool operator()(const node_ptr &a, const node_ptr &b) const {
+            return (*a) > (*b);
+        }
+    };
+
+    /*
+    A comparator used in set.
+    */
+    struct cmpSet {
+        bool operator()(const node_ptr &a, const node_ptr &b) const {
+            return (*a) == (*b);
+        }
+    };
+
+    /*
+    Hash table declaration.
+    Constructor:
+    The first param is the number of buckets in the hash table
+    The second param is the hash function
+    */
+    typedef std::unordered_set<node_ptr, decltype(NPuzzleNode::hash)*, cmpSet> hash_table;
+
+    /*
+    Min-root heap declaration
+    */
+    typedef std::priority_queue<node_ptr, std::vector<node_ptr>, cmpMinHeap> min_heap;
+
+    /*
+    Initialize.
+
+    @param src_ the start node
+    @param des_ the goal node
+    */
+    NPuzzle(const node_ptr &src_, const node_ptr &des_);
+
     ~NPuzzle();
 
-    
+    /*
+    Begin searching.
+    */
+    void run();
+
 private:
+    node_ptr src;
+    node_ptr des;
+    long long searchNodeCnt;  // Counter for the nodes that has been searched
+    min_heap openList;
+    hash_table closeList;
+
+    /*
+    Estimate the heuristic value
+    from the node to the goal.
+
+    @param n the current node
+    @return heuristic value from node n to the goal.
+    */
+    NPuzzleNode::dist_type estimateH(const node_ptr &n) const;
+
+    /*
+    Print the information of the current searching node.
+    */
+    void printSearchInfo(const node_ptr &cur) const;
 
 public:
     /*
