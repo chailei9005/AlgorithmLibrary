@@ -24,10 +24,10 @@ For usage, see function test().
 template <typename T, typename cmpT = std::less_equal<T>>
 class BinaryHeap {
 public:
-    BinaryHeap() : size_(0), arr(1) {
+    ~BinaryHeap() {
     }
 
-    ~BinaryHeap() {
+    BinaryHeap() : size_(0), arr(1) {
     }
 
     /*
@@ -40,7 +40,7 @@ public:
     /*
     Return whether the heap is empty.
     */
-    bool isEmpty() const {
+    bool empty() const {
         return size_ == 0;
     }
 
@@ -51,7 +51,7 @@ public:
     */
     void push(const T &x) {
         if (isFull()) {
-            arr.resize(size_ * 2 + 2);  // Expand space
+            arr.resize((size_ << 1) + 2);  // Expand space
         }
         // Element 'x' percolates up in the heap
         int i;
@@ -64,9 +64,9 @@ public:
     /*
     Return the root element of the heap.
     */
-    T front() const {
-        if (isEmpty()) {
-            throw std::range_error("BinaryHeap.front(): heap is empty");
+    T top() const {
+        if (empty()) {
+            throw std::range_error("BinaryHeap.top(): heap is empty");
         }
         return arr[1];
     }
@@ -75,14 +75,14 @@ public:
     Delete the root element of the heap.
     */
     void pop() {
-        if (isEmpty()) {
+        if (empty()) {
             throw std::range_error("BinaryHeap.pop(): heap is empty");
         }
         T rootEle = arr[1], lastEle = arr[size_--];
         long i, child;
         // Empty hole percolate down in the heap
-        for (i = 1; i * 2 <= size_; i = child) {
-            child = i * 2;
+        for (i = 1; (i << 1) <= size_; i = child) {
+            child = i << 1;
             if (child != size_ && cmp(arr[child + 1], arr[child])) {
                 ++child;
             }
@@ -102,6 +102,7 @@ private:
     cmpT cmp;
 
     /*
+    Content array.
     The first element stores at index 1.
     For each arr[i]:
     1. arr[2 * i] is the left child.
@@ -143,10 +144,10 @@ public:
         std::string oper;
         std::cout << "Operations available:\n"
             << "1. push x (push element x)\n"
-            << "2. front  (get front element)\n"
+            << "2. top    (get top element)\n"
             << "3. pop    (pop an element)\n"
             << "4. size   (get the number of elements in the heap)\n"
-            << "5. sort   (front and pop until the heap is empty)\n"
+            << "5. sort   (top and pop until the heap is empty)\n"
             << std::endl;
         try {
             while (1) {
@@ -155,15 +156,15 @@ public:
                 if (oper == "push") {
                     std::cin >> tmp;
                     heap.push(tmp);
-                } else if (oper == "front") {
-                    std::cout << heap.front() << std::endl;
+                } else if (oper == "top") {
+                    std::cout << heap.top() << std::endl;
                 } else if (oper == "pop") {
                     heap.pop();
                 } else if (oper == "size") {
                     std::cout << heap.size() << std::endl;
                 } else if (oper == "sort") {
-                    while (!heap.isEmpty()) {
-                        T ele = heap.front();
+                    while (!heap.empty()) {
+                        T ele = heap.top();
                         std::cout << ele << " ";
                         heap.pop();
                     }

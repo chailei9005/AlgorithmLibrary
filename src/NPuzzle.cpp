@@ -155,6 +155,14 @@ bool NPuzzleNode::operator>(const NPuzzleNode &a) const {
     return getF() > a.getF();
 }
 
+bool NPuzzleNode::operator<=(const NPuzzleNode &a) const {
+    return getF() <= a.getF();
+}
+
+bool NPuzzleNode::operator>=(const NPuzzleNode &a) const {
+    return getF() >= a.getF();
+}
+
 void NPuzzleNode::setG(const int g_) {
     g = g_;
 }
@@ -378,7 +386,7 @@ void NPuzzle::test() {
     }
     printf("\nPath of nodes:\n");
     for (const auto &d : pathNode) {
-        printf("->%s", d.toString().c_str());
+        //printf("->%s", d.toString().c_str());
     }
     // Test path correctness
     for (const auto &d : pathDirec) {

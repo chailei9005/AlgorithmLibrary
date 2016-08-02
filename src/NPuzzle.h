@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Base.h"
+#include "BinaryHeap.h"
 #include <vector>
 #include <string>
 #include <queue>
@@ -126,6 +127,8 @@ public:
     */
     bool operator<(const NPuzzleNode &a) const;
     bool operator>(const NPuzzleNode &a) const;
+    bool operator<=(const NPuzzleNode &a) const;
+    bool operator>=(const NPuzzleNode &a) const;
 
     /*
     Getters and setters for fields
@@ -181,7 +184,8 @@ public:
     /*
     Min-root heap declaration
     */
-    typedef std::priority_queue<node, std::vector<node>, std::greater<node>> min_heap;
+    typedef BinaryHeap<node> min_heap;
+    //typedef std::priority_queue<node, std::vector<node>, std::greater<node>> min_heap;  // STD version
 
     /*
     Initialize.
