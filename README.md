@@ -29,12 +29,14 @@ $ make clean
 |[Random Generation](https://en.wikipedia.org/wiki/Random_number_generation)|[RandomEngine.h](./src/RandomEngine.h) [RandomEngine.cpp](./src/RandomEngine.cpp)|
 |[Arithmetic Expression](https://en.wikipedia.org/wiki/Shunting-yard_algorithm)|[ArithmeticExpression.h](./src/ArithmeticExpression.h) [ArithmeticExpression.cpp](./src/ArithmeticExpression.cpp)|
 |[N-Puzzle Problem](https://en.wikipedia.org/wiki/15_puzzle)|[NPuzzle.h](./src/NPuzzle.h) [NPuzzle.cpp](./src/NPuzzle.cpp)|
+|||
 |Simple Algorithms|[Algorithm.h](./src/Algorithm.h) [Algorithm.cpp](./src/Algorithm.cpp)|
 |[Factorial](https://en.wikipedia.org/wiki/Factorial)|[factorial()](./src/Algorithm.cpp)|
 |[Binary Search](https://en.wikipedia.org/wiki/Binary_search_algorithm)|[binarySearch()](./src/Algorithm.cpp)|
 |[Permutation](https://en.wikipedia.org/wiki/Permutation)|[nextPermutation()](./src/Algorithm.cpp)|
 |[Combination](https://en.wikipedia.org/wiki/Combination)|[printCombinations()](./src/Algorithm.cpp)|
 |[Cantor Expansion](http://www.programering.com/a/MDMwkDNwATc.html) [(zh)](https://zh.wikipedia.org/wiki/%E5%BA%B7%E6%89%98%E5%B1%95%E5%BC%80)|[cantorExpand()](./src/Algorithm.cpp)|
+|||
 |Graph Algorithms|[AlgorithmGraph.h](./src/AlgorithmGraph.h) [AlgorithmGraph.cpp](./src/AlgorithmGraph.cpp)|
 |[Topological Sort](https://en.wikipedia.org/wiki/Topological_sorting)|[topoSort()](./src/AlgorithmGraph.cpp)|
 |[Dijkstra(shortest path)](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)|[dijkstra()](./src/AlgorithmGraph.cpp)|
