@@ -33,7 +33,7 @@ $ make clean
 |[Binary Search](https://en.wikipedia.org/wiki/Binary_search_algorithm)|[Algorithm.h](./src/Algorithm.h) [Algorithm.cpp](./src/Algorithm.cpp) (Algorithm.binarySearch())|
 |[Permutation](https://en.wikipedia.org/wiki/Permutation)|[Algorithm.h](./src/Algorithm.h) [Algorithm.cpp](./src/Algorithm.cpp) (Algorithm.nextPermutation())|
 |[Combination](https://en.wikipedia.org/wiki/Combination)|[Algorithm.h](./src/Algorithm.h) [Algorithm.cpp](./src/Algorithm.cpp) (Algorithm.printCombinations())|
-|[Cantor Expansion](http://www.programering.com/a/MDMwkDNwATc.html)|[Algorithm.h](./src/Algorithm.h) [Algorithm.cpp](./src/Algorithm.cpp) (Algorithm.cantorExpand())|
+|[Cantor Expansion](http://www.programering.com/a/MDMwkDNwATc.html) [(zh)](https://zh.wikipedia.org/wiki/%E5%BA%B7%E6%89%98%E5%B1%95%E5%BC%80)|[Algorithm.h](./src/Algorithm.h) [Algorithm.cpp](./src/Algorithm.cpp) (Algorithm.cantorExpand())|
 |[Topological Sort](https://en.wikipedia.org/wiki/Topological_sorting)|[AlgorithmGraph.h](./src/AlgorithmGraph.h) [AlgorithmGraph.cpp](./src/AlgorithmGraph.cpp) (AlgorithmGraph.topoSort())|
 |[Dijkstra(shortest path)](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)|[AlgorithmGraph.h](./src/AlgorithmGraph.h) [AlgorithmGraph.cpp](./src/AlgorithmGraph.cpp) (AlgorithmGraph.dijkstra())|
 |[Prim(minimum spanning tree)](https://en.wikipedia.org/wiki/Prim%27s_algorithm)|[AlgorithmGraph.h](./src/AlgorithmGraph.h) [AlgorithmGraph.cpp](./src/AlgorithmGraph.cpp) (AlgorithmGraph.prim())|

@@ -10,11 +10,11 @@ using std::vector;
 using sl::Algorithm;
 
 void Algorithm::test() {
-    testFactorial();
+    //testFactorial();
     //testBinarySearch();
     //testPermutation();
     //testCombination();
-    //testCantorExpand();
+    testCantorExpand();
 }
 
 unsigned long long Algorithm::factorial(unsigned n) {
@@ -230,18 +230,59 @@ void Algorithm::testCombination() {
     printCombinations(a, n, k);
 }
 
-unsigned long long Algorithm::cantorExpand(const int n, const vector<int> &p) {
-    return 0;
+unsigned long long Algorithm::cantorExpand(const int n, const int a[]) {
+    unsigned long long res = 0;
+    for (int i = 0; i < n; ++i) {
+        int cnt = 0;
+        for (int j = i + 1; j < n; ++j) {
+            if (a[j] < a[i]) {
+                ++cnt;
+            }
+        }
+        res += cnt * factorial(n - 1 - i);
+    }
+    return res;
 }
 
-vector<int> Algorithm::cantorExpandInverse(const int n, const unsigned long long val) {
-    return vector<int>();
+void Algorithm::cantorExpandInverse(const int n, unsigned long long val, int a[]) {
+    bool *has = new bool[n];
+    for (int i = 0; i < n; ++i) {
+        has[i] = false;
+    }
+    for (int i = 0; i < n; ++i) {
+        int e = int(val / factorial(n - i - 1));
+        for (int j = 0; j <= e; ++j) {
+            if (has[j]) {
+                ++e;
+            }
+        }
+        a[i] = e;
+        has[e] = true;
+        val %= factorial(n - i - 1);
+    }
+    delete[] has;
 }
 
 void Algorithm::testCantorExpand() {
     cout << "Test contor expand:\n" << endl;
     cin.clear();
-    unsigned n;
+    cout << "Input the size of the permutation array: ";
+    int n;
     cin >> n;
-    cout << factorial(n) << endl;
+    int *a = new int[n];
+    cout << "Input permutation array elements: ";
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    int *b = new int[n];
+    auto val = cantorExpand(n, a);
+    cantorExpandInverse(n, val, b);
+    cout << "Cantor expand value: " << val << endl;
+    cout << "Cantor expand inverse: ";
+    for (int i = 0; i < n; ++i) {
+        cout << b[i] << " ";
+    }
+    cout << endl;
+    delete[] a;
+    delete[] b;
 }

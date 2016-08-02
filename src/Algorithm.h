@@ -81,18 +81,37 @@ public:
     Mapping a permutation to an integer.
 
     @param n the size of the permutation
-    @param arr the permutation array (element range: 0 to n - 1)
+    @param a the permutation array
     @return the expansion value
 
     The inverse of cantor expansion.
     Mapping an integer to a permutation.
 
     @param n the size of the permutation
-    @param val the expansion value
-    @return the permutation array (element range: 0 to n - 1)
+    @param a the result permutation array will
+             be stored in this field.
+
+    Precondition:
+    1. permutation array element range: [0, n - 1].
+    2. array a must has size n.
+
+    Postcondition:
+    1. the expansion value range: [0, n! - 1].
+
+    Sample #1: (ans: 98884)
+    9
+    2 4 6 3 0 1 8 5 7
+
+    Sample #2: (ans: 95)
+    5
+    3 4 2 1 0
+
+    Sample #3: (ans: 7)
+    4
+    1 0 3 2
     */
-    static unsigned long long cantorExpand(const int n, const std::vector<int> &p);
-    static std::vector<int> cantorExpandInverse(const int n, const unsigned long long val);
+    static unsigned long long cantorExpand(const int n, const int a[]);
+    static void cantorExpandInverse(const int n, unsigned long long val, int a[]);
     static void testCantorExpand();
 
 private:

@@ -1,3 +1,4 @@
+#include "Base.h"
 #include "LinkedList.h"
 #include "BinaryHeap.h"
 #include "AVLTree.h"
