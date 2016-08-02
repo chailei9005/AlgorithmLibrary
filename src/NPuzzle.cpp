@@ -197,7 +197,7 @@ N-Puzzle algorithm definition
 */
 
 NPuzzle::NPuzzle(const node &src_, const node &des_)
-    : src(src_), des(des_), closeList(50000, node::hash) {
+    : src(src_), des(des_), closeList(100000, node::hash) {
 }
 
 NPuzzle::~NPuzzle() {
@@ -318,7 +318,7 @@ int NPuzzle::estimateH(const node &n) const {
     }
     // Estimate distance
     int d = getEstimateDist(n);
-    return 10 * (1 * s + 1 * w + 1 * d);
+    return 50 * (1 * s + 1 * w + 3 * d);
 }
 
 void NPuzzle::test() {
@@ -329,12 +329,20 @@ void NPuzzle::test() {
     //NPuzzle::node des({1, 2, 3, 4, 5, 6, 7, 8, 0}, 3, 3);
 
     // 4*4
-    NPuzzle::node src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15}, 4, 4);
-    NPuzzle::node des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0}, 4, 4);
+    //NPuzzle::node src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15}, 4, 4);
+    //NPuzzle::node des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0}, 4, 4);
+
+    // 4*5
+    //NPuzzle::node src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 0, 19}, 4, 5);
+    //NPuzzle::node des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 0}, 4, 5);
+
+    // 5*4
+    //NPuzzle::node src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 0, 19}, 5, 4);
+    //NPuzzle::node des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 0}, 5, 4);
 
     // 5*5
-    //NPuzzle::node src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0, 24}, 5, 5);
-    //NPuzzle::node des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0}, 5, 5);
+    NPuzzle::node src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0, 24}, 5, 5);
+    NPuzzle::node des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0}, 5, 5);
 
     // Rearrage
     src.shuffle();
@@ -344,8 +352,8 @@ void NPuzzle::test() {
     Timer timer;
     puzzle.run();
     auto time = timer.elapse();
-    auto pathDirec = puzzle.getDirectionPath();
-    auto pathNode = puzzle.getNodePath();
+    const auto &pathDirec = puzzle.getDirectionPath();
+    const auto &pathNode = puzzle.getNodePath();
 
     // Print result
     printf("\nSearching finished.\n");

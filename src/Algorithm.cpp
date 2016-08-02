@@ -14,7 +14,7 @@ void Algorithm::test() {
     //testBinarySearch();
     //testPermutation();
     //testCombination();
-    testCantorExpand();
+    //testCantorExpand();
 }
 
 unsigned long long Algorithm::factorial(unsigned n) {

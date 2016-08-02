@@ -29,7 +29,7 @@ void AlgorithmGraph::test() {
     // Test once algorithm at each time
     //testTopoSort(g);
     //testDijkstra(g);
-    testPrim(g);
+    //testPrim(g);
 
     delete g;
 }
