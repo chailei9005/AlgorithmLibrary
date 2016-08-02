@@ -1,5 +1,7 @@
 #include "Timer.h"
 
+using sl::Timer;
+
 Timer::Timer() {
     start = clock();
 }

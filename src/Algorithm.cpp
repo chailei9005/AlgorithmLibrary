@@ -230,7 +230,7 @@ void Algorithm::testCombination() {
     printCombinations(a, n, k);
 }
 
-unsigned long long Algorithm::cantorExpand(const int n, const int a[]) {
+unsigned long long Algorithm::cantorExpand(const int n, const std::vector<int> &a) {
     unsigned long long res = 0;
     for (int i = 0; i < n; ++i) {
         int cnt = 0;
@@ -244,7 +244,8 @@ unsigned long long Algorithm::cantorExpand(const int n, const int a[]) {
     return res;
 }
 
-void Algorithm::cantorExpandInverse(const int n, unsigned long long val, int a[]) {
+void Algorithm::cantorExpandInverse(const int n, unsigned long long val, std::vector<int> &a) {
+    a.clear();
     bool *has = new bool[n];
     for (int i = 0; i < n; ++i) {
         has[i] = false;
@@ -256,7 +257,7 @@ void Algorithm::cantorExpandInverse(const int n, unsigned long long val, int a[]
                 ++e;
             }
         }
-        a[i] = e;
+        a.push_back(e);
         has[e] = true;
         val %= factorial(n - i - 1);
     }
@@ -269,12 +270,13 @@ void Algorithm::testCantorExpand() {
     cout << "Input the size of the permutation array: ";
     int n;
     cin >> n;
-    int *a = new int[n];
+    vector<int> a, b;
     cout << "Input permutation array elements: ";
     for (int i = 0; i < n; ++i) {
-        cin >> a[i];
+        int tmp;
+        cin >> tmp;
+        a.push_back(tmp);
     }
-    int *b = new int[n];
     auto val = cantorExpand(n, a);
     cantorExpandInverse(n, val, b);
     cout << "Cantor expand value: " << val << endl;
@@ -283,6 +285,4 @@ void Algorithm::testCantorExpand() {
         cout << b[i] << " ";
     }
     cout << endl;
-    delete[] a;
-    delete[] b;
 }

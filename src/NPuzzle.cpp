@@ -15,6 +15,7 @@ using std::make_shared;
 using sl::NPuzzleNode;
 using sl::NPuzzle;
 using sl::Direction;
+using sl::Timer;
 
 NPuzzleNode::NPuzzleNode() {
 }

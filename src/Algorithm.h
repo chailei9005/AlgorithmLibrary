@@ -110,8 +110,8 @@ public:
     4
     1 0 3 2
     */
-    static unsigned long long cantorExpand(const int n, const int a[]);
-    static void cantorExpandInverse(const int n, unsigned long long val, int a[]);
+    static unsigned long long cantorExpand(const int n, const std::vector<int> &a);
+    static void cantorExpandInverse(const int n, unsigned long long val, std::vector<int> &a);
     static void testCantorExpand();
 
 private:

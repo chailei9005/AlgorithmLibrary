@@ -1,6 +1,9 @@
 #pragma once
 
+#include "Base.h"
 #include <ctime>
+
+NS_BEGIN
 
 /*
 A class used for compute running time.
@@ -23,3 +26,4 @@ private:
     clock_t start;
 };
 
+NS_END
