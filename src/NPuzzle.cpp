@@ -318,7 +318,7 @@ int NPuzzle::estimateH(const node &n) const {
     }
     // Estimate distance
     int d = getEstimateDist(n);
-    return 1 * s + 1 * w + 1 * d;
+    return 10 * (1 * s + 1 * w + 1 * d);
 }
 
 void NPuzzle::test() {
