@@ -22,7 +22,7 @@ void test() {
     //SortHelper<int>::test();
     //RandomEngine::test();
     //ArithmeticExpression::test();
-    //NPuzzle::test();
+    NPuzzle::test();
     //Algorithm::test();
     //AlgorithmGraph::test();
 }
@@ -31,8 +31,6 @@ int main() {
     {
         test();
     }
-#ifdef _MSC_VER
-    _CrtDumpMemoryLeaks();
-#endif
+    checkMemoryLeaks();
     return 0;
 }
