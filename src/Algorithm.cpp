@@ -10,18 +10,28 @@ using std::vector;
 using sl::Algorithm;
 
 void Algorithm::test() {
+    testFactorial();
     //testBinarySearch();
     //testPermutation();
     //testCombination();
-    testCantorExpand();
+    //testCantorExpand();
 }
 
 unsigned long long Algorithm::factorial(unsigned n) {
     unsigned long long res = 1;
-    for (; n > 1; --n) {
-        res *= n;
+    for (unsigned i = 2; i <= n; ++i) {
+        res *= i;
     }
     return res;
+}
+
+void Algorithm::testFactorial() {
+    cout << "Test factorial:\n\n";
+    cin.clear();
+    cout << "Input n: ";
+    unsigned n;
+    cin >> n;
+    cout << n << "! = " << factorial(n) << endl;
 }
 
 int Algorithm::binarySearch(const int a[], const int n, const int x) {
@@ -221,13 +231,17 @@ void Algorithm::testCombination() {
 }
 
 unsigned long long Algorithm::cantorExpand(const int n, const vector<int> &p) {
-    // TODO
+    return 0;
 }
 
 vector<int> Algorithm::cantorExpandInverse(const int n, const unsigned long long val) {
-    // TODO
+    return vector<int>();
 }
 
 void Algorithm::testCantorExpand() {
-    // TODO
+    cout << "Test contor expand:\n" << endl;
+    cin.clear();
+    unsigned n;
+    cin >> n;
+    cout << factorial(n) << endl;
 }

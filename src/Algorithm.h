@@ -32,8 +32,12 @@ public:
 
     /*
     Calculate factorial.
+    
+    @param n the n value
+    @return the factorial value
     */
-    unsigned long long factorial(unsigned n);
+    static unsigned long long factorial(unsigned n);
+    static void testFactorial();
 
     /*
     Binary search
@@ -92,7 +96,6 @@ public:
     static void testCantorExpand();
 
 private:
-
 };
 
 NS_END

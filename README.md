@@ -29,6 +29,7 @@ $ make clean
 |[Random Generation](https://en.wikipedia.org/wiki/Random_number_generation)|[RandomEngine.h](./src/RandomEngine.h) [RandomEngine.cpp](./src/RandomEngine.cpp)|
 |[Arithmetic Expression](https://en.wikipedia.org/wiki/Shunting-yard_algorithm)|[ArithmeticExpression.h](./src/ArithmeticExpression.h) [ArithmeticExpression.cpp](./src/ArithmeticExpression.cpp)|
 |[N-Puzzle Problem](https://en.wikipedia.org/wiki/15_puzzle)|[NPuzzle.h](./src/NPuzzle.h) [NPuzzle.cpp](./src/NPuzzle.cpp)|
+|[Factorial](https://en.wikipedia.org/wiki/Factorial)|[Algorithm.h](./src/Algorithm.h) [Algorithm.cpp](./src/Algorithm.cpp) (Algorithm.factorial())|
 |[Binary Search](https://en.wikipedia.org/wiki/Binary_search_algorithm)|[Algorithm.h](./src/Algorithm.h) [Algorithm.cpp](./src/Algorithm.cpp) (Algorithm.binarySearch())|
 |[Permutation](https://en.wikipedia.org/wiki/Permutation)|[Algorithm.h](./src/Algorithm.h) [Algorithm.cpp](./src/Algorithm.cpp) (Algorithm.nextPermutation())|
 |[Combination](https://en.wikipedia.org/wiki/Combination)|[Algorithm.h](./src/Algorithm.h) [Algorithm.cpp](./src/Algorithm.cpp) (Algorithm.printCombinations())|
