@@ -199,9 +199,14 @@ public:
     void run();
 
     /*
-    Get the solution path.
+    Get the solution path in directions.
     */
-    const std::list<Direction>& getPath() const;
+    const std::list<Direction>& getDirectionPath() const;
+
+    /*
+    Get the solution path in nodes.
+    */
+    const std::list<node>& getNodePath() const;
 
     /*
     Get the total searched number
@@ -213,7 +218,8 @@ private:
     node des;  // End node
     min_heap openList;
     hash_table closeList;
-    std::list<Direction> path;
+    std::list<Direction> pathDirec;
+    std::list<node> pathNode;
 
     /*
     Estimate the heuristic value
