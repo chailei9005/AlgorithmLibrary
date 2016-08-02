@@ -6,8 +6,8 @@
 #include <queue>
 #include <list>
 #include <unordered_set>
-#include <functional>
 #include <memory>
+#include <functional>
 
 NS_BEGIN
 
@@ -23,20 +23,18 @@ enum Direction {
 };
 
 /*
-Puzzle node definition.
+N-Puzzle node definition.
 
 The value of the node must be like this:
-{9, 1, 2, 3, 4, 5, 6, 7, 8, 0} (row = 3, col = 3)
-value 0 indicates the empty grid in the
-puzzle the the first element stores the
-index of the value 0. Other elements
-indicate the actual puzzle grid.
+{1, 2, 3, 4, 5, 6, 7, 8, 0} (row = 3, col = 3)
+Value 0 indicates the empty grid in the puzzle. 
 */
 class NPuzzleNode {
 public:
     typedef std::vector<int> value_type;
-    typedef long long dist_type;
     typedef std::shared_ptr<NPuzzleNode> node_ptr;
+
+    ~NPuzzleNode();
 
     /*
     Initialize the node.
@@ -46,16 +44,7 @@ public:
     @param col_ the column number
     */
     NPuzzleNode();
-    NPuzzleNode(const value_type &val_,
-                const int row_,
-                const int col_);
-
-    ~NPuzzleNode();
-
-    /*
-    Set the node value.
-    */
-    void setVal(const value_type &val_);
+    NPuzzleNode(const value_type &val_, const int row_, const int col_);
 
     /*
     Get the node value.
@@ -66,15 +55,12 @@ public:
     Get the adjacent node at the direction
 
     @param direc the direction
-    @return the adjacent node pointer. If no
-            adjacent node at the direction,
-            return nullptr.
+    @param n the adjacent node will be stored in this field
     */
-    node_ptr getAdjNode(const Direction &direc) const;
+    void getAdjNode(const Direction &direc, NPuzzleNode &n) const;
 
     /*
     Move the empty grid toward the direction
-    Precondition: can move toward the direcion
 
     @param direc the direction
     */
@@ -84,7 +70,7 @@ public:
     Check whether the empty grid can move toward the direction
 
     @param direc the direction
-    @return whether can move
+    @return true if can move, false otherwise
     */
     bool canMove(const Direction &direc) const;
 
@@ -95,34 +81,25 @@ public:
     void shuffle();
 
     /*
-    Get the total row number of the node
-
-    @return the total row number
-    */
-    int getRow() const;
-
-    /*
     Get the row number of the index
 
-    @param index the index
-    @return the row number (range: 0 to (row - 1))
+    @param i the index
+    @return the row number (range: [0, row - 1])
     */
-    int getRow(const int &index) const;
-
-    /*
-    Get the total col number of the node
-
-    @return the total col number
-    */
-    int getCol() const;
+    int getRow(const int &i) const;
 
     /*
     Get the column number of the index
 
-    @param index the index
-    @return the column number (range: 0 to (col - 1))
+    @param i the index
+    @return the column number (range: [0, col - 1])
     */
-    int getCol(const int &index) const;
+    int getCol(const int &i) const;
+
+    /*
+    Get the element numbers of the node value.
+    */
+    int getSize() const;
 
     /*
     Get the string description of the node value.
@@ -134,10 +111,10 @@ public:
     /*
     Hash function for a node
 
-    @param p the node to hash
+    @param n the node
     @return the hash value of the node
     */
-    static unsigned hash(const node_ptr p);
+    static unsigned hash(const NPuzzleNode &n);
 
     /*
     Check if two nodes equal.
@@ -149,84 +126,49 @@ public:
     */
     bool operator<(const NPuzzleNode &a) const;
     bool operator>(const NPuzzleNode &a) const;
-    bool operator<=(const NPuzzleNode &a) const;
-    bool operator>=(const NPuzzleNode &a) const;
 
     /*
     Getters and setters for fields
     used in searching algorithms.
     */
-    void setG(const dist_type g_);
-    void setH(const dist_type h_);
-    void setParent(const node_ptr p);
+    void setG(const int g_);
+    void setH(const int h_);
+    void setParent(node_ptr p);
     void setDirection(const Direction &d);
-    dist_type getG() const;
-    dist_type getH() const;
-    dist_type getF() const;
+    int getG() const;
+    int getH() const;
+    int getF() const;
     node_ptr getParent() const;
     Direction getDirection() const;
 
 private:
     value_type val;
-    int row;
-    int col;
+    int emptyPos = -1;
+    int row = 0;
+    int col = 0;
+    int g = 0;                  // The distance from beginning node to current node
+    int h = 0;                  // The distance from current node to goal node (heuristic)
+    node_ptr parent = nullptr;  // Parent node pointer
+    Direction direc = NONE;     // Direction from parent node to this node
 
     /*
-    Fields used in searching alogrithm
-    */
-    dist_type g;       // The distance from beginning node to current node
-    dist_type h;       // The distance from current node to goal node (heuristic)
-    node_ptr parent;   // Parent node
-    Direction direc;   // Direction from parent node to this node
-
-    /*
-    Check if the content of the node value
-    is valid in the given dimension.
+    Initialize the node value.
 
     @param val_ the node value
-    @param row_ the row number
-    @param col_ the column number
-    @throw range_error if not valid
+    @throw range_error if the node value is not valid
     */
-    void checkValid(const value_type &val_,
-                    const int row_,
-                    const int col_) const;
-
-    /*
-    Get the index displacement at the direction
-
-    @param direc the direction
-    @return the index displacement
-    */
-    int getDisplacement(const Direction &direc) const;
+    void init(const value_type &val_);
 };
 
 /*
-Contains algorithm to compute N-Puzzle problem.
+N-Puzzle algorithm definition
 
 For usage, see function test().
 */
 class NPuzzle {
 public:
     typedef NPuzzleNode::node_ptr node_ptr;
-
-    /*
-    A comparator used in min-root heap.
-    */
-    struct cmpMinHeap {
-        bool operator()(const node_ptr a, const node_ptr b) const {
-            return (*a) > (*b);
-        }
-    };
-
-    /*
-    A comparator used in set.
-    */
-    struct cmpSet {
-        bool operator()(const node_ptr a, const node_ptr b) const {
-            return (*a) == (*b);
-        }
-    };
+    typedef NPuzzleNode node;
 
     /*
     Hash table declaration.
@@ -234,12 +176,12 @@ public:
     The first param is the number of buckets in the hash table
     The second param is the hash function
     */
-    typedef std::unordered_set<node_ptr, decltype(NPuzzleNode::hash)*, cmpSet> hash_table;
+    typedef std::unordered_set<node, decltype(node::hash)*> hash_table;
 
     /*
     Min-root heap declaration
     */
-    typedef std::priority_queue<node_ptr, std::vector<node_ptr>, cmpMinHeap> min_heap;
+    typedef std::priority_queue<node, std::vector<node>, std::greater<node>> min_heap;
 
     /*
     Initialize.
@@ -247,7 +189,7 @@ public:
     @param src_ the start node
     @param des_ the goal node
     */
-    NPuzzle(const node_ptr src_, const node_ptr des_);
+    NPuzzle(const node &src_, const node &des_);
 
     ~NPuzzle();
 
@@ -267,8 +209,8 @@ public:
     int getSearchCount() const;
 
 private:
-    node_ptr src;
-    node_ptr des;
+    node src;  // Start node
+    node des;  // End node
     min_heap openList;
     hash_table closeList;
     std::list<Direction> path;
@@ -280,12 +222,12 @@ private:
     @param n the current node
     @return heuristic value from node n to the goal.
     */
-    NPuzzleNode::dist_type estimateH(const node_ptr n) const;
+    int estimateH(const node &n) const;
 
     /*
     Print the information of the current searching node.
     */
-    void printSearchInfo(const node_ptr cur) const;
+    void printSearchInfo(const node &cur) const;
 
     /*
     Construct the path from src to des.
@@ -293,22 +235,14 @@ private:
     void constructPath();
 
     /*
-    Calculate the manhatten distance
+    Calculate the estimated distance
     from the curernt node to des node.
+    (using manhatten and geometric distance)
 
     @param n the current node
     @return the manhatten distance between two nodes
     */
-    int getManhattenDist(const node_ptr n) const;
-
-    /*
-    Calculate the geometric distance
-    from the curernt node to des node.
-
-    @param n the current node
-    @return the geometric distance between two nodes
-    */
-    int getGeometricDist(const node_ptr n) const;
+    int getEstimateDist(const node &n) const;
 
 public:
     /*
