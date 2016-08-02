@@ -4,20 +4,24 @@
 #include <vector>
 #include <iostream>
 #include <stdexcept>
+#include <functional>
 
 NS_BEGIN
 
 /*
-A min-root heap data structure.
+A binary heap data structure.
 
-Type T must overload:
-1. operator <  for comparing.
-2. operator << for running test. (not compulsory)
-3. operator >> for running test. (not compulsory)
+Template arguments:
+1. T: the data type
+   To run test, T must overload operator '<<' and '>>'.
+2. cmpT: the comparator that overload operator()
+   The structure will make sure that
+   cmp()(parent_tree_node, child_tree_node) == true
+   (default is using operator '<=')
 
 For usage, see function test().
 */
-template <typename T>
+template <typename T, typename cmpT = std::less_equal<T>>
 class BinaryHeap {
 public:
     BinaryHeap() : size_(0), arr(1) {
@@ -27,17 +31,10 @@ public:
     }
 
     /*
-    Return the size of the binary heap
+    Return the number of elements in the heap
     */
-    unsigned size() const {
+    long size() const {
         return size_;
-    }
-
-    /*
-    Return whether the heap is full.
-    */
-    bool isFull() const {
-        return size_ + 1 == arr.size();
     }
 
     /*
@@ -54,11 +51,11 @@ public:
     */
     void push(const T &x) {
         if (isFull()) {
-            arr.resize(size_ + 2);  // Expand space
+            arr.resize(size_ * 2 + 2);  // Expand space
         }
         // Element 'x' percolates up in the heap
         int i;
-        for (i = ++size_; i != 1 && x < arr[i >> 1]; i >>= 1) {
+        for (i = ++size_; i != 1 && !cmp(arr[i >> 1], x); i >>= 1) {
             arr[i] = arr[i >> 1];
         }
         arr[i] = x;
@@ -69,7 +66,7 @@ public:
     */
     T front() const {
         if (isEmpty()) {
-            throw std::range_error("BinaryHeap.front(): Heap is empty");
+            throw std::range_error("BinaryHeap.front(): heap is empty");
         }
         return arr[1];
     }
@@ -79,18 +76,17 @@ public:
     */
     void pop() {
         if (isEmpty()) {
-            throw std::range_error("BinaryHeap.pop(): Heap is empty");
+            throw std::range_error("BinaryHeap.pop(): heap is empty");
         }
         T rootEle = arr[1], lastEle = arr[size_--];
-        unsigned i, child;
+        long i, child;
         // Empty hole percolate down in the heap
         for (i = 1; i * 2 <= size_; i = child) {
             child = i * 2;
-            // Find smaller child
-            if (child != size_ && arr[child + 1] < arr[child]) {
+            if (child != size_ && cmp(arr[child + 1], arr[child])) {
                 ++child;
             }
-            if (lastEle <= arr[child]) {
+            if (cmp(lastEle, arr[child])) {
                 break;
             } else {
                 arr[i] = arr[child];
@@ -100,7 +96,10 @@ public:
     }
 
 private:
-    unsigned size_;
+    long size_;
+
+    // The comparator
+    cmpT cmp;
 
     /*
     The first element stores at index 1.
@@ -111,7 +110,15 @@ private:
     */
     std::vector<T> arr;
 
+    /*
+    Return whether the heap is full.
+    */
+    bool isFull() const {
+        return size_ + 1 == arr.size();
+    }
+
 public:
+
     /*
     Test the function of the class.
 
@@ -130,7 +137,8 @@ public:
     static void test() {
         std::cout << "Test BinaryHeap:\n\n";
         std::cin.clear();
-        BinaryHeap<T> heap;
+        //BinaryHeap<T> heap; // Min-root heap
+        BinaryHeap<T, std::greater_equal<T>> heap;  // Max-root heap
         T tmp;
         std::string oper;
         std::cout << "Operations available:\n"
@@ -140,28 +148,32 @@ public:
             << "4. size   (get the number of elements in the heap)\n"
             << "5. sort   (front and pop until the heap is empty)\n"
             << std::endl;
-        while (1) {
-            std::cout << "Input operation: ";
-            std::cin >> oper;
-            if (oper == "push") {
-                std::cin >> tmp;
-                heap.push(tmp);
-            } else if (oper == "front") {
-                std::cout << heap.front() << std::endl;
-            } else if (oper == "pop") {
-                heap.pop();
-            } else if (oper == "size") {
-                std::cout << heap.size() << std::endl;
-            } else if (oper == "sort") {
-                while (!heap.isEmpty()) {
-                    T ele = heap.front();
-                    std::cout << ele << " ";
+        try {
+            while (1) {
+                std::cout << "Input operation: ";
+                std::cin >> oper;
+                if (oper == "push") {
+                    std::cin >> tmp;
+                    heap.push(tmp);
+                } else if (oper == "front") {
+                    std::cout << heap.front() << std::endl;
+                } else if (oper == "pop") {
                     heap.pop();
+                } else if (oper == "size") {
+                    std::cout << heap.size() << std::endl;
+                } else if (oper == "sort") {
+                    while (!heap.isEmpty()) {
+                        T ele = heap.front();
+                        std::cout << ele << " ";
+                        heap.pop();
+                    }
+                    std::cout << std::endl;
+                } else {
+                    std::cout << "Invalid operation." << std::endl;
                 }
-                std::cout << std::endl;
-            } else {
-                std::cout << "Invalid operation." << std::endl;
             }
+        } catch (const std::exception &e) {
+            std::cout << "Catch exception: " << e.what() << std::endl;
         }
     }
 };
