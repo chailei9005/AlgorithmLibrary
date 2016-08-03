@@ -45,6 +45,13 @@ public:
     }
 
     /*
+    Clear the heap.
+    */
+    void clear() {
+        size_ = 0;
+    }
+
+    /*
     Insert a new element to the heap.
 
     @param x the element to be pushed into the heap.

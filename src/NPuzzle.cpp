@@ -226,6 +226,22 @@ int NPuzzle::getSearchCount() const {
     return closeList.size();
 }
 
+void NPuzzle::setStartNode(const node &n) {
+    src = n;
+}
+
+void NPuzzle::setEndNode(const node &n) {
+    des = n;
+}
+
+void NPuzzle::init() {
+    openList.clear();
+    closeList.clear();
+    pathDirec.clear();
+    pathNode.clear();
+    openList.push(src);
+}
+
 void NPuzzle::printSearchInfo(const node &cur) const {
     printf("Searching: %s G:%d H:%d F:%d total: %d\n",
            cur.toString().c_str(), cur.getG(), cur.getH(),
@@ -244,8 +260,8 @@ void NPuzzle::constructPath(const node &n) {
 }
 
 void NPuzzle::run() {
+    init();
     node cur;
-    openList.push(src);
     while (!openList.empty()) {
         // Loop until the open list is empty or finding
         // a node that is not in the close list.
@@ -326,6 +342,7 @@ int NPuzzle::estimateH(const node &n) const {
 
 void NPuzzle::test() {
     printf("Test N-Puzzle:\n\n");
+    Timer timer;  // Record running time
 
     // 3*3
     //NPuzzle::node src({1, 5, 2, 7, 0, 4, 6, 3, 8}, 3, 3);
@@ -352,8 +369,10 @@ void NPuzzle::test() {
 
     // Run
     NPuzzle puzzle(src, des);
-    Timer timer;
+    timer.reset();
     puzzle.run();
+
+    // Get result
     auto time = timer.elapse();
     const auto &pathDirec = puzzle.getDirectionPath();
     const auto &pathNode = puzzle.getNodePath();
@@ -365,27 +384,21 @@ void NPuzzle::test() {
     printf("Time elapse: %.2lf ms\n", time);
     printf("Searched number: %d\n", puzzle.getSearchCount());
     printf("Path length: %d\n", (int)pathDirec.size());
-    printf("Path of directions:\n");
-    for (const auto &d : pathDirec) {
-        switch (d) {
-            case LEFT:
-                printf("L "); break;
-            case UP:
-                printf("U "); break;
-            case RIGHT:
-                printf("R "); break;
-            case DOWN:
-                printf("D "); break;
-            default: break;
-        }
-    }
-    printf("\nPath of nodes:\n");
-    for (const auto &d : pathNode) {
-        //printf("->%s", d.toString().c_str());
-    }
-    // Test path correctness
     for (const auto &d : pathDirec) {
         src.move(d);
     }
-    printf("\nPath correctness check: %s\n", src == des ? "pass" : "failed");
+    printf("Path correctness check: %s\n", src == des ? "pass" : "failed");
+    printf("Path of directions:\n");
+    for (const auto &d : pathDirec) {
+        printf("%d ", d);
+    }
+    printf("\nPath of nodes:\n");
+    //int cnt = 0, num = 53 / src.getSize();
+    //for (const auto &d : pathNode) {
+    //    printf("->%s", d.toString().c_str());
+    //    if (++cnt % num == 0) {
+    //        printf("\n");
+    //    }
+    //}
+    printf("\n");
 }

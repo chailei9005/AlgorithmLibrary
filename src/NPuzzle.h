@@ -218,9 +218,15 @@ public:
     */
     int getSearchCount() const;
 
+    /*
+    Set the start node and end node
+    */
+    void setStartNode(const node &n);
+    void setEndNode(const node &n);
+
 private:
-    const node src;  // Start node
-    const node des;  // End node
+    node src;  // Start node
+    node des;  // End node
     min_heap openList;
     hash_table closeList;
     std::list<Direction> pathDirec;
@@ -254,6 +260,11 @@ private:
     @return the manhatten distance between two nodes
     */
     int getEstimateDist(const node &n) const;
+
+    /*
+    Initialize fields for running algorithm
+    */
+    void init();
 
 public:
     /*
