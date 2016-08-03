@@ -56,9 +56,10 @@ public:
     Get the adjacent node at the direction
 
     @param direc the direction
-    @param n the adjacent node will be stored in this field
+    @return the adjacent node pointer. If no
+            adjacent node found, return nullptr
     */
-    void getAdjNode(const Direction &direc, NPuzzleNode &n) const;
+    node_ptr getAdjNode(const Direction &direc) const;
 
     /*
     Move the empty grid toward the direction
@@ -218,8 +219,8 @@ public:
     int getSearchCount() const;
 
 private:
-    node src;  // Start node
-    node des;  // End node
+    const node src;  // Start node
+    const node des;  // End node
     min_heap openList;
     hash_table closeList;
     std::list<Direction> pathDirec;
@@ -240,9 +241,9 @@ private:
     void printSearchInfo(const node &cur) const;
 
     /*
-    Construct the path from src to des.
+    Construct the path from src to the node n.
     */
-    void constructPath();
+    void constructPath(const node &n);
 
     /*
     Calculate the estimated distance

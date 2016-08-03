@@ -10,8 +10,6 @@
 using std::string;
 using std::vector;
 using std::stringstream;
-using std::shared_ptr;
-using std::make_shared;
 using sl::NPuzzleNode;
 using sl::NPuzzle;
 using sl::Direction;
@@ -98,9 +96,14 @@ bool NPuzzleNode::canMove(const Direction &direc) const {
     }
 }
 
-void NPuzzleNode::getAdjNode(const Direction &direc, NPuzzleNode &n) const {
-    n = *this;
-    n.move(direc);
+NPuzzleNode::node_ptr NPuzzleNode::getAdjNode(const Direction &direc) const {
+    if (!canMove(direc)) {
+        return nullptr;
+    } else {
+        node_ptr n(new NPuzzleNode(*this));
+        n->move(direc);
+        return n;
+    }
 }
 
 int NPuzzleNode::getRow(const int &i) const {
@@ -229,24 +232,19 @@ void NPuzzle::printSearchInfo(const node &cur) const {
            cur.getF(), getSearchCount());
 }
 
-void NPuzzle::constructPath() {
-    pathDirec.clear();
-    node_ptr p = des.getParent(), tmp = p;
-    if (p) {
-        pathNode.push_front(des);
-        pathDirec.push_front(des.getDirection());
-        while (p = p->getParent()) {
-            pathNode.push_front(*tmp);
-            pathDirec.push_front(tmp->getDirection());
-            tmp = p;
-        }
-        pathNode.push_front(*tmp);
+void NPuzzle::constructPath(const node &n) {
+    pathNode.push_front(n);
+    pathDirec.push_front(n.getDirection());
+    node_ptr p = n.getParent();
+    while (p) {
+        pathNode.push_front(*p);
+        pathDirec.push_front(p->getDirection());
+        p = p->getParent();
     }
 }
 
 void NPuzzle::run() {
-    node cur, adj;
-    src.setG(0);
+    node cur;
     openList.push(src);
     while (!openList.empty()) {
         // Loop until the open list is empty or finding
@@ -264,21 +262,18 @@ void NPuzzle::run() {
         closeList.insert(cur);
         printSearchInfo(cur);
         if (cur == des) {  // Find destination
-            des = cur;
-            constructPath();
+            constructPath(cur);
             break;
         }
         for (int i = 1; i <= 4; ++i) {  // Traverse adj
             Direction d = Direction(i);
-            if (cur.canMove(d)) {
-                cur.getAdjNode(d, adj);
-                if (closeList.find(adj) == closeList.end()) {
-                    adj.setParent(node_ptr(new node(cur)));
-                    adj.setDirection(d);
-                    adj.setG(cur.getG() + 1);
-                    adj.setH(estimateH(adj));
-                    openList.push(adj);
-                }
+            node_ptr adj = cur.getAdjNode(d);
+            if (adj && closeList.find(*adj) == closeList.end()) {
+                adj->setParent(node_ptr(new node(cur)));
+                adj->setDirection(d);
+                adj->setG(cur.getG() + 1);
+                adj->setH(estimateH(*adj));
+                openList.push(*adj);
             }
         }
     }
