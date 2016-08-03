@@ -314,7 +314,7 @@ int NPuzzle::getEstimateDist(const node &n) const {
             geometric += (int)(sqrt(dR * dR + dC * dC));
         }
     }
-    return 1 * manhatten + 1 * geometric;
+    return 2 * manhatten + 1 * geometric;
 }
 
 int NPuzzle::estimateH(const node &n) const {
@@ -337,7 +337,7 @@ int NPuzzle::estimateH(const node &n) const {
     }
     // Estimate distance
     int d = getEstimateDist(n);
-    return 50 * (1 * s + 1 * w + 3 * d);
+    return 3 * (1 * s + 0 * w + 1 * d);
 }
 
 void NPuzzle::test() {
@@ -361,8 +361,8 @@ void NPuzzle::test() {
     //NPuzzle::node des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 0}, 5, 4);
 
     // 5*5
-    // NPuzzle::node src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0, 24}, 5, 5);
-    // NPuzzle::node des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0}, 5, 5);
+    //NPuzzle::node src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0, 24}, 5, 5);
+    //NPuzzle::node des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0}, 5, 5);
 
     // Rearrage
     src.shuffle();
