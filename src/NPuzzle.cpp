@@ -349,8 +349,8 @@ void NPuzzle::test() {
     //NPuzzle::node des({1, 2, 3, 4, 5, 6, 7, 8, 0}, 3, 3);
 
     // 4*4
-    NPuzzle::node src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15}, 4, 4);
-    NPuzzle::node des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0}, 4, 4);
+    //NPuzzle::node src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15}, 4, 4);
+    //NPuzzle::node des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0}, 4, 4);
 
     // 4*5
     //NPuzzle::node src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 0, 19}, 4, 5);
@@ -361,8 +361,8 @@ void NPuzzle::test() {
     //NPuzzle::node des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 0}, 5, 4);
 
     // 5*5
-    //NPuzzle::node src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0, 24}, 5, 5);
-    //NPuzzle::node des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0}, 5, 5);
+    NPuzzle::node src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0, 24}, 5, 5);
+    NPuzzle::node des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0}, 5, 5);
 
     // Rearrage
     src.shuffle();
@@ -388,11 +388,11 @@ void NPuzzle::test() {
         src.move(d);
     }
     printf("Path correctness check: %s\n", src == des ? "pass" : "failed");
-    printf("Path of directions:\n[");
+    printf("Path of directions:\n");
     for (const auto &d : pathDirec) {
-        printf(",%d", d);
+        printf("%d,", d);
     }
-    printf("]\nPath of nodes:\n");
+    printf("\nPath of nodes:\n");
     //int cnt = 0, num = 53 / src.getSize();
     //for (const auto &d : pathNode) {
     //    printf("->%s", d.toString().c_str());
