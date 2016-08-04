@@ -34,7 +34,6 @@ Value 0 indicates the empty grid in the puzzle.
 class NPuzzleNode {
 public:
     typedef std::vector<int> value_type;
-    typedef std::shared_ptr<NPuzzleNode> node_ptr;
 
     ~NPuzzleNode();
 
@@ -57,10 +56,10 @@ public:
     Get the adjacent node at the direction
 
     @param direc the direction
-    @return the adjacent node pointer. If no
-            adjacent node found, return nullptr
+    @return the adjacent node pointer. If no adjacent node found, return nullptr.
+            (make sure to delete because the pointer is allocated dynamically)
     */
-    node_ptr getAdjNode(const Direction &direc) const;
+    NPuzzleNode* getAdjNode(const Direction &direc) const;
 
     /*
     Move the empty grid toward the direction
@@ -114,10 +113,9 @@ public:
     /*
     Hash function for a node
 
-    @param n the node
     @return the hash value of the node
     */
-    static unsigned long long hash(const NPuzzleNode &n);
+    unsigned long long hash() const;
 
     /*
     Check if two nodes equal.
@@ -138,12 +136,12 @@ public:
     */
     void setG(const int g_);
     void setH(const int h_);
-    void setParent(node_ptr p);
+    void setParent(NPuzzleNode* p);
     void setDirection(const Direction &d);
     int getG() const;
     int getH() const;
     int getF() const;
-    node_ptr getParent() const;
+    NPuzzleNode* getParent() const;
     Direction getDirection() const;
 
 private:
@@ -151,10 +149,10 @@ private:
     int emptyPos = -1;
     int row = 0;
     int col = 0;
-    int g = 0;                  // The distance from beginning node to current node
-    int h = 0;                  // The distance from current node to goal node (heuristic)
-    node_ptr parent = nullptr;  // Parent node pointer
-    Direction direc = NONE;     // Direction from parent node to this node
+    int g = 0;                      // The distance from beginning node to current node
+    int h = 0;                      // The distance from current node to goal node (heuristic)
+    NPuzzleNode* parent = nullptr;  // Parent node pointer
+    Direction direc = NONE;         // Direction from parent node to this node
 
     /*
     Initialize the node value.
@@ -172,8 +170,15 @@ For usage, see function test().
 */
 class NPuzzle {
 public:
-    typedef NPuzzleNode::node_ptr node_ptr;
-    typedef NPuzzleNode node;
+    /*
+    Comparator for hash table
+    */
+    struct cmpHashTable {
+        bool operator()(const NPuzzleNode *const &a,
+                        const NPuzzleNode *const &b) const {
+            return *a == *b;
+        }
+    };
 
     /*
     Hash table declaration.
@@ -181,13 +186,23 @@ public:
     The first param is the number of buckets in the hash table
     The second param is the hash function
     */
-    typedef HashTable<node> hash_table;
-    //typedef std::unordered_set<node, decltype(node::hash)*> hash_table;  // STD version
+    typedef HashTable<NPuzzleNode*, cmpHashTable> hash_table;
+    //typedef std::unordered_set<node, decltype(NPuzzleNode().hash)*> hash_table;  // STD version
+
+    /*
+    Comparator for binary heap
+    */
+    struct cmpBinaryHeap {
+        bool operator()(const NPuzzleNode *const &a,
+                        const NPuzzleNode *const &b) const {
+            return *a <= *b;
+        }
+    };
 
     /*
     Min-root heap declaration
     */
-    typedef BinaryHeap<node> min_heap;
+    typedef BinaryHeap<NPuzzleNode*, cmpBinaryHeap> min_heap;
     //typedef std::priority_queue<node, std::vector<node>, std::greater<node>> min_heap;  // STD version
 
     /*
@@ -196,7 +211,7 @@ public:
     @param src_ the start node
     @param des_ the goal node
     */
-    NPuzzle(const node &src_, const node &des_);
+    NPuzzle(const NPuzzleNode &src_, const NPuzzleNode &des_);
 
     ~NPuzzle();
 
@@ -213,7 +228,7 @@ public:
     /*
     Get the solution path in nodes.
     */
-    const std::list<node>& getNodePath() const;
+    const std::list<NPuzzleNode>& getNodePath() const;
 
     /*
     Get the total searched number
@@ -223,16 +238,21 @@ public:
     /*
     Set the start node and end node
     */
-    void setStartNode(const node &n);
-    void setEndNode(const node &n);
+    void setStartNode(const NPuzzleNode &n);
+    void setEndNode(const NPuzzleNode &n);
 
 private:
-    node src;  // Start node
-    node des;  // End node
+    NPuzzleNode src;
+    NPuzzleNode des;
     min_heap openList;
     hash_table closeList;
     std::list<Direction> pathDirec;
-    std::list<node> pathNode;
+    std::list<NPuzzleNode> pathNode;
+
+    // Record dynamically allocated nodes
+    std::list<NPuzzleNode*> alloc;
+
+    unsigned searchedCnt = 0;
 
     /*
     Estimate the heuristic value
@@ -241,7 +261,7 @@ private:
     @param n the current node
     @return heuristic value from node n to the goal.
     */
-    int estimateH(const node &n) const;
+    int getEstimate(const NPuzzleNode *n) const;
 
     /*
     Calculate the estimated distance
@@ -251,22 +271,27 @@ private:
     @param n the current node
     @return the manhatten distance between two nodes
     */
-    int getEstimateDist(const node &n) const;
+    int getEstimateDist(const NPuzzleNode *n) const;
 
     /*
     Print the information of the current searching node.
     */
-    void printSearchInfo(const node &cur) const;
+    void printSearchInfo(const NPuzzleNode *cur) const;
 
     /*
     Construct the path from src to the node n.
     */
-    void constructPath(const node &n);
+    void constructPath(const NPuzzleNode *n);
 
     /*
     Check if the node is visited.
     */
-    bool isVisited(const node &n) const;
+    bool isVisit(NPuzzleNode *const n) const;
+
+    /*
+    Free the resources using in searching.
+    */
+    void freeResources();
 
 public:
     /*
