@@ -1,6 +1,7 @@
 #include "Base.h"
 #include "LinkedList.h"
 #include "BinaryHeap.h"
+#include "HashTable.h"
 #include "AVLTree.h"
 #include "DisjointSet.h"
 #include "Graph.h"
@@ -16,6 +17,7 @@ using namespace sl;
 void test() {
     //LinkedList<int>::test();
     //BinaryHeap<int>::test();
+    //HashTable<int>::test();
     //AVLTree<int>::test();
     //DisjointSet::test();
     //Graph::test();

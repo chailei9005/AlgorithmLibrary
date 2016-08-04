@@ -142,8 +142,8 @@ string NPuzzleNode::toString() const {
     return res;
 }
 
-unsigned NPuzzleNode::hash(const NPuzzleNode &n) {
-    return (unsigned)Algorithm::cantorExpand(n.getSize(), n.getVal());
+unsigned long long NPuzzleNode::hash(const NPuzzleNode &n) {
+    return Algorithm::cantorExpand(n.getSize(), n.getVal());
 }
 
 bool NPuzzleNode::operator==(const NPuzzleNode &a) const {
@@ -208,7 +208,7 @@ N-Puzzle algorithm definition
 */
 
 NPuzzle::NPuzzle(const node &src_, const node &des_)
-    : src(src_), des(des_), closeList(100000, node::hash) {
+    : src(src_), des(des_), closeList(2000000, node::hash) {
 }
 
 NPuzzle::~NPuzzle() {
@@ -234,21 +234,20 @@ void NPuzzle::setEndNode(const node &n) {
     des = n;
 }
 
-void NPuzzle::init() {
-    openList.clear();
-    closeList.clear();
-    pathDirec.clear();
-    pathNode.clear();
-    openList.push(src);
-}
-
 void NPuzzle::printSearchInfo(const node &cur) const {
     printf("Searching: %s G:%d H:%d F:%d Total nodes: %d\n",
            cur.toString().c_str(), cur.getG(), cur.getH(),
            cur.getF(), getSearchCount());
 }
 
+bool NPuzzle::isVisited(const node &n) const {
+    return closeList.has(n);
+    //return closeList.find(n) != closeList.end();  // STL version
+}
+
 void NPuzzle::constructPath(const node &n) {
+    pathDirec.clear();
+    pathNode.clear();
     pathNode.push_front(n);
     pathDirec.push_front(n.getDirection());
     node_ptr p = n.getParent();
@@ -260,7 +259,7 @@ void NPuzzle::constructPath(const node &n) {
 }
 
 void NPuzzle::run() {
-    init();
+    openList.push(src);
     node cur;
     while (!openList.empty()) {
         // Loop until the open list is empty or finding
@@ -268,23 +267,23 @@ void NPuzzle::run() {
         do {
             cur = openList.top();
             openList.pop();
-        } while (!openList.empty() && closeList.find(cur) != closeList.end());
+        } while (!openList.empty() && isVisited(cur));
         // If all the nodes in the open list is in the
         // close list, then there is no available path
         // between the two nodes.
-        if (openList.empty() && closeList.find(cur) != closeList.end()) {
-            break;
+        if (openList.empty() && isVisited(cur)) {
+            return;
         }
         closeList.insert(cur);
         printSearchInfo(cur);
         if (cur == des) {  // Find destination
             constructPath(cur);
-            break;
+            return;
         }
         for (int i = 1; i <= 4; ++i) {  // Traverse adj
             Direction d = Direction(i);
             node_ptr adj = cur.getAdjNode(d);
-            if (adj && closeList.find(*adj) == closeList.end()) {
+            if (adj && !isVisited(*adj)) {
                 adj->setParent(node_ptr(new node(cur)));
                 adj->setDirection(d);
                 adj->setG(cur.getG() + 1);

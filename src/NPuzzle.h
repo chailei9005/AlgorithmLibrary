@@ -2,6 +2,7 @@
 
 #include "Base.h"
 #include "BinaryHeap.h"
+#include "HashTable.h"
 #include <vector>
 #include <string>
 #include <queue>
@@ -116,7 +117,7 @@ public:
     @param n the node
     @return the hash value of the node
     */
-    static unsigned hash(const NPuzzleNode &n);
+    static unsigned long long hash(const NPuzzleNode &n);
 
     /*
     Check if two nodes equal.
@@ -180,7 +181,8 @@ public:
     The first param is the number of buckets in the hash table
     The second param is the hash function
     */
-    typedef std::unordered_set<node, decltype(node::hash)*> hash_table;
+    typedef HashTable<node> hash_table;
+    //typedef std::unordered_set<node, decltype(node::hash)*> hash_table;  // STD version
 
     /*
     Min-root heap declaration
@@ -242,16 +244,6 @@ private:
     int estimateH(const node &n) const;
 
     /*
-    Print the information of the current searching node.
-    */
-    void printSearchInfo(const node &cur) const;
-
-    /*
-    Construct the path from src to the node n.
-    */
-    void constructPath(const node &n);
-
-    /*
     Calculate the estimated distance
     from the curernt node to des node.
     (using manhatten and geometric distance)
@@ -262,9 +254,19 @@ private:
     int getEstimateDist(const node &n) const;
 
     /*
-    Initialize fields for running algorithm
+    Print the information of the current searching node.
     */
-    void init();
+    void printSearchInfo(const node &cur) const;
+
+    /*
+    Construct the path from src to the node n.
+    */
+    void constructPath(const node &n);
+
+    /*
+    Check if the node is visited.
+    */
+    bool isVisited(const node &n) const;
 
 public:
     /*
