@@ -14,14 +14,14 @@ A binary heap data structure.
 Template arguments:
 1. T: the data type
    To run test, T must overload operator '<<' and '>>'.
-2. cmpT: the comparator that overload operator()
+2. cmp: the comparator that overload operator()
    The structure will make sure that
    cmp()(parent_tree_node, child_tree_node) == true
    (default is using operator '<=')
 
 For usage, see function test().
 */
-template <typename T, typename cmpT = std::less_equal<T>>
+template <typename T, typename cmp = std::less_equal<T>>
 class BinaryHeap {
 public:
     ~BinaryHeap() {
@@ -33,7 +33,7 @@ public:
     /*
     Return the number of elements in the heap
     */
-    long size() const {
+    unsigned size() const {
         return size_;
     }
 
@@ -58,11 +58,11 @@ public:
     */
     void push(const T &x) {
         if (isFull()) {
-            arr.resize((size_ << 1) + 2);  // Expand space
+            arr.resize(arr.size() << 1);  // Expand space
         }
         // Element 'x' percolates up in the heap
         int i;
-        for (i = ++size_; i != 1 && !cmp(arr[i >> 1], x); i >>= 1) {
+        for (i = ++size_; i != 1 && !cmp_(arr[i >> 1], x); i >>= 1) {
             arr[i] = arr[i >> 1];
         }
         arr[i] = x;
@@ -86,14 +86,14 @@ public:
             throw std::range_error("BinaryHeap.pop(): heap is empty");
         }
         T rootEle = arr[1], lastEle = arr[size_--];
-        long i, child;
+        unsigned i, child;
         // Empty hole percolate down in the heap
         for (i = 1; (i << 1) <= size_; i = child) {
             child = i << 1;
-            if (child != size_ && cmp(arr[child + 1], arr[child])) {
+            if (child != size_ && cmp_(arr[child + 1], arr[child])) {
                 ++child;
             }
-            if (cmp(lastEle, arr[child])) {
+            if (cmp_(lastEle, arr[child])) {
                 break;
             } else {
                 arr[i] = arr[child];
@@ -103,10 +103,10 @@ public:
     }
 
 private:
-    long size_;
+    unsigned size_;
 
     // The comparator
-    cmpT cmp;
+    cmp cmp_;
 
     /*
     Content array.

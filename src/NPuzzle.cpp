@@ -243,7 +243,7 @@ void NPuzzle::init() {
 }
 
 void NPuzzle::printSearchInfo(const node &cur) const {
-    printf("Searching: %s G:%d H:%d F:%d total: %d\n",
+    printf("Searching: %s G:%d H:%d F:%d Total nodes: %d\n",
            cur.toString().c_str(), cur.getG(), cur.getH(),
            cur.getF(), getSearchCount());
 }
@@ -337,7 +337,7 @@ int NPuzzle::estimateH(const node &n) const {
     }
     // Estimate distance
     int d = getEstimateDist(n);
-    return 3 * (1 * s + 0 * w + 1 * d);
+    return 5 * (1 * s + 0 * w + 1 * d);
 }
 
 void NPuzzle::test() {
