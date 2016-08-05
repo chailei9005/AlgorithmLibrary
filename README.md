@@ -37,6 +37,7 @@ $ make clean
 |[Permutation](https://en.wikipedia.org/wiki/Permutation)|[nextPermutation()](./src/Algorithm.cpp)|
 |[Combination](https://en.wikipedia.org/wiki/Combination)|[printCombinations()](./src/Algorithm.cpp)|
 |[Cantor Expansion](http://www.programering.com/a/MDMwkDNwATc.html) [(zh)](https://zh.wikipedia.org/wiki/%E5%BA%B7%E6%89%98%E5%B1%95%E5%BC%80)|[cantorExpand()](./src/Algorithm.cpp)|
+|[Prime Number](https://en.wikipedia.org/wiki/Prime_number)|[nextPrime()](./src/Algorithm.cpp)|
 |||
 |Graph Algorithms|[AlgorithmGraph.h](./src/AlgorithmGraph.h) [AlgorithmGraph.cpp](./src/AlgorithmGraph.cpp)|
 |[Topological Sort](https://en.wikipedia.org/wiki/Topological_sorting)|[topoSort()](./src/AlgorithmGraph.cpp)|

@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 using std::cout;
 using std::endl;
@@ -15,6 +16,7 @@ void Algorithm::test() {
     //testPermutation();
     //testCombination();
     //testCantorExpand();
+    testNextPrime();
 }
 
 unsigned long long Algorithm::factorial(unsigned n) {
@@ -285,4 +287,35 @@ void Algorithm::testCantorExpand() {
         cout << b[i] << " ";
     }
     cout << endl;
+}
+
+unsigned long long Algorithm::nextPrime(unsigned long long n) {
+    while (!isPrime(n)) {
+        ++n;
+    }
+    return n;
+}
+
+bool Algorithm::isPrime(const unsigned long long n) {
+    if (n <= 1) return false;
+    if (n != 2 && (n & 1) == 0) {
+        return false;
+    } else {
+        unsigned long long bound = (unsigned long long)sqrt(n);
+        for (unsigned long long i = 3; i <= bound; i += 2) {
+            if (n % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+void Algorithm::testNextPrime() {
+    cout << "Test next prime number:\n" << endl;
+    cin.clear();
+    cout << "Input number: ";
+    unsigned long long n;
+    cin >> n;
+    cout << "Next prime number: " << nextPrime(n) << endl;
 }

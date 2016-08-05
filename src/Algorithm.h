@@ -114,6 +114,14 @@ public:
     static void cantorExpandInverse(const int n, unsigned long long val, std::vector<int> &a);
     static void testCantorExpand();
 
+    /*
+    Check if n is a prime number
+    Time complexity O(N^(1/2))
+    */
+    static unsigned long long nextPrime(unsigned long long n);
+    static bool isPrime(const unsigned long long n);
+    static void testNextPrime();
+
 private:
 };
 
