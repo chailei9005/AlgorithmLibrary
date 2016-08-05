@@ -26,12 +26,12 @@ NPuzzleNode::~NPuzzleNode() {
 NPuzzleNode::NPuzzleNode() {
 }
 
-NPuzzleNode::NPuzzleNode(const value_type &val_, const int row_, const int col_)
+NPuzzleNode::NPuzzleNode(const std::vector<int> &val_, const int row_, const int col_)
     : row(row_), col(col_) {
     init(val_);
 }
 
-void NPuzzleNode::init(const value_type &val_) {
+void NPuzzleNode::init(const std::vector<int> &val_) {
     if (row < 2 || col < 2) {
         throw std::range_error("NPuzzleNode.init(): dimension is at least 2*2");
     }
@@ -50,7 +50,7 @@ void NPuzzleNode::init(const value_type &val_) {
     val = val_;
 }
 
-const NPuzzleNode::value_type& NPuzzleNode::getVal() const {
+const std::vector<int>& NPuzzleNode::getVal() const {
     return val;
 }
 
@@ -97,13 +97,9 @@ bool NPuzzleNode::canMove(const Direction &direc) const {
 }
 
 NPuzzleNode* NPuzzleNode::getAdjNode(const Direction &direc) const {
-    if (!canMove(direc)) {
-        return nullptr;
-    } else {
-        NPuzzleNode* n = new NPuzzleNode(*this);
-        n->move(direc);
-        return n;
-    }
+    NPuzzleNode* n = new NPuzzleNode(*this);
+    n->move(direc);
+    return n;
 }
 
 int NPuzzleNode::getRow(const int &i) const {
@@ -234,24 +230,10 @@ void NPuzzle::setEndNode(const NPuzzleNode &n) {
     des = n;
 }
 
-void NPuzzle::printSearchInfo(const NPuzzleNode *cur) const {
+void NPuzzle::printSearchInfo(const NPuzzleNode *const cur) const {
     printf("Searching: %s G:%d H:%d F:%d Total nodes: %d\n",
            cur->toString().c_str(), cur->getG(), cur->getH(),
            cur->getF(), getSearchCount());
-}
-
-bool NPuzzle::isVisit(NPuzzleNode *const n) const {
-    return closeList.has(n);
-    //return closeList.find(n) != closeList.end();  // STL version
-}
-
-void NPuzzle::freeResources() {
-    for (NPuzzleNode *n : alloc) {
-        delete n;
-    }
-    alloc.clear();
-    openList.clear();
-    closeList.clear();
 }
 
 void NPuzzle::run() {
@@ -288,8 +270,8 @@ void NPuzzle::run() {
 
         for (int i = 1; i <= 4; ++i) {  // Traverse adj
             Direction d = Direction(i);
-            NPuzzleNode *adj = cur->getAdjNode(d);
-            if (adj) {
+            if (cur->canMove(d)) {
+                NPuzzleNode *adj = cur->getAdjNode(d);
                 alloc.push_back(adj);
                 if (!isVisit(adj)) {
                     adj->setParent(cur);
@@ -303,7 +285,16 @@ void NPuzzle::run() {
     }
 }
 
-void NPuzzle::constructPath(NPuzzleNode *n) {
+void NPuzzle::freeResources() {
+    for (NPuzzleNode *n : alloc) {
+        delete n;
+    }
+    alloc.clear();
+    openList.clear();
+    closeList.clear();
+}
+
+void NPuzzle::constructPath(const NPuzzleNode *n) {
     pathNode.clear();
     pathDirec.clear();
     while (n) {
@@ -313,10 +304,31 @@ void NPuzzle::constructPath(NPuzzleNode *n) {
     }
 }
 
-int NPuzzle::getEstimateDist(const NPuzzleNode *n) const {
+bool NPuzzle::isVisit(NPuzzleNode *const n) const {
+    return closeList.has(n);
+    //return closeList.find(n) != closeList.end();  // STL version
+}
+
+int NPuzzle::getEstimate(const NPuzzleNode *const n) const {
     const auto &val = n->getVal();
     const auto &desVal = des.getVal();
     const auto &size = n->getSize();
+
+    // Number of nodes whose next node is in a wrong position
+    int wrongNext = 0;
+    for (int i = 0; i < size - 1; i++) {
+        if (val[i] + 1 != val[i + 1]) {
+            wrongNext++;
+        }
+    }
+
+    // Number of nodes which are in a wrong position
+    int wrong = 0;
+    for (int i = 0; i < size; ++i) {
+        if (val[i] != desVal[i]) {
+            ++wrong;
+        }
+    }
 
     // Sum up the distance of each element
     int manhatten = 0, geometric = 0;
@@ -332,37 +344,15 @@ int NPuzzle::getEstimateDist(const NPuzzleNode *n) const {
             geometric += (int)(sqrt(dR * dR + dC * dC));
         }
     }
-    return 2 * manhatten + 1 * geometric;
-}
 
-int NPuzzle::getEstimate(const NPuzzleNode *n) const {
-    const auto &val = n->getVal();
-    const auto &desVal = des.getVal();
-    const auto &size = n->getSize();
-    // Number of nodes whose next node is in a wrong position
-    int s = 0;
-    for (int i = 0; i < size - 1; i++) {
-        if (val[i] + 1 != val[i + 1]) {
-            s++;
-        }
-    }
-    // Number of nodes which are in a wrong position
-    int w = 0;
-    for (int i = 0; i < size; ++i) {
-        if (val[i] != desVal[i]) {
-            ++w;
-        }
-    }
-    // Estimate distance
-    int d = getEstimateDist(n);
-    return 5 * (1 * s + 0 * w + 1 * d);
+    return 5 * (1 * wrongNext + 0 * wrong + 2 * manhatten + 1 * geometric);
 }
 
 void NPuzzle::test() {
     printf("Test N-Puzzle:\n\n");
 
     // 3*3
-    //NPuzzleNode src({1, 2, 3, 4, 5, 6, 0, 7, 8}, 3, 3);
+    //NPuzzleNode src({5, 1, 7, 4, 3, 6, 0, 2, 8}, 3, 3);
     //NPuzzleNode des({1, 2, 3, 4, 5, 6, 7, 8, 0}, 3, 3);
 
     // 4*4
@@ -378,7 +368,7 @@ void NPuzzle::test() {
     //NPuzzleNode des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 0}, 5, 4);
 
     // 5*5
-    NPuzzleNode src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0, 24}, 5, 5);
+    NPuzzleNode src({14, 0, 24, 13, 23, 21, 20, 22, 18, 11, 6, 1, 16, 3, 10, 7, 17, 4, 8, 2, 9, 15, 19, 5, 12}, 5, 5);
     NPuzzleNode des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0}, 5, 5);
 
     // Rearrage
