@@ -281,7 +281,7 @@ private:
     /*
     Construct the path from src to the node n.
     */
-    void constructPath(const NPuzzleNode *n);
+    void constructPath(NPuzzleNode *n);
 
     /*
     Check if the node is visited.

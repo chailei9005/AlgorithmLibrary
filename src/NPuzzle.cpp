@@ -254,19 +254,6 @@ void NPuzzle::freeResources() {
     closeList.clear();
 }
 
-void NPuzzle::constructPath(const NPuzzleNode *n) {
-    pathNode.clear();
-    pathNode.push_front(*n);
-    pathDirec.clear();
-    pathDirec.push_front(n->getDirection());
-    NPuzzleNode *p = n->getParent();
-    while (p) {
-        pathNode.push_front(*p);
-        pathDirec.push_front(p->getDirection());
-        p = p->getParent();
-    }
-}
-
 void NPuzzle::run() {
     searchedCnt = 0;
     NPuzzleNode *start = new NPuzzleNode(src);
@@ -313,6 +300,16 @@ void NPuzzle::run() {
                 }
             }
         }
+    }
+}
+
+void NPuzzle::constructPath(NPuzzleNode *n) {
+    pathNode.clear();
+    pathDirec.clear();
+    while (n) {
+        //pathNode.push_front(*n);
+        pathDirec.push_front(n->getDirection());
+        n = n->getParent();
     }
 }
 
@@ -402,24 +399,27 @@ void NPuzzle::test() {
     printf("\nSearching finished.\n");
     printf(" Begin node: %s\n", src.toString().c_str());
     printf("   End node: %s\n", des.toString().c_str());
-    printf("Time elapse: %.2lf ms\n", time);
-    printf("Searched number: %d\n", puzzle.getSearchCount());
+    printf("Time elapse: %.3lf ms\n", time);
+    printf("Searched nodes: %d\n", puzzle.getSearchCount());
     printf("Path length: %d\n", (int)pathDirec.size());
     for (const auto &d : pathDirec) {
         src.move(d);
     }
     printf("Path correctness check: %s\n", src == des ? "pass" : "failed");
     printf("Path of directions:\n");
+    int cnt = 0;
     for (const auto &d : pathDirec) {
-        printf("%d,", d);
+        if (cnt++) printf(",");
+        printf("%d", d);
     }
     printf("\nPath of nodes:\n");
-    int cnt = 0, num = 53 / src.getSize();
-    //for (const auto &d : pathNode) {
-    //    printf("->%s", d.toString().c_str());
-    //    if (++cnt % num == 0) {
-    //        printf("\n");
-    //    }
-    //}
+    int num = 53 / src.getSize();
+    cnt = 0;
+    for (const auto &d : pathNode) {
+        printf("->%s", d.toString().c_str());
+        if (++cnt % num == 0) {
+            printf("\n");
+        }
+    }
     printf("\n");
 }
