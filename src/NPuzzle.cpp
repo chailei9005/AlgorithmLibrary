@@ -204,7 +204,7 @@ N-Puzzle algorithm definition
 */
 
 NPuzzle::NPuzzle(const NPuzzleNode &src_, const NPuzzleNode &des_)
-    : src(src_), des(des_), closeList(2000000, [](const NPuzzleNode *const &x) { return x->hash(); }) {
+    : src(src_), des(des_), closeList(1048576, [](const NPuzzleNode *const &x) { return x->hash(); }) {
 }
 
 NPuzzle::~NPuzzle() {
