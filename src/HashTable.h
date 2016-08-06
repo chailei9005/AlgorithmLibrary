@@ -23,29 +23,32 @@ For usage, see function test().
 template <typename T, typename cmp = std::equal_to<T>>
 class HashTable {
 public:
+    typedef unsigned size_type;
 
     /*
     Initialize the hashFunc table.
 
-    @param bucketsNum the number of buckets
+    @param bucketsNum_ the minimum number of buckets
     @param hashFunc_ the hash function.
     */
-    HashTable(const unsigned &bucketsNum,
+    HashTable(const size_type bucketsNum_,
               const std::function<unsigned long long(const T&)> &hashFunc_
-              = [](const T &x) { return std::hash<T>()(x); })
-        : size_(0), buckets(bucketsNum, nullptr), hashFunc(hashFunc_) {}
+              = [](const T &x) { return std::hash<T>()(x); }) : hashFunc(hashFunc_) {
+        rehash(bucketsNum_);
+    }
 
     /*
     Release the space
     */
     ~HashTable() {
         clear();
+        delete[] buckets;
     }
 
     /*
     Return the number of elements in the hash table
     */
-    unsigned size() const {
+    size_type size() const {
         return size_;
     }
 
@@ -53,7 +56,7 @@ public:
     Clear the elements in the hash table.
     */
     void clear() {
-        for (unsigned i = 0; i < buckets.size(); ++i) {
+        for (size_type i = 0; i < bucketsNum; ++i) {
             ListNode *tmp = buckets[i], *del;
             while (tmp) {
                 del = tmp;
@@ -72,7 +75,7 @@ public:
     @param e the element
     */
     void insert(const T &e) {
-        unsigned pos = hash(e);
+        size_type pos = hash(e);
         if (!buckets[pos]) {
             buckets[pos] = new ListNode(e);
             ++size_;
@@ -97,7 +100,7 @@ public:
     @param e the element
     */
     bool has(const T &e) const {
-        unsigned pos = hash(e);
+        size_type pos = hash(e);
         if (buckets[pos]) {
             ListNode *tmp = buckets[pos];
             while (tmp) {
@@ -117,7 +120,7 @@ public:
     @param e the element
     */
     void remove(const T &e) {
-        unsigned pos = hash(e);
+        size_type pos = hash(e);
         if (buckets[pos]) {
             auto tmp = buckets[pos];
             if (cmp_(tmp->val, e)) {
@@ -136,6 +139,37 @@ public:
         }
     }
 
+    /* 
+    Rehash the hash table.
+
+    @param bucketsNum_ the minimum number of buckets
+    */
+    void rehash(const size_type bucketsNum_) {
+        // Calculate new buckets number
+        size_type newNum = MIN_BUCKETS;
+        while (newNum < bucketsNum_) {
+            newNum <<= 1;
+        }
+        // Record old buckets
+        ListNode **oldBuckets = buckets;
+        size_type oldBucketsNum = bucketsNum;
+        // Rehash
+        size_ = 0;
+        bucketsNum = newNum;
+        buckets = new ListNode*[bucketsNum];
+        for (size_type i = 0; i < bucketsNum; ++i) {
+            buckets[i] = nullptr;
+        }
+        for (size_type i = 0; i < oldBucketsNum; ++i) {
+            ListNode *p = oldBuckets[i];
+            while (p) {
+                insert(p->val);
+                p = p->next;
+            }
+        }
+        delete[] oldBuckets;
+    }
+
 private:
     /*
     Definition of list nodes in a bucket
@@ -147,22 +181,27 @@ private:
             : val(e), next(n) {}
     };
 
-    std::vector<ListNode*> buckets;
+    ListNode **buckets = nullptr;
+
+    size_type size_ = 0;
+    size_type bucketsNum = 0;
 
     std::function<unsigned long long(const T&)> hashFunc;
 
     cmp cmp_;
 
-    unsigned size_;
+    static const size_type MIN_BUCKETS = 8;
 
     /*
-    The hash function
+    The hash function.
+    Use bitwise AND to displace mod operation.
+    Thus the buckets number must be a power of 2 (2^n).
 
     @param x the element
     @return the hash value of the element x
     */
-    unsigned hash(const T &x) const {
-        return static_cast<unsigned>(hashFunc(x) & (buckets.size() - 1));
+    size_type hash(const T &x) const {
+        return static_cast<size_type>(hashFunc(x) & (bucketsNum - 1));
     }
 
 public:
@@ -180,6 +219,7 @@ public:
             << "2. r x  (remove element x)\n"
             << "3. f x  (find element x)\n"
             << "4. size (print the size)\n"
+            << "5. rh x (rehash the hash table with minimum buckets number x)"
             << "5. clr  (clear the table)\n"
             << "6. exit (exit test)\n"
             << std::endl;
@@ -202,6 +242,9 @@ public:
                     }
                 } else if (oper == "size") {
                     std::cout << table.size() << std::endl;
+                } else if (oper == "rh") {
+                    std::cin >> tmp;
+                    table.rehash(tmp);
                 } else if (oper == "clr") {
                     table.clear();
                 } else if (oper == "exit") {
