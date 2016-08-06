@@ -238,9 +238,7 @@ void NPuzzle::printSearchInfo(const NPuzzleNode *const cur) const {
 
 void NPuzzle::run() {
     searchedCnt = 0;
-    NPuzzleNode *start = new NPuzzleNode(src);
-    alloc.push_back(start);
-    openList.push(start);
+    openList.push(&src);
     while (!openList.empty()) {
 
         // Loop until the open list is empty or finding
