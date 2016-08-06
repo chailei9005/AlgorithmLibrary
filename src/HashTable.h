@@ -9,7 +9,7 @@
 NS_BEGIN
 
 /*
-A hashFunc table data structure.
+A hash table data structure.
 
 Template arguments:
 1. T: the data type
@@ -26,7 +26,7 @@ public:
     typedef unsigned size_type;
 
     /*
-    Initialize the hashFunc table.
+    Initialize the hash table.
 
     @param bucketsNum_ the minimum number of buckets
     @param hashFunc_ the hash function.
@@ -69,7 +69,7 @@ public:
     }
 
     /*
-    Insert an element to the hashFunc table.
+    Insert an element to the hash table.
     If the element exists, do nothing.
 
     @param e the element
@@ -95,7 +95,7 @@ public:
     }
     
     /*
-    Check if an element is in the hashFunc table.
+    Check if an element is in the hash table.
 
     @param e the element
     */
@@ -114,7 +114,7 @@ public:
     }
 
     /*
-    Remove an element from the hashFunc table.
+    Remove an element from the hash table.
     If the element does not exist, do nothing.
 
     @param e the element
