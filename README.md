@@ -32,17 +32,17 @@ $ make clean
 |[N-Puzzle Problem](https://en.wikipedia.org/wiki/15_puzzle)|[NPuzzle.h](./src/NPuzzle.h) [NPuzzle.cpp](./src/NPuzzle.cpp)|can search 70 nodes per millisecond in average (compiler: g++ -O2)|
 |||
 |Simple Algorithms|[Algorithm.h](./src/Algorithm.h) [Algorithm.cpp](./src/Algorithm.cpp)|
-|[Factorial](https://en.wikipedia.org/wiki/Factorial)|Algorithm::[factorial()](./src/Algorithm.cpp)|20! is max (return unsigned long long)|
-|[Binary Search](https://en.wikipedia.org/wiki/Binary_search_algorithm)|Algorithm::[binarySearch()](./src/Algorithm.cpp)|find first or last appeared position|
-|[Permutation](https://en.wikipedia.org/wiki/Permutation)|Algorithm::[nextPermutation()](./src/Algorithm.cpp)|non-recursive version|
-|[Combination](https://en.wikipedia.org/wiki/Combination)|Algorithm::[printCombinations()](./src/Algorithm.cpp)|non-recursive version|
-|[Cantor Expansion](http://www.programering.com/a/MDMwkDNwATc.html) [(zh)](https://zh.wikipedia.org/wiki/%E5%BA%B7%E6%89%98%E5%B1%95%E5%BC%80)|Algorithm::[cantorExpand()](./src/Algorithm.cpp)|cantor expansion and its inverse|
-|[Prime Number](https://en.wikipedia.org/wiki/Prime_number)|Algorithm::[nextPrime()](./src/Algorithm.cpp)|find next prime number (choose appropriate buckets number for hash table)|
+|[Factorial](https://en.wikipedia.org/wiki/Factorial)|[Algorithm::factorial()](./src/Algorithm.cpp)|20! is max (return unsigned long long)|
+|[Binary Search](https://en.wikipedia.org/wiki/Binary_search_algorithm)|[Algorithm::binarySearch()](./src/Algorithm.cpp)|find first or last appeared position|
+|[Permutation](https://en.wikipedia.org/wiki/Permutation)|[Algorithm::nextPermutation()](./src/Algorithm.cpp)|non-recursive version|
+|[Combination](https://en.wikipedia.org/wiki/Combination)|[Algorithm::printCombinations()](./src/Algorithm.cpp)|non-recursive version|
+|[Cantor Expansion](http://www.programering.com/a/MDMwkDNwATc.html) [(zh)](https://zh.wikipedia.org/wiki/%E5%BA%B7%E6%89%98%E5%B1%95%E5%BC%80)|[Algorithm::cantorExpand()](./src/Algorithm.cpp)|cantor expansion and its inverse|
+|[Prime Number](https://en.wikipedia.org/wiki/Prime_number)|[Algorithm::nextPrime()](./src/Algorithm.cpp)|find next prime number (choose appropriate buckets number for hash table)|
 |||
 |Graph Algorithms|[AlgorithmGraph.h](./src/AlgorithmGraph.h) [AlgorithmGraph.cpp](./src/AlgorithmGraph.cpp)|
-|[Topological Sort](https://en.wikipedia.org/wiki/Topological_sorting)|AlgorithmGraph::[topoSort()](./src/AlgorithmGraph.cpp)|check if a graph is cyclic|
-|[Dijkstra](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)|AlgorithmGraph::[dijkstra()](./src/AlgorithmGraph.cpp)|shortest path|
-|[Prim](https://en.wikipedia.org/wiki/Prim%27s_algorithm)|AlgorithmGraph::[prim()](./src/AlgorithmGraph.cpp)|minimum spanning tree|
+|[Topological Sort](https://en.wikipedia.org/wiki/Topological_sorting)|[AlgorithmGraph::topoSort()](./src/AlgorithmGraph.cpp)|check if a graph is cyclic|
+|[Dijkstra](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)|[AlgorithmGraph::dijkstra()](./src/AlgorithmGraph.cpp)|shortest path|
+|[Prim](https://en.wikipedia.org/wiki/Prim%27s_algorithm)|[AlgorithmGraph::prim()](./src/AlgorithmGraph.cpp)|minimum spanning tree|
 
 ## Utility
 
