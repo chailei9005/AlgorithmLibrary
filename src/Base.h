@@ -13,7 +13,7 @@ Memory leaks check
 (available in Microsoft Visual C++ complier)
 */
 
-#define CHECK_LEAK
+//#define CHECK_LEAK
 
 #ifdef CHECK_LEAK
 #ifdef _MSC_VER

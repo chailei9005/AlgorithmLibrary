@@ -13,18 +13,13 @@ For usage, see function test().
 class Algorithm {
 public:
     /*
-    Test the function of the class.
-    */
-    static void test();
-
-    /*
     Swap the value of two elements.
 
     @param a the first element
     @param b the second element
     */
     template <typename T>
-    static void swap(T &a, T &b) {
+    static inline void swap(T &a, T &b) {
         T tmp = a;
         a = b;
         b = tmp;
@@ -123,6 +118,12 @@ public:
     static void testNextPrime();
 
 private:
+
+public:
+    /*
+    Test the function of the class.
+    */
+    static void test();
 };
 
 NS_END

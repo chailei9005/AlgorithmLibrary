@@ -16,24 +16,6 @@ public:
     typedef Graph::weight_type weight_type;
 
     /*
-    Test the function of the class.
-    */
-    static void test();
-
-    /*
-    Swap the value of two elements.
-
-    @param a the first element
-    @param b the second element
-    */
-    template <typename T>
-    static void swap(T &a, T &b) {
-        T tmp = a;
-        a = b;
-        b = tmp;
-    }
-
-    /*
     Topological sorting.
 
     @param g the graph object
@@ -199,6 +181,11 @@ private:
     */
     static num_type getMinNotVisit(const Graph *g);
 
+public:
+    /*
+    Test the function of the class.
+    */
+    static void test();
 };
 
 NS_END
