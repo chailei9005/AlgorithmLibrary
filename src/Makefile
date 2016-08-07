@@ -1,7 +1,7 @@
 OBJS = main.o DisjointSet.o ArithmeticExpression.o RandomEngine.o \
 Graph.o Algorithm.o AlgorithmGraph.o NPuzzle.o Timer.o Base.o
 
-CC = g++ -std=c++11
+CC = g++ -std=c++11 -O2
 
 APP_NAME = demo
 
