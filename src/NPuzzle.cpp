@@ -139,8 +139,8 @@ string NPuzzleNode::toString() const {
 }
 
 unsigned long long NPuzzleNode::hash() const {
-    //return Algorithm::cantorExpand(val.size(), val);
-    return std::hash<string>()(toString());
+    return Algorithm::cantorExpand(val.size(), val);
+    //return std::hash<string>()(toString());
 }
 
 bool NPuzzleNode::operator==(const NPuzzleNode &a) const {

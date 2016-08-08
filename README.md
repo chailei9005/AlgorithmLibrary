@@ -26,7 +26,7 @@ $ make clean
 
 | Name | Source | Comment |
 | ---- | ------ | ------- |
-|[N-Puzzle Problem](https://en.wikipedia.org/wiki/15_puzzle)|[NPuzzle.h](./src/NPuzzle.h) [NPuzzle.cpp](./src/NPuzzle.cpp)|can search 70 nodes per millisecond in average (compiler: g++ -O2) ([GUI demo](https://github.com/chuyangLiu/NPuzzle-AI))|
+|[N-Puzzle Problem](https://en.wikipedia.org/wiki/15_puzzle)|[NPuzzle.h](./src/NPuzzle.h) [NPuzzle.cpp](./src/NPuzzle.cpp)|can search 240 nodes per millisecond in average(5*5 puzzle; compiler: g++ -O2) ([GUI demo](https://github.com/chuyangLiu/NPuzzle-AI))|
 |[Sorting Algorithm](https://en.wikipedia.org/wiki/Sorting_algorithm)|[SortHelper.h](./src/SortHelper.h)|classic sorting algorithms
 |[Random Generation](https://en.wikipedia.org/wiki/Random_number_generation)|[RandomEngine.h](./src/RandomEngine.h) [RandomEngine.cpp](./src/RandomEngine.cpp)|pseudorandom number generation|
 |[Arithmetic Expression](https://en.wikipedia.org/wiki/Shunting-yard_algorithm)|[ArithmeticExpression.h](./src/ArithmeticExpression.h) [ArithmeticExpression.cpp](./src/ArithmeticExpression.cpp)|arithemetic expression calculation|
