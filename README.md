@@ -1,6 +1,6 @@
 # DataStructureAndAlgorithm
 
-A library that contains useful data structures and algorithms written in c/c++.
+A library containing some data structures and algorithms written in c/c++.
 
 ## Compile and Run
 
@@ -44,7 +44,7 @@ $ make clean
 
 | Name | Source | Comment |
 | ---- | ------ | ------- |
-|Timer|[Timer.h](./src/Timer.h) [Timer.cpp](./src/Timer.cpp)|calculate running time|
+|Timer|[Timer.h](./src/Timer.h) [Timer.cpp](./src/Timer.cpp)|calculate program execution time|
 
 ## License
 
