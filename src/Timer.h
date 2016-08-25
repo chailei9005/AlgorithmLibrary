@@ -13,17 +13,17 @@ public:
     Timer();
 
     /*
-    Reset the start time to current.
+    Reset the beginning time to current time.
     */
     void reset();
 
     /*
-    Get elapsed time in milliseconds.
+    Return elapsed time from the beiginning time in milliseconds.
     */
     double elapse();
 
 private:
-    clock_t start;
+    clock_t begin;
 };
 
 NS_END

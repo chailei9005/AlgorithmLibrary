@@ -3,14 +3,13 @@
 using sl::Timer;
 
 Timer::Timer() {
-    start = clock();
+    reset();
 }
 
 void Timer::reset() {
-    start = clock();
+    begin = clock();
 }
 
 double Timer::elapse() {
-    clock_t endTime = clock();
-    return 1000.0 * ((double)(endTime - start)) / ((double)CLOCKS_PER_SEC);
+    return 1000.0 * ((clock() - begin) / (double)CLOCKS_PER_SEC);
 }
