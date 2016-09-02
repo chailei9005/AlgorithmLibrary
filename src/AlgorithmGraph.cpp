@@ -28,8 +28,9 @@ void AlgorithmGraph::test() {
 
     // Test once algorithm at each time
     //testTopoSort(g);
-    //testDijkstra(g);
+    testDijkstra(g);
     //testPrim(g);
+    //testHungarian(g);
 
     delete g;
 }
@@ -141,11 +142,10 @@ void AlgorithmGraph::dijkstra(Graph *g, const num_type &src) {
     }
 }
 
-void AlgorithmGraph::printPathTo(const vector<num_type> &prev_,
-                                 const num_type &des) {
+void AlgorithmGraph::printPathTo(const num_type &des, const vector<num_type> &prev_) {
     num_type tmp = des;
     if (prev_[tmp] != NOT_NODE) {
-        printPathTo(prev_, prev_[tmp]);
+        printPathTo(prev_[tmp], prev_);
         cout << " -> ";
     }
     cout << tmp;
@@ -162,7 +162,7 @@ void AlgorithmGraph::testDijkstra(Graph *g) {
     for (num_type i = 0; i < g->size(); ++i) {
         cout << "From node " << src << " to " << i
             << " (length: " << dist[i] << "): ";
-        printPathTo(prev, i);
+        printPathTo(i, prev);
         cout << endl;
     }
 }
@@ -192,6 +192,97 @@ void AlgorithmGraph::testPrim(Graph *g) {
     for (num_type i = 0; i < g->size(); ++i) {
         if (prev[i] != NOT_NODE) {
             cout << "(" << prev[i] << ", " << i << "), ";
+        }
+    }
+    cout << endl;
+}
+
+AlgorithmGraph::num_type AlgorithmGraph::hungarian(const num_type leftN, 
+                                                   vector<num_type> &match,
+                                                   Graph *g) {
+    num_type n = g->size(), maxMatch = 0;
+    for (num_type i = 0; i < leftN; ++i) {
+        // Start with an unmatch node and find augmenting path
+        if (match[i] == NOT_NODE) {
+            for (num_type j = 0; j < n; ++j) {
+                visit[j] = false;
+            }
+            if (buildAugmentPath(i, match, g)) {
+                ++maxMatch;
+            }
+        }
+    }
+    return maxMatch;
+}
+
+bool AlgorithmGraph::buildAugmentPath(const num_type src, vector<num_type> &match, Graph *g) {
+    // DFS version
+    //vector<num_type> adjNodes;
+    //g->getNeighbours(src, adjNodes);
+    //for (const auto &adjN : adjNodes) {
+    //    if (!visit[adjN]) {
+    //        visit[adjN] = true;
+    //        // DFS in alternative path, stop at unmatching point
+    //        if (match[adjN] == NOT_NODE || buildAugmentPath(match[adjN], match, g)) {
+    //            // Add matching edge
+    //            match[src] = adjN;
+    //            match[adjN] = src;
+    //            return true;  // Find an augmenting path
+    //        }
+    //    }
+    //}
+    //return false;  // No augmenting path
+
+    // BFS version
+    queue<num_type> q;
+    q.push(src);
+    vector<int> prev(g->size(), -2);  // Record the alternative path
+    prev[src] = NOT_NODE;  // Path begin at start vertex
+    while (!q.empty()) {
+        num_type v = q.front();
+        q.pop();
+        vector<num_type> adjNodes;
+        g->getNeighbours(v, adjNodes);
+        for (const auto &adjN : adjNodes) {
+            if (!visit[adjN]) {
+                visit[adjN] = true;
+                if (match[adjN] != NOT_NODE) { 
+                    prev[match[adjN]] = v;
+                    q.push(match[adjN]);
+                } else {
+                    num_type a = v, b = adjN;
+                    // Reverse matching edge and unmatching edge
+                    while (a != NOT_NODE) {
+                        num_type tmp = match[a];
+                        match[a] = b;
+                        match[b] = a;
+                        b = tmp;
+                        a = prev[a];
+                    }
+                    return true;  // Find an augmenting path
+                }
+            }
+        }
+    }
+    return false;  // No augmenting path
+}
+
+void AlgorithmGraph::testHungarian(Graph *g) {
+    cout << "Test hungarian:\n\n";
+    cin.clear();
+    cout << "Input left nodes number in the bipartite graph: ";
+    num_type leftN;
+    cin >> leftN;
+    vector<num_type> match(g->size(), -1);
+    cout << "Max matching number: " << hungarian(leftN, match, g) << endl;
+    cout << "Match edges:" << endl;
+    int cnt = 0;
+    for (num_type i = 0; i < leftN; ++i) {
+        if (match[i] != NOT_NODE) {
+            cout << "(" << i << ", " << match[i] << "), ";
+        }
+        if ((++cnt) % 5 == 0) {
+            cout << endl;
         }
     }
     cout << endl;

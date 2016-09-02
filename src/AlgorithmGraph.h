@@ -98,15 +98,14 @@ public:
     From node 2 to 7 (length: 7): 2 -> 4 -> 7
     */
     static void dijkstra(Graph *g, const num_type &src);
-    static void printPathTo(const std::vector<num_type> &prev_, const num_type &des);
+    static void printPathTo(const num_type &des, const std::vector<num_type> &prev_);
     static void testDijkstra(Graph *g);
 
     /*
-    prim's algorithm to find minimum
-    spanning tree (undirected graph).
+    Prim's algorithm to find minimum spanning tree (undirected graph).
+    A minimun spanning tree exists iff the undirected graph is connected.
 
-    A minimun spanning tree exists iff
-    the undirected graph is connected.
+    @param g the graph object
 
     Sample #1: (each edge is added twice to construct an undirected graph):
     8 0
@@ -143,6 +142,77 @@ public:
     */
     static void prim(Graph *g);
     static void testPrim(Graph *g);
+
+    /*
+    Hungarian's algorithm to find the maximum matching number
+    in an unweighted bipartite graph.
+
+    Reference: http://blog.csdn.net/pi9nc/article/details/11848327
+
+    Precondition: the graph must be a bipartitle graph.
+
+    @param leftN the left node number of the bipartite graph
+    @param match if match[a] = b, then edge(a, b) is one of the
+                 matching edge after running this algorithm.
+                 if match[a] = -1, then node a is not matched.
+    @param g the graph object
+    @return the maximum matching number of the graph
+
+    Sample #1: (ans: 4; edges: (0, 6), (1, 4), (2, 5), (3, 7))
+    8 0
+    0 4 1
+    4 0 1
+    0 6 1
+    6 0 1
+    1 4 1
+    4 1 1
+    2 4 1
+    4 2 1
+    2 5 1
+    5 2 1
+    3 6 1
+    6 3 1
+    3 7 1
+    7 3 1
+    4
+
+    Sample #2: (ans: 3; edges: (0, 4), (1, 3), (2, 5))
+    7 0
+    0 4 1
+    4 0 1
+    1 3 1
+    3 1 1
+    1 4 1
+    4 1 1
+    4 2 1
+    2 4 1
+    2 5 1
+    5 2 1
+    2 6 1
+    6 2 1
+    3
+
+    Sample #3: (ans: 3; edges: (0, 6), (1, 4), (2, 5))
+    8 0
+    0 4 1
+    4 0 1
+    0 6 1
+    6 0 1
+    1 4 1
+    4 1 1
+    2 4 1
+    4 2 1
+    2 5 1
+    5 2 1
+    2 7 1
+    7 2 1
+    3 6 1
+    6 3 1
+    4
+    */
+    static num_type hungarian(const num_type leftN, std::vector<num_type> &match, Graph *g);
+    static bool buildAugmentPath(const num_type src, std::vector<num_type> &match, Graph *g);
+    static void testHungarian(Graph *g);
 
 private:
     /*

@@ -24,9 +24,9 @@ void test() {
     //SortHelper<int>::test();
     //RandomEngine::test();
     //ArithmeticExpression::test();
-    NPuzzle::test();
+    //NPuzzle::test();
     //Algorithm::test();
-    //AlgorithmGraph::test();
+    AlgorithmGraph::test();
 }
 
 int main() {
