@@ -30,8 +30,8 @@ void AlgorithmGraph::test() {
     //testTopoSort(g);
     //testDijkstra(g);
     //testPrim(g);
-    //testHungarian(g);
-    testEdmondKarp(g);
+    testHungarian(g);
+    //testEdmondKarp(g);
 
     delete g;
 }
@@ -218,54 +218,55 @@ AlgorithmGraph::num_type AlgorithmGraph::hungarian(const num_type leftN,
 
 bool AlgorithmGraph::buildAugmentPath(const num_type src, vector<num_type> &match, Graph *g) {
     // DFS version
-    //vector<num_type> adjNodes;
-    //g->getNeighbours(src, adjNodes);
-    //for (const auto &adjN : adjNodes) {
-    //    if (!visit[adjN]) {
-    //        visit[adjN] = true;
-    //        // DFS in alternative path, stop at unmatching point
-    //        if (match[adjN] == NOT_NODE || buildAugmentPath(match[adjN], match, g)) {
-    //            // Add matching edge
-    //            match[src] = adjN;
-    //            match[adjN] = src;
-    //            return true;  // Find an augmenting path
-    //        }
-    //    }
-    //}
-    //return false;  // No augmenting path
-
-    // BFS version
-    queue<num_type> q;
-    q.push(src);
-    vector<int> prev(g->size(), -2);  // Record the alternative path
-    prev[src] = NOT_NODE;  // Path begin at start vertex
-    while (!q.empty()) {
-        num_type v = q.front();
-        q.pop();
-        vector<num_type> adjNodes;
-        g->getNeighbours(v, adjNodes);
-        for (const auto &adjN : adjNodes) {
-            if (!visit[adjN]) {
-                visit[adjN] = true;
-                if (match[adjN] != NOT_NODE) { 
-                    prev[match[adjN]] = v;
-                    q.push(match[adjN]);
-                } else {
-                    num_type a = v, b = adjN;
-                    // Reverse matching edge and unmatching edge
-                    while (a != NOT_NODE) {
-                        num_type tmp = match[a];
-                        match[a] = b;
-                        match[b] = a;
-                        b = tmp;
-                        a = prev[a];
-                    }
-                    return true;  // Find an augmenting path
-                }
+    vector<num_type> adjNodes;
+    g->getNeighbours(src, adjNodes);
+    for (const auto &adjN : adjNodes) {
+        if (!visit[adjN]) {
+            visit[adjN] = true;
+            // DFS in alternative path, stop at unmatching point
+            if (match[adjN] == NOT_NODE || buildAugmentPath(match[adjN], match, g)) {
+                // Add matching edge
+                match[src] = adjN;
+                match[adjN] = src;
+                return true;  // Find an augmenting path
             }
         }
     }
     return false;  // No augmenting path
+
+    // BFS version
+    //queue<num_type> q;
+    //q.push(src);
+    //for (num_type i = 0; i < g->size(); ++i) {
+    //    prev[i] = NOT_NODE;
+    //}
+    //while (!q.empty()) {
+    //    num_type v = q.front();
+    //    q.pop();
+    //    vector<num_type> adjNodes;
+    //    g->getNeighbours(v, adjNodes);
+    //    for (const auto &adjN : adjNodes) {
+    //        if (!visit[adjN]) {
+    //            visit[adjN] = true;
+    //            if (match[adjN] != NOT_NODE) { 
+    //                prev[match[adjN]] = v;
+    //                q.push(match[adjN]);
+    //            } else {
+    //                num_type a = v, b = adjN;
+    //                // Reverse matching edge and unmatching edge
+    //                while (a != NOT_NODE) {
+    //                    num_type tmp = match[a];
+    //                    match[a] = b;
+    //                    match[b] = a;
+    //                    b = tmp;
+    //                    a = prev[a];
+    //                }
+    //                return true;  // Find an augmenting path
+    //            }
+    //        }
+    //    }
+    //}
+    //return false;  // No augmenting path
 }
 
 void AlgorithmGraph::testHungarian(Graph *g) {
@@ -274,7 +275,7 @@ void AlgorithmGraph::testHungarian(Graph *g) {
     cout << "Input left nodes number in the bipartite graph: ";
     num_type leftN;
     cin >> leftN;
-    vector<num_type> match(g->size(), -1);
+    vector<num_type> match(g->size(), NOT_NODE);
     cout << "Max matching number: " << hungarian(leftN, match, g) << endl;
     cout << "Match edges:" << endl;
     int cnt = 0;
