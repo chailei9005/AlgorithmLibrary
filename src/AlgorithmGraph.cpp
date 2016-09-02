@@ -28,9 +28,10 @@ void AlgorithmGraph::test() {
 
     // Test once algorithm at each time
     //testTopoSort(g);
-    testDijkstra(g);
+    //testDijkstra(g);
     //testPrim(g);
     //testHungarian(g);
+    testEdmondKarp(g);
 
     delete g;
 }
@@ -286,4 +287,63 @@ void AlgorithmGraph::testHungarian(Graph *g) {
         }
     }
     cout << endl;
+}
+
+AlgorithmGraph::weight_type AlgorithmGraph::EdmondKarp(const num_type &src,
+                                                       const num_type &des,
+                                                       Graph *g) {
+    num_type n = g->size();
+    weight_type maxflow = 0;
+    while (1) {
+        // Find an augment path and return its flow increase
+        int increase = getIncreaseFromAugmentPath(src, des, g);
+        if (increase == 0) {  // No augmenting path
+            break;
+        } else {
+            weight_type last = des;
+            while (last != src) {  // Update capacity
+                num_type pre = prev[last];
+                g->increaseWeight(pre, last, -increase);  // Forward edge minus increase
+                g->increaseWeight(last, pre, increase);  // Reverse edge add increase
+                last = pre;
+            }
+            maxflow += increase;  // Update max flow
+        }
+    }
+    return maxflow;
+}
+
+AlgorithmGraph::weight_type AlgorithmGraph::getIncreaseFromAugmentPath(const num_type &src,
+                                                                       const num_type &des,
+                                                                       Graph *g) {
+    num_type n = g->size();
+    vector<weight_type> flow(n, 0);  // Store the maximum flow at each node in the augment path
+    flow[src] = INF;
+    for (num_type i = 0; i < n; ++i) {
+        prev[i] = NOT_NODE;
+    }
+    // BFS
+    queue<num_type> q;
+    q.push(src);
+    while (!q.empty()) {
+        num_type v = q.front();
+        q.pop();
+        if (v == des) {  // Found an augmenting path
+            break;
+        }
+        for (num_type i = 0; i < n; ++i) {
+            if (i != src && g->getWeight(v, i) > 0 && prev[i] == NOT_NODE) {
+                prev[i] = v;
+                flow[i] = std::min(flow[v], g->getWeight(v, i));
+                q.push(i);
+            }
+        }
+    }
+    return prev[des] == NOT_NODE ? 0 : flow[des];  // Return the flow increase in the path
+}
+
+void AlgorithmGraph::testEdmondKarp(Graph *g) {
+    cout << "Test Edmond-Karp:\n\n";
+    cin.clear();
+    cout << "Max flow: " << EdmondKarp(0, g->size() - 1, g) << endl;
 }

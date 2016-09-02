@@ -39,7 +39,8 @@ $ make clean
 |[Topological Sort](https://en.wikipedia.org/wiki/Topological_sorting)|[AlgorithmGraph::topoSort()](./src/AlgorithmGraph.cpp)|check if a graph is cyclic|
 |[Dijkstra](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)|[AlgorithmGraph::dijkstra()](./src/AlgorithmGraph.cpp)|shortest path|
 |[Prim](https://en.wikipedia.org/wiki/Prim%27s_algorithm)|[AlgorithmGraph::prim()](./src/AlgorithmGraph.cpp)|minimum spanning tree|
-|[Hungarian](https://en.wikipedia.org/wiki/Hungarian_algorithm)|[AlgorithmGraph::hungarian()](./src/AlgorithmGraph.cpp)|solve [bipartite graph](https://en.wikipedia.org/wiki/Bipartite_graph) matching problem; [中文博客](http://blog.csdn.net/pi9nc/article/details/11848327)|
+|[Hungarian](https://en.wikipedia.org/wiki/Hungarian_algorithm)|[AlgorithmGraph::hungarian()](./src/AlgorithmGraph.cpp)|solve [bipartite graph](https://en.wikipedia.org/wiki/Bipartite_graph) matching problem; ([中文博客](http://blog.csdn.net/pi9nc/article/details/11848327))|
+|[Edmonds–Karp](https://en.wikipedia.org/wiki/Edmonds%E2%80%93Karp_algorithm)|[AlgorithmGraph::EdmondKarp()](./src/AlgorithmGraph.cpp)|solve [maximum flow problem](https://en.wikipedia.org/wiki/Maximum_flow_problem); ([中文博客](http://www.cnblogs.com/zsboy/archive/2013/01/27/2878810.html))|
 
 ## Utility
 

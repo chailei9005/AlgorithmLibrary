@@ -70,7 +70,7 @@ public:
     void getNeighbours(const num_type &n, std::vector<num_type> &nodes) const;
 
     /*
-    Get the getWeight of the edge between two nodes.
+    Get the weight of the edge between two nodes.
 
     @param from the start node
     @param to the end node
@@ -80,13 +80,22 @@ public:
     weight_type getWeight(const num_type &from, const num_type &to) const;
 
     /*
-    Set the getWeight of the edge between two nodes.
+    Set the weight of the edge between two nodes.
 
     @param from the start node
     @param to the end node
     @param w the new weight value
     */
     void setWeight(const num_type &from, const num_type &to, const weight_type &w);
+
+    /*
+    Increase the weight of the edge between two nodes.
+
+    @param from the start node
+    @param to the end node
+    @param increase the increase value
+    */
+    void increaseWeight(const num_type &from, const num_type &to, const weight_type &increase);
 
     /*
     Add an edge between two nodes.

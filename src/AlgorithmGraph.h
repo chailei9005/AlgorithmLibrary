@@ -214,6 +214,46 @@ public:
     static bool buildAugmentPath(const num_type src, std::vector<num_type> &match, Graph *g);
     static void testHungarian(Graph *g);
 
+    /*
+    Edmond-Karp's algorithm to solve maximum flow problem.
+
+    Reference: http://www.cnblogs.com/zsboy/archive/2013/01/27/2878810.html
+
+    Default:
+    src: node[0];
+    des: node[node_num - 1];
+
+    @param src the start node
+    @param des the destination node
+    @param g the graph object (need to use adjacent matrix)
+    @return the maximum flow value
+
+    Sample #1: (ans: 5)
+    6 1
+    0 1 3
+    0 2 2
+    1 2 1
+    1 4 4
+    1 3 3
+    2 4 2
+    3 5 2
+    4 5 3
+
+    Sample #2: (ans: 14)
+    6 1
+    0 1 15
+    0 2 4
+    1 4 12
+    2 3 10
+    3 1 5
+    4 2 3
+    4 5 7
+    3 5 10
+    */
+    static weight_type EdmondKarp(const num_type &src, const num_type &des, Graph *g);
+    static weight_type getIncreaseFromAugmentPath(const num_type &src, const num_type &des, Graph *g);
+    static void testEdmondKarp(Graph *g);
+
 private:
     /*
     Constants.

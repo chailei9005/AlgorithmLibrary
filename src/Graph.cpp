@@ -140,6 +140,17 @@ void Graph::setWeight(const num_type &from, const num_type &to, const weight_typ
     }
 }
 
+void Graph::increaseWeight(const num_type &from, const num_type &to, const weight_type &increase) {
+    checkValid(from);
+    checkValid(to);
+    auto cur = getWeight(from, to);
+    if (cur + increase == NONE_EDGE_WEIGHT) {
+        removeEdge(from, to);
+    } else {
+        setWeight(from, to, cur + increase);
+    }
+}
+
 void Graph::addEdge(const num_type &from, const num_type &to, const weight_type &w) {
     checkValid(from);
     checkValid(to);
