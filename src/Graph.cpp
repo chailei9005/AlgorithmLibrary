@@ -17,12 +17,12 @@ Graph::Graph(const num_type &n, const StorageType &type_)
     : type(type_), size_(n) {
     switch (type) {
         case ADJ_LIST:
-            for (num_type i = 0; i < n; ++i) {
+            for (auto i = 0; i < n; ++i) {
                 adjList.push_back(HeadNode());
             }
             break;
         case ADJ_MATRIX:
-            for (num_type i = 0; i < n; ++i) {
+            for (auto i = 0; i < n; ++i) {
                 adjMatrix.push_back(vector<weight_type>(n, NONE_EDGE_WEIGHT));
             }
             break;
@@ -61,7 +61,7 @@ Graph::num_type Graph::size() const {
 }
 
 void Graph::getNeighbours(const num_type &n,
-                            std::vector<num_type> &nodes) const {
+                          vector<num_type> &nodes) const {
     checkValid(n);
     nodes.clear();
     switch (type) {
@@ -75,7 +75,7 @@ void Graph::getNeighbours(const num_type &n,
             break;
         }     
         case ADJ_MATRIX:
-            for (num_type i = 0; i < size_; ++i) {
+            for (auto i = 0; i < size_; ++i) {
                 if (adjMatrix[n][i] != NONE_EDGE_WEIGHT) {
                     nodes.push_back(i);
                 }
@@ -156,7 +156,7 @@ void Graph::addEdge(const num_type &from, const num_type &to, const weight_type 
     checkValid(to);
     switch (type) {
         case ADJ_LIST: {
-            if (w != 0) {
+            if (!isZero(w)) {
                 auto &headNode = adjList[from];
                 if (!headNode.adjNodes) {
                     headNode.adjNodes = new std::list<AdjNode>();
@@ -214,7 +214,7 @@ void Graph::print() const {
     cout << "Range of node number: [0, " << (size_ - 1)
         << "]\nAdjacent nodes and edge weight:\n";
     vector<num_type> adjs;
-    for (num_type i = 0; i < size_; ++i) {
+    for (auto i = 0; i < size_; ++i) {
         getNeighbours(i, adjs);
         cout << "Node[" << i << "]: ";
         if (adjs.empty()) {

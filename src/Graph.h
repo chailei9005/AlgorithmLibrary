@@ -17,7 +17,7 @@ public:
     typedef long num_type;
 
     // Type for edge getWeight
-    typedef long weight_type;
+    typedef double weight_type;
 
     // Weight value for adjacent matrix
     // if there is not edge between two nodes

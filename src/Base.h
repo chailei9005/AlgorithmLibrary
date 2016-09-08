@@ -2,14 +2,11 @@
 #ifndef BASE_H
 #define BASE_H
 
-/*
-Store some configure definitions.
-*/
 #define NS_BEGIN namespace sl {
 #define NS_END   }
 
 /*
-Memory leaks check
+Memory leaks check macros
 (available in Microsoft Visual C++ complier)
 */
 
@@ -31,6 +28,12 @@ Memory leaks check
 Check if memory leaks exist.
 */
 void checkMemoryLeaks();
+
+/*
+Compare a double value to zero.
+*/
+#define EPSILON 1e-6
+#define isZero(x) ((x >= -EPSILON) && (x <= EPSILON))
 
 #endif
 

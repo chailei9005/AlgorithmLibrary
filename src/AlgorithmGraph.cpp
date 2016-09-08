@@ -16,7 +16,7 @@ using sl::Graph;
 const AlgorithmGraph::num_type AlgorithmGraph::NOT_NODE = -1;
 const AlgorithmGraph::weight_type AlgorithmGraph::INF = 2147483647;
 
-vector<unsigned long> AlgorithmGraph::indegree;
+vector<AlgorithmGraph::num_type> AlgorithmGraph::indegree;
 vector<AlgorithmGraph::weight_type> AlgorithmGraph::dist;
 vector<AlgorithmGraph::num_type> AlgorithmGraph::prev;
 vector<bool> AlgorithmGraph::visit;
@@ -38,7 +38,7 @@ void AlgorithmGraph::test() {
 }
 
 void AlgorithmGraph::initGlobals(const num_type &nodeNum) {
-    indegree = vector<unsigned long>(nodeNum, 0);
+    indegree = vector<num_type>(nodeNum, 0);
     dist = vector<AlgorithmGraph::weight_type>(nodeNum, INF);
     prev = vector<AlgorithmGraph::num_type>(nodeNum, NOT_NODE);
     visit = vector<bool>(nodeNum, false);
@@ -59,7 +59,7 @@ Graph* AlgorithmGraph::createGraphFromInput() {
             weight_type w;
             cin >> w;
             g->addEdge(i, j, w);
-            if (w != 0) {
+            if (!isZero(w)) {
                 ++indegree[j];
             }
         }
@@ -122,7 +122,7 @@ void AlgorithmGraph::testTopoSort(Graph *g) {
     if (topoSort(g, res)) {
         cout << "Graph contains no cycle\n"
             << "Sort result: ";
-        for (size_t i = 0; i < res.size(); ++i) {
+        for (unsigned i = 0; i < res.size(); ++i) {
             cout << res[i] << " ";
         }
         cout << endl;
@@ -166,7 +166,7 @@ void AlgorithmGraph::testDijkstra(Graph *g) {
     cin >> src;
     dijkstra(g, src);
     cout << "The shortest path:" << endl;
-    for (num_type i = 0; i < g->size(); ++i) {
+    for (auto i = 0; i < g->size(); ++i) {
         cout << "From node " << src << " to " << i
             << " (length: " << dist[i] << "): ";
         printPathTo(i, prev);
@@ -432,7 +432,7 @@ AlgorithmGraph::weight_type AlgorithmGraph::EdmondKarp(const num_type &src,
     weight_type maxflow = 0;
     while (1) {
         // Find an augment path and return its flow increase
-        int increase = getIncreaseFromPath(src, des, g);
+        auto increase = getIncreaseFromPath(src, des, g);
         if (increase == 0) {  // No augmenting path
             break;
         } else {

@@ -203,9 +203,9 @@ public:
 
     Answer #1:
     Max matching costs: 29
-    Max matching edges: (4, 5), (3, 6), (1, 7), (2, 8), (0, 9)
+    Max matching edges: (4, 5), (3, 6), (1, 7), (2, 8), (0, 9),
     Min matching costs: 14
-    Min matching edges: (0, 5), (4, 6), (3, 7), (1, 8), (2, 9)
+    Min matching edges: (0, 5), (4, 6), (3, 7), (1, 8), (2, 9),
 
     Sample #2:
     10 1
@@ -223,9 +223,9 @@ public:
 
     Answer #2:
     Max matching costs: 36
-    Max matching edges: (0, 5), (4, 6), (3, 7), (1, 8), (2, 9)
+    Max matching edges: (0, 5), (4, 6), (3, 7), (1, 8), (2, 9),
     Min matching costs: 21
-    Min matching edges: (4, 5), (3, 6), (1, 7), (2, 8), (0, 9)
+    Min matching edges: (4, 5), (3, 6), (1, 7), (2, 8), (0, 9),
     */
     static weight_type km(const num_type leftN,
                           std::vector<num_type> &match,
@@ -285,7 +285,7 @@ private:
     /*
     Fields for searching algorithms.
     */
-    static std::vector<unsigned long> indegree;
+    static std::vector<num_type> indegree;
     static std::vector<weight_type> dist;
     static std::vector<num_type> prev;
     static std::vector<bool> visit;
