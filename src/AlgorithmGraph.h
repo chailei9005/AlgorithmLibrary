@@ -25,32 +25,27 @@ public:
 
     Sample #1: (ans: 0 1 2 5 4 3 7 6(not unique), no cycle)
     8 0
-    0 1 1
-    1 2 1
-    1 4 1
-    1 3 1
-    2 4 1
-    2 5 1
-    3 6 1
-    4 3 1
-    4 6 1
-    4 7 1
-    5 7 1
-    5 4 1
-    7 6 1
+    0 1 0 0 0 0 0 0
+    0 0 1 1 1 0 0 0
+    0 0 0 0 1 1 0 0
+    0 0 0 0 0 0 1 0
+    0 0 0 1 0 0 1 1
+    0 0 0 0 1 0 0 1
+    0 0 0 0 0 0 0 0
+    0 0 0 0 0 0 1 0
 
     Sample #2: (has cycle)
     4 1
-    0 1 1
-    1 2 1
-    2 3 1
-    3 1 1
+    0 1 0 0
+    0 0 1 0
+    0 0 0 1
+    0 1 0 0
     */
     static bool topoSort(Graph *g, std::vector<num_type> &res);
     static void testTopoSort(Graph *g);
 
     /*
-    Dijkstra's algorithm
+    Dijkstra algorithm
 
     If negative edges exist, avoid checking visited condition
     when traversing the adjacent nodes. Unfortuantely, this
@@ -61,22 +56,17 @@ public:
 
     Sample #1:
     8 0
-    1 0 1
-    1 2 2
-    1 4 1
-    2 4 3
-    2 5 10
-    3 1 4
-    3 6 5
-    4 3 2
-    4 6 8
-    4 7 4
-    4 5 2
-    5 7 6
-    7 6 1
+    0 0 0 0 0 0 0 0
+    1 0 2 0 1 0 0 0
+    0 0 0 0 3 10 0 0
+    0 4 0 0 0 0 5 0
+    0 0 0 2 0 2 8 4
+    0 0 0 0 0 0 0 6
+    0 0 0 0 0 0 0 0
+    0 0 0 0 0 0 1 0
     {1|2}
 
-    Ans:
+    Answer #1:
     The shortest path:
     From node 1 to 0 (length: 1): 1 -> 0
     From node 1 to 1 (length: 0): 1
@@ -102,41 +92,23 @@ public:
     static void testDijkstra(Graph *g);
 
     /*
-    Prim's algorithm to find minimum spanning tree (undirected graph).
+    Prim algorithm to find minimum spanning tree (undirected graph).
     A minimun spanning tree exists iff the undirected graph is connected.
 
     @param g the graph object
 
     Sample #1: (each edge is added twice to construct an undirected graph):
     8 0
-    0 1 3
-    1 0 3
-    1 2 2
-    2 1 2
-    1 4 1
-    4 1 1
-    1 3 4
-    3 1 4
-    2 4 3
-    4 2 3
-    2 5 10
-    5 2 10
-    3 4 2
-    4 3 2
-    4 5 7
-    5 4 7
-    3 6 5
-    6 3 5
-    4 6 8
-    6 4 8
-    4 7 4
-    7 4 4
-    5 7 6
-    7 5 6
-    6 7 1
-    7 6 1
+    0 3 0 0 0 0 0 0
+    3 0 2 4 1 10 0 0
+    0 2 0 0 3 0 0 0
+    0 4 0 0 2 0 5 0
+    0 1 3 2 0 7 8 4
+    0 10 0 0 7 0 0 6
+    0 0 0 5 8 0 0 1
+    0 0 0 0 4 6 1 0
 
-    Ans:
+    Answer #1:
     The edges of the minimum spanning tree:
     (0, 1), (1, 2), (4, 3), (1, 4), (7, 5), (7, 6), (4, 7),
     */
@@ -144,10 +116,8 @@ public:
     static void testPrim(Graph *g);
 
     /*
-    Hungarian's algorithm to find the maximum matching number
+    Hungarian algorithm to find the maximum matching number
     in an unweighted bipartite graph.
-
-    Reference: http://blog.csdn.net/pi9nc/article/details/11848327
 
     Precondition: the graph must be a bipartitle graph.
 
@@ -160,64 +130,115 @@ public:
 
     Sample #1: (ans: 4; edges: (0, 6), (1, 4), (2, 5), (3, 7))
     8 0
-    0 4 1
-    4 0 1
-    0 6 1
-    6 0 1
-    1 4 1
-    4 1 1
-    2 4 1
-    4 2 1
-    2 5 1
-    5 2 1
-    3 6 1
-    6 3 1
-    3 7 1
-    7 3 1
+    0 0 0 0 1 0 1 0
+    0 0 0 0 1 0 0 0
+    0 0 0 0 1 1 0 0
+    0 0 0 0 0 0 1 1
+    1 1 1 0 0 0 0 0
+    0 0 1 0 0 0 0 0
+    1 0 0 1 0 0 0 0
+    0 0 0 1 0 0 0 0
     4
 
     Sample #2: (ans: 3; edges: (0, 4), (1, 3), (2, 5))
     7 0
-    0 4 1
-    4 0 1
-    1 3 1
-    3 1 1
-    1 4 1
-    4 1 1
-    4 2 1
-    2 4 1
-    2 5 1
-    5 2 1
-    2 6 1
-    6 2 1
+    0 0 0 0 1 0 0
+    0 0 0 1 1 0 0
+    0 0 0 0 1 1 1
+    0 1 0 0 0 0 0
+    1 1 1 0 0 0 0
+    0 0 1 0 0 0 0
+    0 0 1 0 0 0 0
     3
 
     Sample #3: (ans: 3; edges: (0, 6), (1, 4), (2, 5))
     8 0
-    0 4 1
-    4 0 1
-    0 6 1
-    6 0 1
-    1 4 1
-    4 1 1
-    2 4 1
-    4 2 1
-    2 5 1
-    5 2 1
-    2 7 1
-    7 2 1
-    3 6 1
-    6 3 1
+    0 0 0 0 1 0 1 0
+    0 0 0 0 1 0 0 0
+    0 0 0 0 1 1 0 1
+    0 0 0 0 0 0 1 0
+    1 1 1 0 0 0 0 0
+    0 0 1 0 0 0 0 0
+    1 0 0 1 0 0 0 0
+    0 0 1 0 0 0 0 0
     4
     */
-    static num_type hungarian(const num_type leftN, std::vector<num_type> &match, Graph *g);
-    static bool buildAugmentPath(const num_type src, std::vector<num_type> &match, Graph *g);
+    static num_type hungarian(const num_type leftN,
+                              std::vector<num_type> &match,
+                              Graph *g);
+    static bool findPath1(const num_type src,
+                          std::vector<num_type> &match,
+                          Graph *g);
     static void testHungarian(Graph *g);
 
     /*
-    Edmond-Karp's algorithm to solve maximum flow problem.
+    Kuhn¨CMunkres algorithm to find optimum(maximum sum of weight)
+    matching in a weighted bipartite graph. (time complexity: O(n^4))
+    Graph stored in an adjacent matrix.
 
-    Reference: http://www.cnblogs.com/zsboy/archive/2013/01/27/2878810.html
+    Precondition: the graph must be a bipartitle graph.
+
+    @param leftN the left node number of the bipartite graph
+    @param match if match[right] = left, then edge(left, right) is one of the
+                 matching edge after running this algorithm. If match[right] = -1,
+                 then right node is not matched.
+    @param g the graph object
+    @param max if max is true, the result matching has maximum sum of weight
+               else it has minimum sum of weight.
+    @return the sum of weight in the optimum matching
+
+    Sample #1:
+    10 1
+    0 0 0 0 0 3 4 6 4 9
+    0 0 0 0 0 6 4 5 3 8
+    0 0 0 0 0 7 5 3 4 2
+    0 0 0 0 0 6 3 2 2 5
+    0 0 0 0 0 8 4 5 4 7
+    3 6 7 6 8 0 0 0 0 0
+    4 4 5 3 4 0 0 0 0 0
+    6 5 3 2 5 0 0 0 0 0
+    4 3 4 2 4 0 0 0 0 0
+    9 8 2 5 7 0 0 0 0 0
+    5
+
+    Answer #1:
+    Max matching costs: 29
+    Max matching edges: (4, 5), (3, 6), (1, 7), (2, 8), (0, 9)
+    Min matching costs: 14
+    Min matching edges: (0, 5), (4, 6), (3, 7), (1, 8), (2, 9)
+
+    Sample #2:
+    10 1
+    0 0 0 0 0 7 6 4 6 1
+    0 0 0 0 0 4 6 5 7 2
+    0 0 0 0 0 3 5 7 6 8
+    0 0 0 0 0 4 7 8 8 5
+    0 0 0 0 0 2 6 5 6 3
+    7 4 3 4 2 0 0 0 0 0
+    6 6 5 7 6 0 0 0 0 0
+    4 5 7 8 5 0 0 0 0 0
+    6 7 6 8 6 0 0 0 0 0
+    1 2 8 5 3 0 0 0 0 0
+    5
+
+    Answer #2:
+    Max matching costs: 36
+    Max matching edges: (0, 5), (4, 6), (3, 7), (1, 8), (2, 9)
+    Min matching costs: 21
+    Min matching edges: (4, 5), (3, 6), (1, 7), (2, 8), (0, 9)
+    */
+    static weight_type km(const num_type leftN,
+                          std::vector<num_type> &match,
+                          Graph *g,
+                          const bool max = true);
+    static bool findPath2(const num_type src,
+                          std::vector<weight_type> &val,
+                          std::vector<num_type> &match,
+                          Graph *g);
+    static void testKM(Graph *g);
+
+    /*
+    Edmond-Karp's algorithm to solve maximum flow problem.
 
     Default:
     src: node[0];
@@ -230,28 +251,28 @@ public:
 
     Sample #1: (ans: 5)
     6 1
-    0 1 3
-    0 2 2
-    1 2 1
-    1 4 4
-    1 3 3
-    2 4 2
-    3 5 2
-    4 5 3
+    0 3 2 0 0 0
+    0 0 1 3 4 0
+    0 0 0 0 2 0
+    0 0 0 0 0 2
+    0 0 0 0 0 3
+    0 0 0 0 0 0
 
     Sample #2: (ans: 14)
     6 1
-    0 1 15
-    0 2 4
-    1 4 12
-    2 3 10
-    3 1 5
-    4 2 3
-    4 5 7
-    3 5 10
+    0 15 4 0 0 0
+    0 0 0 0 12 0
+    0 0 0 10 0 0
+    0 5 0 0 0 10
+    0 0 3 0 0 7
+    0 0 0 0 0 0
     */
-    static weight_type EdmondKarp(const num_type &src, const num_type &des, Graph *g);
-    static weight_type getIncreaseFromAugmentPath(const num_type &src, const num_type &des, Graph *g);
+    static weight_type EdmondKarp(const num_type &src,
+                                  const num_type &des,
+                                  Graph *g);
+    static weight_type getIncreaseFromPath(const num_type &src,
+                                           const num_type &des,
+                                           Graph *g);
     static void testEdmondKarp(Graph *g);
 
 private:
@@ -265,16 +286,16 @@ private:
     Fields for searching algorithms.
     */
     static std::vector<unsigned long> indegree;
-    static std::vector<bool> visit;
     static std::vector<weight_type> dist;
     static std::vector<num_type> prev;
+    static std::vector<bool> visit;
 
     /*
     Create a graph object from command input.
 
     @return a pointer to the graph created
     */
-    static sl::Graph* createGraphFromCommand();
+    static sl::Graph* createGraphFromInput();
 
     /*
     Initialize global arrays.

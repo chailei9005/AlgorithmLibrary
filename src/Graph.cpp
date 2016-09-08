@@ -156,11 +156,13 @@ void Graph::addEdge(const num_type &from, const num_type &to, const weight_type 
     checkValid(to);
     switch (type) {
         case ADJ_LIST: {
-            auto &headNode = adjList[from];
-            if (!headNode.adjNodes) {
-                headNode.adjNodes = new std::list<AdjNode>();
+            if (w != 0) {
+                auto &headNode = adjList[from];
+                if (!headNode.adjNodes) {
+                    headNode.adjNodes = new std::list<AdjNode>();
+                }
+                headNode.adjNodes->push_back(AdjNode(to, w));
             }
-            headNode.adjNodes->push_back(AdjNode(to, w));
             break;
         }
         case ADJ_MATRIX:
