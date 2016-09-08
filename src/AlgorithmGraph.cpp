@@ -209,7 +209,7 @@ AlgorithmGraph::num_type AlgorithmGraph::hungarian(const num_type leftN,
                                                    Graph *g) {
     num_type n = g->size(), maxMatch = 0;
     for (auto i = 0; i < leftN; ++i) {
-        // Start with an unmatch node and find augmenting path
+        // Start with an unmatch node and find augmented path
         if (match[i] == NOT_NODE) {
             for (auto j = 0; j < n; ++j) {
                 visit[j] = false;
@@ -236,11 +236,11 @@ bool AlgorithmGraph::findPath1(const num_type src,
     //            // Add matching edge
     //            match[src] = adjN;
     //            match[adjN] = src;
-    //            return true;  // Find an augmenting path
+    //            return true;  // Find an augmented path
     //        }
     //    }
     //}
-    //return false;  // No augmenting path
+    //return false;  // No augmented path
 
     // BFS version
     queue<num_type> q;
@@ -269,12 +269,12 @@ bool AlgorithmGraph::findPath1(const num_type src,
                         b = tmp;
                         a = prev[a];
                     }
-                    return true;  // Find an augmenting path
+                    return true;  // Find an augmented path
                 }
             }
         }
     }
-    return false;  // No augmenting path
+    return false;  // No augmented path
 }
 
 void AlgorithmGraph::testHungarian(Graph *g) {
@@ -351,9 +351,9 @@ AlgorithmGraph::weight_type AlgorithmGraph::km(const num_type leftN,
                 }
             }
             for (auto i = 0; i < n; ++i) {
-                if (i < leftN && visit[i]) {
+                if (i < leftN && visit[i]) {  // Left node in the augmented path
                     val[i] -= d;
-                } else if (i >= leftN && visit[i]) {
+                } else if (i >= leftN && visit[i]) {  // Right node in the augmented path
                     val[i] += d;
                 }
             }
@@ -363,7 +363,9 @@ AlgorithmGraph::weight_type AlgorithmGraph::km(const num_type leftN,
     // Compute total weight in the matching
     weight_type costs = 0;
     for (auto i = leftN; i < n; ++i) {
-        costs += g->getWeight(match[i], i);
+        if (match[i] != NOT_NODE) {
+            costs += g->getWeight(match[i], i);
+        }
     }
     if (!max) {
         // Make costs opposite to get minimum costs
@@ -384,11 +386,11 @@ bool AlgorithmGraph::findPath2(const num_type src,
             visit[adjN] = true;
             if (match[adjN] == NOT_NODE || findPath2(match[adjN], val, match, g)) {
                 match[adjN] = src;
-                return true;  // Find an augmenting path
+                return true;  // Find an augmented path
             }
         }
     }
-    return false;  // No augmenting path
+    return false;  // No augmented path
 }
 
 void AlgorithmGraph::testKM(Graph *g) {
@@ -406,10 +408,8 @@ void AlgorithmGraph::testKM(Graph *g) {
         if (match1[i] != NOT_NODE) {
             cout << "(" << match1[i] << ", " << i << "), ";
         }
-        if ((++cnt) % 5 == 0) {
-            cout << endl;
-        }
     }
+    cout << endl;
     // Compute minimum matching
     vector<num_type> match2(g->size(), NOT_NODE);
     cout << "Min matching costs: " << km(leftN, match2, g, false) << endl;
@@ -419,10 +419,8 @@ void AlgorithmGraph::testKM(Graph *g) {
         if (match2[i] != NOT_NODE) {
             cout << "(" << match2[i] << ", " << i << "), ";
         }
-        if ((++cnt) % 5 == 0) {
-            cout << endl;
-        }
     }
+    cout << endl;
 }
 
 AlgorithmGraph::weight_type AlgorithmGraph::EdmondKarp(const num_type &src,
@@ -431,7 +429,7 @@ AlgorithmGraph::weight_type AlgorithmGraph::EdmondKarp(const num_type &src,
     auto n = g->size();
     weight_type maxflow = 0;
     while (1) {
-        // Find an augment path and return its flow increase
+        // Find an augmented path and return its flow increase
         auto increase = getIncreaseFromPath(src, des, g);
         if (increase == 0) {  // No augmenting path
             break;
@@ -453,7 +451,7 @@ AlgorithmGraph::weight_type AlgorithmGraph::getIncreaseFromPath(const num_type &
                                                                 const num_type &des,
                                                                 Graph *g) {
     auto n = g->size();
-    vector<weight_type> flow(n, 0);  // Store the maximum flow at each node in the augment path
+    vector<weight_type> flow(n, 0);  // Store the maximum flow at each node in the augmented path
     flow[src] = INF;
     for (auto i = 0; i < n; ++i) {
         prev[i] = NOT_NODE;
@@ -464,7 +462,7 @@ AlgorithmGraph::weight_type AlgorithmGraph::getIncreaseFromPath(const num_type &
     while (!q.empty()) {
         auto v = q.front();
         q.pop();
-        if (v == des) {  // Found an augmenting path
+        if (v == des) {  // Found an augmented path
             break;
         }
         for (auto i = 0; i < n; ++i) {

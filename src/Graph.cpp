@@ -11,8 +11,6 @@ using std::cout;
 using std::endl;
 using std::string;
 
-const Graph::weight_type Graph::NONE_EDGE_WEIGHT = 0;
-
 Graph::Graph(const num_type &n, const StorageType &type_)
     : type(type_), size_(n) {
     switch (type) {
@@ -23,7 +21,7 @@ Graph::Graph(const num_type &n, const StorageType &type_)
             break;
         case ADJ_MATRIX:
             for (auto i = 0; i < n; ++i) {
-                adjMatrix.push_back(vector<weight_type>(n, NONE_EDGE_WEIGHT));
+                adjMatrix.push_back(vector<weight_type>(n, 0));
             }
             break;
         default:
@@ -76,7 +74,7 @@ void Graph::getNeighbours(const num_type &n,
         }     
         case ADJ_MATRIX:
             for (auto i = 0; i < size_; ++i) {
-                if (adjMatrix[n][i] != NONE_EDGE_WEIGHT) {
+                if (!isZero(adjMatrix[n][i])) {
                     nodes.push_back(i);
                 }
             }
@@ -116,7 +114,7 @@ Graph::weight_type Graph::getWeight(const num_type &from,
 void Graph::setWeight(const num_type &from, const num_type &to, const weight_type &w) {
     checkValid(from);
     checkValid(to);
-    if (w == NONE_EDGE_WEIGHT) {
+    if (isZero(w)) {
         removeEdge(from, to);
     }
     switch (type) {
@@ -144,7 +142,7 @@ void Graph::increaseWeight(const num_type &from, const num_type &to, const weigh
     checkValid(from);
     checkValid(to);
     auto cur = getWeight(from, to);
-    if (cur + increase == NONE_EDGE_WEIGHT) {
+    if (isZero(cur + increase)) {
         removeEdge(from, to);
     } else {
         setWeight(from, to, cur + increase);
@@ -192,7 +190,7 @@ void Graph::removeEdge(const num_type &from, const num_type &to) {
             break;
         }
         case ADJ_MATRIX:
-            adjMatrix[from][to] = NONE_EDGE_WEIGHT;
+            adjMatrix[from][to] = 0;
             break;
         default:
             break;
