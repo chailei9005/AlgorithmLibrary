@@ -114,6 +114,13 @@ public:
     */
     void removeEdge(const num_type &from, const num_type &to);
 
+    /*
+    Check if there is an edge between two nodes.
+
+    @param from the start node
+    @param to the end node
+    */
+    bool hasEdge(const num_type &from, const num_type &to);
 private:
     /*
     Definition for an adjacent in an adjacent list.

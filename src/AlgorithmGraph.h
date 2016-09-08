@@ -176,13 +176,15 @@ public:
     matching in a weighted bipartite graph. (time complexity: O(n^4))
     Graph stored in an adjacent matrix.
 
-    Precondition: the graph must be a bipartitle graph.
+    Precondition:
+    1. the graph must be a bipartite graph.
+    2. left nodes number <= right nodes number.
 
     @param leftN the left node number of the bipartite graph
     @param match if match[right] = left, then edge(left, right) is one of the
                  matching edge after running this algorithm. If match[right] = -1,
                  then right node is not matched.
-    @param g the graph object
+    @param g the graph object 
     @param max if max is true, the result matching has maximum sum of weight
                else it has minimum sum of weight.
     @return the sum of weight in the optimum matching
@@ -190,15 +192,15 @@ public:
     Sample #1:
     5 1
     0 0 9 5 7
-    0 0 9 2 3
-    9 9 0 0 0
+    0 0 0 2 3
+    9 0 0 0 0
     5 2 0 0 0
     7 3 0 0 0
     2
 
     Answer #1:
-    Max matching costs: 16
-    Max matching edges: (1, 2), (0, 4),
+    Max matching costs: 12
+    Max matching edges: (0, 2), (1, 4),
     Min matching costs: 8
     Min matching edges: (0, 3), (1, 4),
 

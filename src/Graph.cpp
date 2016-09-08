@@ -197,6 +197,10 @@ void Graph::removeEdge(const num_type &from, const num_type &to) {
     }
 }
 
+bool Graph::hasEdge(const num_type &from, const num_type &to) {
+    return !isZero(getWeight(from, to));
+}
+
 void Graph::print() const {
     cout << "This graph is stored in an ";
     switch (type) {

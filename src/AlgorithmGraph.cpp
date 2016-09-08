@@ -319,8 +319,10 @@ AlgorithmGraph::weight_type AlgorithmGraph::km(const num_type leftN,
     for (auto i = 0; i < n; ++i) {
         if (i < leftN) {  // Left node
             val[i] = -INF;
-            for (auto j = leftN; j < n; ++j) {
-                auto w = g->getWeight(i, j);
+            vector<num_type> adjNodes;
+            g->getNeighbours(i, adjNodes);
+            for (const auto &adjN : adjNodes) {
+                auto w = g->getWeight(i, adjN);
                 if (val[i] < w) {  // Find max weight
                     val[i] = w;
                 }
@@ -343,9 +345,11 @@ AlgorithmGraph::weight_type AlgorithmGraph::km(const num_type leftN,
             weight_type d = INF;
             for (auto i = 0; i < leftN; ++i) {
                 if (visit[i]) {
-                    for (auto j = leftN; j < n; ++j) {
-                        if (!visit[j]) {
-                            d = std::min(d, val[i] + val[j] - g->getWeight(i, j));
+                    vector<num_type> adjNodes;
+                    g->getNeighbours(i, adjNodes);
+                    for (const auto &adjN : adjNodes) {
+                        if (!visit[adjN]) {
+                            d = std::min(d, val[i] + val[adjN] - g->getWeight(i, adjN));
                         }
                     }
                 }
