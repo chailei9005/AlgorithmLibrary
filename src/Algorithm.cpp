@@ -16,7 +16,7 @@ void Algorithm::test() {
     //testPermutation();
     //testCombination();
     //testCantorExpand();
-    testNextPrime();
+    //testNextPrime();
 }
 
 unsigned long long Algorithm::factorial(unsigned n) {

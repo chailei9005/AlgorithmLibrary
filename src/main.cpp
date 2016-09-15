@@ -26,7 +26,7 @@ void test() {
     //ArithmeticExpression::test();
     //NPuzzle::test();
     //Algorithm::test();
-    AlgorithmGraph::test();
+    //AlgorithmGraph::test();
 }
 
 int main() {

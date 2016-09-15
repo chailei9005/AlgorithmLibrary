@@ -31,7 +31,7 @@ void AlgorithmGraph::test() {
     //testDijkstra(g);
     //testPrim(g);
     //testHungarian(g);
-    testKM(g);
+    //testKM(g);
     //testEdmondKarp(g);
 
     delete g;

@@ -297,7 +297,7 @@ void NPuzzle::constructPath(const NPuzzleNode *n) {
     pathNode.clear();
     pathDirec.clear();
     while (n) {
-        //pathNode.push_front(*n);
+        pathNode.push_front(*n);
         pathDirec.push_front(n->getDirection());
         n = n->getParent();
     }
@@ -345,14 +345,15 @@ int NPuzzle::getEstimate(const NPuzzleNode *const n) const {
     }
 
     return 5 * (1 * wrongNext + 0 * wrong + 2 * manhatten + 1 * geometric);
+    //return 1 * (0 * wrongNext + 0 * wrong + 0 * manhatten + 1 * geometric);
 }
 
 void NPuzzle::test() {
     printf("Test N-Puzzle:\n\n");
 
     // 3*3
-    //NPuzzleNode src({5, 1, 7, 4, 3, 6, 0, 2, 8}, 3, 3);
-    //NPuzzleNode des({1, 2, 3, 4, 5, 6, 7, 8, 0}, 3, 3);
+    NPuzzleNode src({5, 1, 7, 4, 3, 6, 0, 2, 8}, 3, 3);
+    NPuzzleNode des({1, 2, 3, 4, 5, 6, 7, 8, 0}, 3, 3);
 
     // 4*4
     //NPuzzleNode src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15}, 4, 4);
@@ -367,8 +368,8 @@ void NPuzzle::test() {
     //NPuzzleNode des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 0}, 5, 4);
 
     // 5*5
-    NPuzzleNode src({14, 0, 24, 13, 23, 21, 20, 22, 18, 11, 6, 1, 16, 3, 10, 7, 17, 4, 8, 2, 9, 15, 19, 5, 12}, 5, 5);
-    NPuzzleNode des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0}, 5, 5);
+    //NPuzzleNode src({14, 0, 24, 13, 23, 21, 20, 22, 18, 11, 6, 1, 16, 3, 10, 7, 17, 4, 8, 2, 9, 15, 19, 5, 12}, 5, 5);
+    //NPuzzleNode des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0}, 5, 5);
 
     // Rearrage
     src.shuffle();
