@@ -1,14 +1,12 @@
-# DataStructureAndAlgorithm
+# AlgorithmLibrary
 
 A library containing some data structures and algorithms written in c/c++.
 
 ## Compile and Run
 
 ```bash
-$ cd src
 $ make
 $ make run
-$ make clean
 ```
 
 ## Data Structure
