@@ -344,8 +344,8 @@ int NPuzzle::getEstimate(const NPuzzleNode *const n) const {
         }
     }
 
-    return 5 * (1 * wrongNext + 0 * wrong + 2 * manhatten + 1 * geometric);
-    //return 1 * (0 * wrongNext + 0 * wrong + 0 * manhatten + 1 * geometric);
+    //return 5 * (1 * wrongNext + 0 * wrong + 2 * manhatten + 1 * geometric);
+    return 1 * (0 * wrongNext + 0 * wrong + 1 * manhatten + 0 * geometric);
 }
 
 void NPuzzle::test() {
