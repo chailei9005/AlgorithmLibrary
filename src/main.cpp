@@ -8,6 +8,7 @@
 #include "SortHelper.h"
 #include "RandomEngine.h"
 #include "ArithmeticExpression.h"
+#include "MD5.h"
 #include "NPuzzle.h"
 #include "Algorithm.h"
 #include "AlgorithmGraph.h"
@@ -24,7 +25,8 @@ void test() {
     //SortHelper<int>::test();
     //RandomEngine::test();
     //ArithmeticExpression::test();
-    NPuzzle::test();
+    MD5::test();
+    //NPuzzle::test();
     //Algorithm::test();
     //AlgorithmGraph::test();
 }

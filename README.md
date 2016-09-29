@@ -28,6 +28,7 @@ $ make run
 |[Sorting](https://en.wikipedia.org/wiki/Sorting_algorithm)|[SortHelper.h](./src/SortHelper.h)|classic sorting algorithms
 |[Random Generation](https://en.wikipedia.org/wiki/Random_number_generation)|[RandomEngine.h](./src/RandomEngine.h) [RandomEngine.cpp](./src/RandomEngine.cpp)|pseudorandom number generation|
 |[Arithmetic Expression](https://en.wikipedia.org/wiki/Shunting-yard_algorithm)|[ArithmeticExpression.h](./src/ArithmeticExpression.h) [ArithmeticExpression.cpp](./src/ArithmeticExpression.cpp)|arithemetic expression calculation|
+|[MD5](https://en.wikipedia.org/wiki/MD5)|[MD5.h](./src/MD5.h) [MD5.cpp](./src/MD5.cpp)|message encrypt|
 |[Factorial](https://en.wikipedia.org/wiki/Factorial)|[Algorithm::factorial()](./src/Algorithm.cpp)|20! is max (return unsigned long long)|
 |[Binary Search](https://en.wikipedia.org/wiki/Binary_search_algorithm)|[Algorithm::binarySearch()](./src/Algorithm.cpp)|find first or last appeared position|
 |[Permutation](https://en.wikipedia.org/wiki/Permutation)|[Algorithm::nextPermutation()](./src/Algorithm.cpp)|non-recursive version|
