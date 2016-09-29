@@ -1,10 +1,14 @@
 #include "MD5.h"
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 using std::cout;
 using std::cin;
 using std::endl;
 using std::getline;
+using std::ifstream;
+using std::ostringstream;
 using std::string;
 using sl::MD5;
 
@@ -40,7 +44,7 @@ string MD5::encrypt(const string &msg) {
     UInt32 a = 0x67452301, b = 0xefcdab89;
     UInt32 c = 0x98badcfe, d = 0x10325476;
     UInt32 groupNum = 0;
-    UInt32 *str = fillup(msg, groupNum);
+    UInt32 *str = pad(msg, groupNum);
     for (UInt32 i = 0; i < groupNum; ++i) {
         UInt32 group[16];  // Each group contains 16 32-bit intergers
         for (auto j = 0; j < 16; ++j) {
@@ -52,7 +56,7 @@ string MD5::encrypt(const string &msg) {
     return toHexStr(a) + toHexStr(b) + toHexStr(c) + toHexStr(d);
 }
 
-MD5::UInt32* MD5::fillup(const string &str, UInt32 &groupNum) {
+MD5::UInt32* MD5::pad(const string &str, UInt32 &groupNum) {
     auto strLen = str.length();
 
     // Each group has 64 bytes = 512 bits.
@@ -70,10 +74,12 @@ MD5::UInt32* MD5::fillup(const string &str, UInt32 &groupNum) {
     for (unsigned i = 0; i < strLen; ++i) {
         res[i >> 2] |= (str[i]) << ((i % 4) << 3);
     }
-    res[strLen >> 2] |= (1 << 7) << (((strLen % 4)) << 3);  // Append one '1' at the end 
+    res[strLen >> 2] |= (1 << 7) << ((strLen % 4) << 3);  // Append one '1' at the end 
 
-    // Add original length(in bits)
-    res[len - 2] = strLen << 3;
+    // Append original length of the message in bits
+    UInt64 originLenInBits = (UInt64)strLen << 3;
+    res[len - 1] = originLenInBits >> 32;  // MSB
+    res[len - 2] = originLenInBits & 0xffffffff;  // LSB
     return res;
 }
 
@@ -124,11 +130,21 @@ MD5::UInt32 MD5::cycleShiftLeft(const UInt32 num, const UInt32 shiftCnt) {
 void MD5::test() {
     cout << "Test MD5:\n\n";
     cin.clear();
+
+    // Read data from command line
     string msg;
     while (1) {
         cout << "Input message to be encrypted:" << endl;
         getline(cin, msg);
-        cout << "Ciphertext:" << endl
-            << MD5::encrypt(msg) << endl << endl;
+        cout << "Message length: " << msg.length() << endl;
+        cout << "MD5: " << MD5::encrypt(msg) << endl << endl;
     }
+
+    // Read data from file
+    //ifstream ifs("files/md5_msg.txt");
+    //ostringstream oss;
+    //oss << ifs.rdbuf();
+    //string msg = oss.str();
+    //cout << "Message length: " << msg.length() << endl;
+    //cout << "MD5: " << MD5::encrypt(msg) << endl << endl;
 }

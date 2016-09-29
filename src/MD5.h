@@ -12,7 +12,8 @@ For usage, see function test().
 */
 class MD5 {
 public:
-    typedef unsigned int UInt32;
+    typedef uint32_t UInt32;
+    typedef uint64_t UInt64;
 
     /*
     Encrypt the message using MD5 algorithm.
@@ -33,20 +34,20 @@ private:
     static const UInt32 k[64];
 
     /*
-    Fill up the string to make the length of the string satisfy: #(length) mod 512 = 0.
+    Pad the string to make the length of the string satisfy: #(length) mod 512 = 0.
     The last 64 bits of the result is #(length of the original string) mod 2^64.
 
     @param str the string to be filled up
     @param groupNum the number of the groups
     @return the filled string stored in an array of 32-bit integer.
     */
-    static UInt32* fillup(const std::string &str, UInt32 &groupNum);
+    static UInt32* pad(const std::string &str, UInt32 &groupNum);
 
     /*
     Loop 64 times for each group and calculate a, b, c and d.
 
     @param group the group to be processed.
-    @param a/b/c/d the four 32-bit integer of the encrypted message. 
+    @param a/b/c/d the four 32-bit integer of cyphertext. 
     */
     static void loop(const UInt32 *const group, UInt32 &a, UInt32 &b, UInt32 &c, UInt32 &d);
 
@@ -86,11 +87,14 @@ public:
     Sample #5: (ans: c3fcd3d76192e4007dfb496cca67e13b)
     abcdefghijklmnopqrstuvwxyz
 
-    Sample #6: (ans: 603F52D844017E83CA267751FEE5B61B)
+    Sample #6: (ans: 603f52d844017e83ca267751fee5b61b)
     jklmn
 
     Sample #7: (ans: 0cc175b9c0f1b6a831c399e269772661)
     a
+
+    Sample #8: (ans: 51bbd89663cb10b67a15aad3f5121637)
+    (files/md5_msg.txt)
     */
     static void test();
 };
