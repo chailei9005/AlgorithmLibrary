@@ -24,7 +24,7 @@ $ make run
 
 | Name | Source | Comment |
 | ---- | ------ | ------- |
-|[N-Puzzle Problem](https://en.wikipedia.org/wiki/15_puzzle)|[NPuzzle.h](./src/NPuzzle.h) [NPuzzle.cpp](./src/NPuzzle.cpp)|can search 240 nodes per millisecond in average(5*5 puzzle; compiler: g++ -O2) ([GUI demo](https://github.com/chuyangLiu/NPuzzle-AI), [中文博客](http://blog.csdn.net/qq_22885773/article/details/52144827))|
+|[N-Puzzle Problem](https://en.wikipedia.org/wiki/15_puzzle)|[NPuzzle.h](./src/NPuzzle.h) [NPuzzle.cpp](./src/NPuzzle.cpp)|able to search 240 nodes per millisecond in average(5*5 puzzle; compiler: g++ -O2); [GUI demo](https://github.com/chuyangLiu/NPuzzle-AI) [博客](http://blog.csdn.net/qq_22885773/article/details/52144827)|
 |[Sorting](https://en.wikipedia.org/wiki/Sorting_algorithm)|[SortHelper.h](./src/SortHelper.h)|classic sorting algorithms
 |[Random Generation](https://en.wikipedia.org/wiki/Random_number_generation)|[RandomEngine.h](./src/RandomEngine.h) [RandomEngine.cpp](./src/RandomEngine.cpp)|pseudorandom number generation|
 |[Arithmetic Expression](https://en.wikipedia.org/wiki/Shunting-yard_algorithm)|[ArithmeticExpression.h](./src/ArithmeticExpression.h) [ArithmeticExpression.cpp](./src/ArithmeticExpression.cpp)|arithemetic expression calculation|
@@ -38,9 +38,9 @@ $ make run
 |[Topological Sort](https://en.wikipedia.org/wiki/Topological_sorting)|[AlgorithmGraph::topoSort()](./src/AlgorithmGraph.cpp)|check if a graph is cyclic|
 |[Dijkstra](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)|[AlgorithmGraph::dijkstra()](./src/AlgorithmGraph.cpp)|shortest path|
 |[Prim](https://en.wikipedia.org/wiki/Prim%27s_algorithm)|[AlgorithmGraph::prim()](./src/AlgorithmGraph.cpp)|minimum spanning tree|
-|[Hungarian](https://en.wikipedia.org/wiki/Hungarian_algorithm)|[AlgorithmGraph::hungarian()](./src/AlgorithmGraph.cpp)|solve unweighted [bipartite graph](https://en.wikipedia.org/wiki/Bipartite_graph) matching problem; ([中文博客](http://blog.csdn.net/pi9nc/article/details/11848327))|
-|[Kuhn Munkras(KM)](https://en.wikipedia.org/wiki/Hungarian_algorithm)|[AlgorithmGraph::km()](./src/AlgorithmGraph.cpp)|solve optimal weighted [bipartite graph](https://en.wikipedia.org/wiki/Bipartite_graph) matching problem; ([中文博客](http://blog.csdn.net/rappy/article/details/1790647))|
-|[Edmonds–Karp](https://en.wikipedia.org/wiki/Edmonds%E2%80%93Karp_algorithm)|[AlgorithmGraph::EdmondKarp()](./src/AlgorithmGraph.cpp)|solve [maximum flow problem](https://en.wikipedia.org/wiki/Maximum_flow_problem); ([中文博客](http://www.cnblogs.com/zsboy/archive/2013/01/27/2878810.html))|
+|[Hungarian](https://en.wikipedia.org/wiki/Hungarian_algorithm)|[AlgorithmGraph::hungarian()](./src/AlgorithmGraph.cpp)|solve unweighted [bipartite graph](https://en.wikipedia.org/wiki/Bipartite_graph) matching problem; [博客](http://blog.csdn.net/pi9nc/article/details/11848327)|
+|[Kuhn Munkras(KM)](https://en.wikipedia.org/wiki/Hungarian_algorithm)|[AlgorithmGraph::km()](./src/AlgorithmGraph.cpp)|solve optimal weighted [bipartite graph](https://en.wikipedia.org/wiki/Bipartite_graph) matching problem; [博客](http://blog.csdn.net/rappy/article/details/1790647)|
+|[Edmonds–Karp](https://en.wikipedia.org/wiki/Edmonds%E2%80%93Karp_algorithm)|[AlgorithmGraph::EdmondKarp()](./src/AlgorithmGraph.cpp)|solve [maximum flow problem](https://en.wikipedia.org/wiki/Maximum_flow_problem); [博客](http://www.cnblogs.com/zsboy/archive/2013/01/27/2878810.html)|
 
 ## Utility
 
