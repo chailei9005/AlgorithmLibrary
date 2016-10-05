@@ -35,7 +35,7 @@ void NPuzzleNode::init(const std::vector<int> &val_) {
     if (row < 2 || col < 2) {
         throw std::range_error("NPuzzleNode.init(): dimension is at least 2*2");
     }
-    if (val_.size() != row * col) {
+    if ((int)val_.size() != row * col) {
         throw std::range_error("NPuzzleNode.init(): value size must equal to (row * col)");
     }
     emptyPos = -1;
@@ -237,6 +237,18 @@ void NPuzzle::printSearchInfo(const NPuzzleNode *const cur) const {
            cur->getF(), getSearchCount());
 }
 
+void NPuzzle::setNodePathEnable(const bool e) {
+    nodePathEnable = e;
+}
+
+void NPuzzle::setDirecPathEnable(const bool e) {
+    direcPathEnable = e;
+}
+
+void NPuzzle::setSearchDetailEnable(const bool e) {
+    searchDetailEnable = e;
+}
+
 void NPuzzle::run() {
     searchedCnt = 0;
     openList.push(&src);
@@ -259,7 +271,9 @@ void NPuzzle::run() {
 
         ++searchedCnt;
         closeList.insert(cur);
-        //printSearchInfo(cur);
+        if (searchDetailEnable) {
+            printSearchInfo(cur);
+        }
 
         if (*cur == des) {  // Find goal
             constructPath(cur);
@@ -276,7 +290,7 @@ void NPuzzle::run() {
                     adj->setParent(cur);
                     adj->setDirection(d);
                     adj->setG(cur->getG() + 1);
-                    adj->setH(getEstimate(adj));
+                    adj->setH(getHeuristic(adj));
                     openList.push(adj);
                 }
             }
@@ -297,8 +311,12 @@ void NPuzzle::constructPath(const NPuzzleNode *n) {
     pathNode.clear();
     pathDirec.clear();
     while (n) {
-        pathNode.push_front(*n);
-        pathDirec.push_front(n->getDirection());
+        if (nodePathEnable) {
+            pathNode.push_front(*n);
+        }
+        if (direcPathEnable) {
+            pathDirec.push_front(n->getDirection());
+        }
         n = n->getParent();
     }
 }
@@ -308,7 +326,7 @@ bool NPuzzle::isVisit(NPuzzleNode *const n) const {
     //return closeList.find(n) != closeList.end();  // STL version
 }
 
-int NPuzzle::getEstimate(const NPuzzleNode *const n) const {
+int NPuzzle::getHeuristic(const NPuzzleNode *const n) const {
     const auto &val = n->getVal();
     const auto &desVal = des.getVal();
     const auto &size = n->getSize();
@@ -344,8 +362,7 @@ int NPuzzle::getEstimate(const NPuzzleNode *const n) const {
         }
     }
 
-    //return 5 * (1 * wrongNext + 0 * wrong + 2 * manhatten + 1 * geometric);
-    return 1 * (0 * wrongNext + 0 * wrong + 1 * manhatten + 0 * geometric);
+    return 5 * (1 * wrongNext + 0 * wrong + 2 * manhatten + 1 * geometric);
 }
 
 void NPuzzle::test() {
@@ -374,10 +391,15 @@ void NPuzzle::test() {
     // Rearrage
     src.shuffle();
 
+    // Create a puzzle calculator
+    NPuzzle puzzle(src, des);
+    puzzle.setSearchDetailEnable(false);
+    puzzle.setDirecPathEnable(true);
+    puzzle.setNodePathEnable(false);
+
     // Run
     printf("Searching...\n");
     Timer timer;
-    NPuzzle puzzle(src, des);
     puzzle.run();
 
     // Get result
@@ -391,6 +413,7 @@ void NPuzzle::test() {
     printf("   End node: %s\n", des.toString().c_str());
     printf("Time elapse: %.3lf ms\n", time);
     printf("Searched nodes: %d\n", puzzle.getSearchCount());
+    printf("Search efficency: %.3lf nodes/ms\n", puzzle.getSearchCount() / time);
     printf("Path length: %d\n", (int)pathDirec.size());
     for (const auto &d : pathDirec) {
         src.move(d);

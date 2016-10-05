@@ -25,7 +25,7 @@ void test() {
     //SortHelper<int>::test();
     //RandomEngine::test();
     //ArithmeticExpression::test();
-    MD5::test();
+    //MD5::test();
     //NPuzzle::test();
     //Algorithm::test();
     //AlgorithmGraph::test();

@@ -204,6 +204,21 @@ public:
     void setStartNode(const NPuzzleNode &n);
     void setEndNode(const NPuzzleNode &n);
 
+    /*
+    Set whether to construct result path represented by nodes.
+    */
+    void setNodePathEnable(const bool e);
+
+    /*
+    Set whether to construct result path represented by directions.
+    */
+    void setDirecPathEnable(const bool e);
+
+    /*
+    Set whether to show search details.
+    */
+    void setSearchDetailEnable(const bool e);
+
 private:
     /*
     Comparator for hash table
@@ -255,14 +270,17 @@ private:
 
     unsigned searchedCnt = 0;
 
+    bool nodePathEnable = false;
+    bool direcPathEnable = true;
+    bool searchDetailEnable = false;
+
     /*
-    Estimate the heuristic value
-    from the node to the goal.
+    Return the heuristic value from the current node to the destination.
 
     @param n the current node
     @return heuristic value from node n to the goal.
     */
-    int getEstimate(const NPuzzleNode *const n) const;
+    int getHeuristic(const NPuzzleNode *const n) const;
 
     /*
     Print the information of the current searching node.

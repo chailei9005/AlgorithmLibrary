@@ -79,7 +79,7 @@ bool AlgorithmGraph::isAllVisit() {
 }
 
 AlgorithmGraph::num_type AlgorithmGraph::getMinNotVisit(const Graph *g) {
-    num_type n;
+    num_type n = -1;
     weight_type min = INF;
     for (auto i = 0; i < g->size(); ++i) {
         if (!visit[i] && dist[i] < min) {
@@ -407,7 +407,6 @@ void AlgorithmGraph::testKM(Graph *g) {
     vector<num_type> match1(g->size(), NOT_NODE);
     cout << "Max matching costs: " << km(leftN, match1, g) << endl;
     cout << "Max matching edges: ";
-    int cnt = 0;
     for (auto i = leftN; i < g->size(); ++i) {
         if (match1[i] != NOT_NODE) {
             cout << "(" << match1[i] << ", " << i << "), ";
@@ -418,7 +417,6 @@ void AlgorithmGraph::testKM(Graph *g) {
     vector<num_type> match2(g->size(), NOT_NODE);
     cout << "Min matching costs: " << km(leftN, match2, g, false) << endl;
     cout << "Min matching edges: ";
-    cnt = 0;
     for (auto i = leftN; i < g->size(); ++i) {
         if (match2[i] != NOT_NODE) {
             cout << "(" << match2[i] << ", " << i << "), ";
@@ -430,7 +428,6 @@ void AlgorithmGraph::testKM(Graph *g) {
 AlgorithmGraph::weight_type AlgorithmGraph::EdmondKarp(const num_type &src,
                                                        const num_type &des,
                                                        Graph *g) {
-    auto n = g->size();
     weight_type maxflow = 0;
     while (1) {
         // Find an augmented path and return its flow increase

@@ -173,7 +173,7 @@ void ArithmeticExpression::toPostfix() {
 
 bool ArithmeticExpression::priorityExceed(const string &a, const string &b) {
     if (a == "(") return false;  // Left bracket has the highest priority
-    int priority1, priority2;
+    int priority1 = -1, priority2 = -1;
     if (a == "*" || a == "/") {
         priority1 = 1;
     } else if (a == "+" || a == "-") {

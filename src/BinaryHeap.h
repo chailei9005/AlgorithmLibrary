@@ -85,7 +85,7 @@ public:
         if (empty()) {
             throw std::range_error("BinaryHeap.pop(): heap is empty");
         }
-        T rootEle = arr[1], lastEle = arr[size_--];
+        T lastEle = arr[size_--];
         unsigned i, child;
         // Empty hole percolate down in the heap
         for (i = 1; (i << 1) <= size_; i = child) {

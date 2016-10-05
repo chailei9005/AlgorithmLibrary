@@ -141,7 +141,7 @@ void MD5::test() {
     }
 
     // Read data from file
-    //ifstream ifs("files/md5_msg.txt");
+    //ifstream ifs("data/md5_msg.txt");
     //ostringstream oss;
     //oss << ifs.rdbuf();
     //string msg = oss.str();
