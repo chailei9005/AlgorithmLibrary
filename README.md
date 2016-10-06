@@ -24,11 +24,12 @@ $ make run
 
 | Name | Source | Comment |
 | ---- | ------ | ------- |
-|[N-Puzzle Problem](https://en.wikipedia.org/wiki/15_puzzle)|[NPuzzle.h](./src/NPuzzle.h) [NPuzzle.cpp](./src/NPuzzle.cpp)|[GUI demo](https://github.com/chuyangLiu/NPuzzle-AI); [中文博客](http://blog.csdn.net/qq_22885773/article/details/52144827)|
-|[Sorting](https://en.wikipedia.org/wiki/Sorting_algorithm)|[SortHelper.h](./src/SortHelper.h)|classic sorting algorithms
+|[Sorting](https://en.wikipedia.org/wiki/Sorting_algorithm)|[SortHelper.h](./src/SortHelper.h)|classic sorting algorithms|
 |[Random Generation](https://en.wikipedia.org/wiki/Random_number_generation)|[RandomEngine.h](./src/RandomEngine.h) [RandomEngine.cpp](./src/RandomEngine.cpp)|pseudorandom number generation|
 |[Arithmetic Expression](https://en.wikipedia.org/wiki/Shunting-yard_algorithm)|[ArithmeticExpression.h](./src/ArithmeticExpression.h) [ArithmeticExpression.cpp](./src/ArithmeticExpression.cpp)|arithemetic expression calculation|
 |[MD5](https://en.wikipedia.org/wiki/MD5) [MD5(CN)](http://baike.baidu.com/link?url=bO26fMBDaRRQZkoObKjuCAHRLG_JkvfvCOVWdBfXZhiiwqLvUHfFRJaBHg9xLDwPf5iXAWafVgy7BxjSFCQDaa)|[MD5.h](./src/MD5.h) [MD5.cpp](./src/MD5.cpp)|message encrypt|
+|[N-Puzzle Problem](https://en.wikipedia.org/wiki/15_puzzle)|[NPuzzle.h](./src/NPuzzle.h) [NPuzzle.cpp](./src/NPuzzle.cpp)|[GUI demo](https://github.com/stevennL/NPuzzle-AI); [中文博客](http://blog.csdn.net/qq_22885773/article/details/52144827)|
+|[N-Queens Problem](https://en.wikipedia.org/wiki/Eight_queens_puzzle)|[NQueen.h](./src/NQueen.h) [NQueen.cpp](./src/NQueen.cpp)||
 |[Factorial](https://en.wikipedia.org/wiki/Factorial)|[Algorithm::factorial()](./src/Algorithm.cpp)|20! is max (return unsigned long long)|
 |[Binary Search](https://en.wikipedia.org/wiki/Binary_search_algorithm)|[Algorithm::binarySearch()](./src/Algorithm.cpp)|find first or last appeared position|
 |[Permutation](https://en.wikipedia.org/wiki/Permutation)|[Algorithm::nextPermutation()](./src/Algorithm.cpp)|non-recursive version|

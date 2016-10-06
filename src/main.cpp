@@ -10,6 +10,7 @@
 #include "ArithmeticExpression.h"
 #include "MD5.h"
 #include "NPuzzle.h"
+#include "NQueen.h"
 #include "Algorithm.h"
 #include "AlgorithmGraph.h"
 
@@ -27,6 +28,7 @@ void test() {
     //ArithmeticExpression::test();
     //MD5::test();
     //NPuzzle::test();
+    //NQueen::test();
     //Algorithm::test();
     //AlgorithmGraph::test();
 }
