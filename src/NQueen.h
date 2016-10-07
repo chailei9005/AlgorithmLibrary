@@ -37,9 +37,14 @@ public:
     bool hasConflict(const int row1, const int row2) const;
 
     /*
-    Return a neightbor of current node having minimnum conflict amount.
+    Return a neighbor of current node having minimnum conflict amount.
     */
     NQueenNode getMinConflictNeighbor() const;
+
+    /*
+    Return a random neightbor of current node.
+    */
+    NQueenNode getRandNeighbor() const;
 
     /*
     Return the string presentation of the node value.
@@ -61,6 +66,14 @@ public:
     Return the size.
     */
     int getSize() const;
+
+    /*
+    Return a random node of n-queens problem
+
+    @param size the amount of queens
+    @return a node generated randomly
+    */
+    static NQueenNode getRandNode(const int size);
 
 private:
     std::vector<int> val;
@@ -91,15 +104,30 @@ public:
     static void solveWithEnumeration(const int n, std::vector<NQueenNode> &res);
 
     /*
-    Solve the N-Queen problem using hill climbing algorithm.
+    Solve the N-Queen problem using steepest hill climbing algorithm.
+
+    @param start the initial node
+    @return the solution node
+    */
+    static NQueenNode solveWithSteepestHillClimb(const NQueenNode &start);
+
+    /*
+    Solve the N-Queen problem using first choice hill climbing algorithm.
+
+    @param start the initial node
+    @return the solution node
+    */
+    static NQueenNode solveWithFirstChoiceHillClimb(const NQueenNode &start);
+
+    /*
+    Solve the N-Queen problem using random restart hill climbing algorithm.
 
     @param n the amount of queens
     @return the solution node
     */
-    static NQueenNode solveWithHillClimb(const int n);
+    static NQueenNode solveWithRandRestartHillClimb(const int n);
 
 private:
-
     /*
     Enumerate all possibilities and find solution.
 

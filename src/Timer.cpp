@@ -11,5 +11,5 @@ void Timer::reset() {
 }
 
 double Timer::elapse() {
-    return 1000.0 * ((clock() - begin) / (double)CLOCKS_PER_SEC);
+    return 1000 * (clock() - begin) / (double)CLOCKS_PER_SEC;
 }
