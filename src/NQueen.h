@@ -27,14 +27,19 @@ public:
     NQueenNode(const std::vector<int> &val_);
 
     /*
-    Return the number of queens that conflicts with others
+    Return the amount of conflict queens.
     */
-    int conflictCount() const;
+    unsigned conflictCount() const;
 
     /*
     Test if the queens in two rows collide with each other.
     */
-    bool conflict(const int row1, const int row2) const;
+    bool hasConflict(const int row1, const int row2) const;
+
+    /*
+    Return a neightbor of current node having minimnum conflict amount.
+    */
+    NQueenNode getMinConflictNeighbor() const;
 
     /*
     Return the string presentation of the node value.
@@ -80,10 +85,18 @@ public:
     /*
     Solve the N-Queen problem using enumeration alogrithm.
 
-    @param n the maximum numbers of queens
+    @param n the amount of queens
     @param res the solutions will be stored in this field
     */
     static void solveWithEnumeration(const int n, std::vector<NQueenNode> &res);
+
+    /*
+    Solve the N-Queen problem using hill climbing algorithm.
+
+    @param n the amount of queens
+    @return the solution node
+    */
+    static NQueenNode solveWithHillClimb(const int n);
 
 private:
 
@@ -91,7 +104,7 @@ private:
     Enumerate all possibilities and find solution.
 
     @param node the current processing node
-    @param row the current processing row number
+    @param row the current processing row
     @param res the solutions will be stored in this field
     */
     static void enumerate(NQueenNode &node, const int row, std::vector<NQueenNode> &res);
