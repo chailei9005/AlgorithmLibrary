@@ -98,9 +98,24 @@ void NQueen::solveWithEnumeration(const int n, vector<NQueenNode> &res) {
 }
 
 void NQueen::enumerate(NQueenNode &node, const int row, vector<NQueenNode> &res) {
-    // TODO enumerate recursively
-    res.push_back(NQueenNode({0, 1, 2, 3}));
-    res.push_back(NQueenNode({0, 1, 2, 3, 4, 5, 6, 7}));
+    auto size = node.getSize();
+    if (row == size) {
+        res.push_back(node);
+    } else {
+        for (auto col = 0; col < size; ++col) {
+            node[row] = col;
+            bool conflict = false;
+            for (auto i = 0; i < row; ++i) {
+                if (node.conflict(i, row)) {
+                    conflict = true;
+                    break;
+                }
+            }
+            if (!conflict) {
+                enumerate(node, row + 1, res);
+            }
+        }
+    }
 }
 
 void NQueen::test() {
@@ -108,7 +123,7 @@ void NQueen::test() {
     int n;
     printf("Input queens number: ");
     if (scanf("%d", &n) != 1) {
-        printf("Read error.\n");
+        printf("Read input error.\n");
         return;
     }
 
@@ -118,14 +133,12 @@ void NQueen::test() {
     NQueen::solveWithEnumeration(n, res);
     auto time = timer.elapse();
 
-    printf("\nComputing finished.\n");
-    printf("Time elapse: %.3lf ms\n", time);
+    printf("Computing finished.\n\n");
     printf("Solutions:\n");
     for (unsigned i = 0; i < res.size(); ++i) {
-        printf("Solution #%d:\n", i + 1);
-        printf("%s\n", res[i].toPrettyString().c_str());
-        printf("Node value: %s\n", res[i].toString().c_str());
-        printf("Conflict count: %d\n", res[i].conflictCount());
-        printf("\n");
+        printf("\nSolution #%d: (conflict: %d)\n", i + 1, res[i].conflictCount());
+        printf("%s\n%s\n", res[i].toPrettyString().c_str(), res[i].toString().c_str());
     }
+    printf("\nSolution amount: %d\n", (int)res.size());
+    printf("Time elapse: %.3lf ms\n", time);
 }
