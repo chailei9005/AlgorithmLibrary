@@ -111,10 +111,10 @@ void MD5::loop(const UInt32 *const group, UInt32 &a, UInt32 &b, UInt32 &c, UInt3
 
 string MD5::toHexStr(const UInt32 num) {
     string tmp, res = "";
-    for (int i = 0; i < 4; ++i) {
+    for (UInt32 i = 0; i < 4; ++i) {
         tmp = "";
         int byte = (num >> (i << 3)) % (1 << 8);
-        for (int j = 0; j < 2; ++j) {
+        for (UInt32 j = 0; j < 2; ++j) {
             tmp.insert(0, 1, hex[byte % 16]);
             byte >>= 4;
         }
