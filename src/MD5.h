@@ -94,7 +94,7 @@ public:
     a
 
     Sample #8: (ans: 51bbd89663cb10b67a15aad3f5121637)
-    (files/md5_msg.txt)
+    (data/md5_msg.txt)
     */
     static void test();
 };
