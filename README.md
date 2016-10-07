@@ -40,7 +40,7 @@ $ make run
 |[Dijkstra](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)|[AlgorithmGraph::dijkstra()](./src/AlgorithmGraph.cpp)|shortest path|
 |[Prim](https://en.wikipedia.org/wiki/Prim%27s_algorithm)|[AlgorithmGraph::prim()](./src/AlgorithmGraph.cpp)|minimum spanning tree|
 |[Hungarian](https://en.wikipedia.org/wiki/Hungarian_algorithm)|[AlgorithmGraph::hungarian()](./src/AlgorithmGraph.cpp)|solve unweighted [bipartite graph](https://en.wikipedia.org/wiki/Bipartite_graph) matching problem; [中文博客](http://blog.csdn.net/pi9nc/article/details/11848327)|
-|[Kuhn Munkras(KM)](https://en.wikipedia.org/wiki/Hungarian_algorithm)|[AlgorithmGraph::km()](./src/AlgorithmGraph.cpp)|solve optimal weighted [bipartite graph](https://en.wikipedia.org/wiki/Bipartite_graph) matching problem; [中文博客](http://blog.csdn.net/rappy/article/details/1790647)|
+|[Kuhn-Munkras](https://en.wikipedia.org/wiki/Hungarian_algorithm)|[AlgorithmGraph::km()](./src/AlgorithmGraph.cpp)|solve optimal weighted [bipartite graph](https://en.wikipedia.org/wiki/Bipartite_graph) matching problem; [中文博客](http://blog.csdn.net/rappy/article/details/1790647)|
 |[Edmonds–Karp](https://en.wikipedia.org/wiki/Edmonds%E2%80%93Karp_algorithm)|[AlgorithmGraph::EdmondKarp()](./src/AlgorithmGraph.cpp)|solve [maximum flow problem](https://en.wikipedia.org/wiki/Maximum_flow_problem); [中文博客](http://www.cnblogs.com/zsboy/archive/2013/01/27/2878810.html)|
 
 ## Utility
