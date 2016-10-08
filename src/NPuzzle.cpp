@@ -537,7 +537,7 @@ void NPuzzle::testAStar(NPuzzle &puzzle) {
         src.move(d);
     }
     printf("Path correctness check: %s\n", src == des ? "pass" : "failed");
-    printf("Path of directions:\n");
+    printf("Path of directions: (0->none, 1->left, 2->up, 3->right, 4->down)\n");
     int cnt = 0;
     for (const auto &d : pathDirec) {
         if (cnt++) printf(",");
