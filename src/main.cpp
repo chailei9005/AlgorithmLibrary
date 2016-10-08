@@ -6,7 +6,7 @@
 #include "DisjointSet.h"
 #include "Graph.h"
 #include "SortHelper.h"
-#include "RandomEngine.h"
+#include "Random.h"
 #include "ArithmeticExpression.h"
 #include "MD5.h"
 #include "NPuzzle.h"
@@ -24,7 +24,7 @@ void test() {
     //DisjointSet::test();
     //Graph::test();
     //SortHelper<int>::test();
-    //RandomEngine::test();
+    //Random::test();
     //ArithmeticExpression::test();
     //MD5::test();
     //NPuzzle::test();

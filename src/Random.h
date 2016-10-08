@@ -7,6 +7,7 @@ NS_BEGIN
 
 /*
 Contain algorithms for generating random numbers.
+This is a singleton.
 
 Randomize equation: X(i+1) = A*X(i) mod M
 A = 48271
@@ -21,35 +22,48 @@ e(X(i)) =
 
 Note: INT_MAX >= 2^31 - 1 is necessary to ensure the program to run correctly
 */
-class RandomEngine {
+class Random {
 public:
     typedef long long value_type;
+
+    ~Random();
+
+    /*
+    Forbid copy
+    */
+    Random(const Random &m) = delete;
+    Random& operator=(const Random &m) = delete;
+
+    /*
+    Return the only instance
+    */
+    static Random* getInstance();
 
     /*
     Return a random number between 0 and 1 (exclude 0 and 1)
     */
-    static double random();
+    double rand();
 
     /*
     Return a random double number in (min, max)
     */
-    static double randDouble(const double min, const double max);
+    double randDouble(const double min, const double max);
 
     /*
     Return a random integer number in [min, max]
     */
-    static unsigned long long randInt(const unsigned long long min,
+    unsigned long long randInt(const unsigned long long min,
                                       const unsigned long long max);
 
     /*
     Return a random integer number in [min, max] using library methods.
     */
-    static unsigned randLib(const unsigned min, const unsigned max);
+    unsigned randLib(const unsigned min, const unsigned max);
     
     /*
     Set the seed value.
     */
-    static void setSeed(value_type seed_);
+    void setSeed(value_type seed_);
 
     /*
     Randomly rearrange the elements in an array.
@@ -57,7 +71,7 @@ public:
     @param arr the array to rearrange
     */
     template <typename T>
-    static void randomChange(std::vector<T> &arr) {
+    void randomChange(std::vector<T> &arr) {
         for (unsigned i = 1; i < arr.size(); ++i) {
             unsigned pos = randLib(0, i);
             T tmp = arr[i];
@@ -67,11 +81,16 @@ public:
     }
 
 private:
-    static value_type seed;
-    static const value_type A;
-    static const value_type M;
-    static const value_type Q;
-    static const value_type R;
+    value_type seed;
+    const value_type A;
+    const value_type M;
+    const value_type Q;
+    const value_type R;
+
+    /*
+    Private constructor for singleton.
+    */
+    Random();
 
 public:
     /*

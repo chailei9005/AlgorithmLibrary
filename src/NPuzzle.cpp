@@ -1,5 +1,5 @@
 #include "NPuzzle.h"
-#include "RandomEngine.h"
+#include "Random.h"
 #include "Timer.h"
 #include "Algorithm.h"
 #include <sstream>
@@ -116,7 +116,7 @@ int NPuzzleNode::getSize() const {
 
 void NPuzzleNode::shuffle() {
     for (int i = 0; i < 1000; ++i) {
-        Direction d = Direction(RandomEngine::randLib(1, 4));
+        Direction d = Direction(Random::getInstance()->randLib(1, 4));
         if (canMove(d)) {
             move(d);
         }

@@ -1,6 +1,6 @@
 #include "NQueen.h"
 #include "Timer.h"
-#include "RandomEngine.h"
+#include "Random.h"
 #include <cstdio>
 #include <stdexcept>
 #include <sstream>
@@ -69,9 +69,9 @@ NQueenNode NQueenNode::getMinConflictNeighbor() const {
 }
 
 NQueenNode NQueenNode::getRandNeighbor() const {
-    int desCol = -1, row = RandomEngine::randLib(0, size - 1);
+    int desCol = -1, row = Random::getInstance()->randLib(0, size - 1);
     while (1) {
-        desCol = RandomEngine::randLib(0, size - 1);
+        desCol = Random::getInstance()->randLib(0, size - 1);
         if (val[row] != desCol) {
             break;
         }
@@ -124,7 +124,7 @@ int NQueenNode::getSize() const {
 NQueenNode NQueenNode::getRandNode(const int size) {
     vector<int> val_(size, 0);
     for (auto &x : val_) {
-        x = RandomEngine::randLib(0, size - 1);
+        x = Random::getInstance()->randLib(0, size - 1);
     }
     return NQueenNode(val_);
 }
@@ -201,6 +201,7 @@ NQueenNode NQueen::solveWithRandRestartHillClimb(const int n) {
 
 void NQueen::test() {
     printf("Test N-Queen:\n\n");
+
     int n;
     printf("Input queens amount n(n>=4): ");
     if (scanf("%d", &n) != 1 || n < 4) {
@@ -210,7 +211,7 @@ void NQueen::test() {
 
     const int caseCnt = 500;
     Timer timer;
-    NQueenNode node(vector<int>(n, -1));
+    NQueenNode resNode(vector<int>(n, -1));
 
     // Steepest hill climbing
     printf("\nCompute using steepest hill climbing...\n");
@@ -221,7 +222,7 @@ void NQueen::test() {
         auto tmp = NQueen::solveWithSteepestHillClimb(NQueenNode::getRandNode(n));
         time += timer.elapse();
         if (tmp.conflictCount() == 0) {
-            node = tmp;
+            resNode = tmp;
             ++sucCnt;
         }
     }
@@ -229,8 +230,8 @@ void NQueen::test() {
     printf("Case amount: %d\n", caseCnt);
     printf("Success rate: %.2lf%%\n", 100 * (double)sucCnt / caseCnt);
     printf("Average time elapse: %.3lf ms\n", time / caseCnt);
-    printf("One solution: (conflict amount: %d)\n", node.conflictCount());
-    printf("%s\n%s\n", node.toPrettyString().c_str(), node.toString().c_str());
+    printf("One solution: (conflict amount: %d)\n", resNode.conflictCount());
+    printf("%s\n%s\n", resNode.toPrettyString().c_str(), resNode.toString().c_str());
 
     // First choice hill climbing
     printf("\nCompute using first choice hill climbing...\n");
@@ -240,7 +241,7 @@ void NQueen::test() {
         auto tmp = NQueen::solveWithFirstChoiceHillClimb(NQueenNode::getRandNode(n));
         time += timer.elapse();
         if (tmp.conflictCount() == 0) {
-            node = tmp;
+            resNode = tmp;
             ++sucCnt;
         }
     }
@@ -248,8 +249,8 @@ void NQueen::test() {
     printf("Case amount: %d\n", caseCnt);
     printf("Success rate: %.2lf%%\n", 100 * (double)sucCnt / caseCnt);
     printf("Average time elapse: %.3lf ms\n", time / caseCnt);
-    printf("One solution: (conflict amount: %d)\n", node.conflictCount());
-    printf("%s\n%s\n", node.toPrettyString().c_str(), node.toString().c_str());
+    printf("One solution: (conflict amount: %d)\n", resNode.conflictCount());
+    printf("%s\n%s\n", resNode.toPrettyString().c_str(), resNode.toString().c_str());
 
     // Random restart choice hill climbing
     printf("\nCompute using random restart hill climbing...\n");
@@ -259,7 +260,7 @@ void NQueen::test() {
         auto tmp = NQueen::solveWithRandRestartHillClimb(n);
         time += timer.elapse();
         if (tmp.conflictCount() == 0) {
-            node = tmp;
+            resNode = tmp;
             ++sucCnt;
         }
     }
@@ -267,8 +268,8 @@ void NQueen::test() {
     printf("Case amount: %d\n", caseCnt);
     printf("Success rate: %.2lf%%\n", 100 * (double)sucCnt / caseCnt);
     printf("Average time elapse: %.3lf ms\n", time / caseCnt);
-    printf("One solution: (conflict amount: %d)\n", node.conflictCount());
-    printf("%s\n%s\n", node.toPrettyString().c_str(), node.toString().c_str());
+    printf("One solution: (conflict amount: %d)\n", resNode.conflictCount());
+    printf("%s\n%s\n", resNode.toPrettyString().c_str(), resNode.toString().c_str());
 
     // Enumeration
     printf("\nCompute using enumeration...\n");

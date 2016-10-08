@@ -1,19 +1,26 @@
-#include "RandomEngine.h"
+#include "Random.h"
 #include <iostream>
 #include <ctime>
 
-using sl::RandomEngine;
+using sl::Random;
 using std::cout;
 using std::cin;
 using std::endl;
 
-RandomEngine::value_type RandomEngine::seed = time(nullptr);
-const RandomEngine::value_type RandomEngine::A = 48271;
-const RandomEngine::value_type RandomEngine::M = 2147483647;
-const RandomEngine::value_type RandomEngine::Q = M / A;
-const RandomEngine::value_type RandomEngine::R = M % A;
+Random::~Random() {
+}
 
-double RandomEngine::random() {
+Random::Random()
+    : seed(time(nullptr)), A(48271), M(2147483647), Q(M / A), R(M % A) {
+}
+
+Random* Random::getInstance() {
+    // According to C++11, static field constructor is thread-safe
+    static Random instance;
+    return &instance;
+}
+
+double Random::rand() {
     value_type tmpSeed = A * (seed % Q) - R * (seed / Q);
     if (tmpSeed >= 0) {
         seed = tmpSeed;
@@ -23,47 +30,47 @@ double RandomEngine::random() {
     return static_cast<double>(seed) / M;
 }
 
-double RandomEngine::randDouble(const double min, const double max) {
-    return random() * (max - min) + min;
+double Random::randDouble(const double min, const double max) {
+    return rand() * (max - min) + min;
 }
 
-unsigned long long RandomEngine::randInt(const unsigned long long min,
+unsigned long long Random::randInt(const unsigned long long min,
                                          const unsigned long long max) {
-    return static_cast<unsigned long long>(random() * (max - min + 1) + min);
+    return static_cast<unsigned long long>(rand() * (max - min + 1) + min);
 }
 
-unsigned RandomEngine::randLib(const unsigned min, const unsigned max) {
+unsigned Random::randLib(const unsigned min, const unsigned max) {
     static bool seedSet = false;
     if (!seedSet) {
         srand(static_cast<unsigned>(time(nullptr)));
         seedSet = true;
     }
-    return rand() % (max - min + 1) + min;
+    return std::rand() % (max - min + 1) + min;
 }
 
-void RandomEngine::setSeed(value_type seed_) {
+void Random::setSeed(value_type seed_) {
     seed = seed_;
 }
 
-void RandomEngine::test() {
-    std::cout << "Test RandomEngine:\n\n";
+void Random::test() {
+    std::cout << "Test Random:\n\n";
     std::cin.clear();
     unsigned min, max, n = 10;
     cout << "Input the range of the random number: ";
     cin >> min >> max;
     cout << "\nGenerate " << n << " integers:" << endl;
     for (unsigned i = 0; i < n; ++i) {
-        auto num = RandomEngine::randInt(min, max);
+        auto num = Random::getInstance()->randInt(min, max);
         cout << num << endl;
     }
     cout << "\nGenerate " << n << " integers using library methods:" << endl;
     for (unsigned i = 0; i < n; ++i) {
-        auto num = RandomEngine::randInt(min, max);
+        auto num = Random::getInstance()->randInt(min, max);
         cout << num << endl;
     }
     cout << "\nGenerate " << n << " double numbers:" << endl;
     for (unsigned i = 0; i < n; ++i) {
-        auto num = RandomEngine::randDouble(min, max);
+        auto num = Random::getInstance()->randDouble(min, max);
         cout << num << endl;
     }
     cout << "\nRandomly rearrange an array of size 10:\n";
@@ -72,7 +79,7 @@ void RandomEngine::test() {
         for (int i = 0; i < 10; ++i) {
             arr.push_back(i);
         }
-        RandomEngine::randomChange(arr);
+        Random::getInstance()->randomChange(arr);
         for (unsigned j = 0; j < arr.size(); ++j) {
             cout << arr[j] << " ";
         }
