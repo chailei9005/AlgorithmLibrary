@@ -13,26 +13,32 @@ using std::priority_queue;
 using sl::AlgorithmGraph;
 using sl::Graph;
 
-const AlgorithmGraph::num_type AlgorithmGraph::NOT_NODE = -1;
-const AlgorithmGraph::weight_type AlgorithmGraph::INF = 2147483647;
+AlgorithmGraph::~AlgorithmGraph() {
+}
 
-vector<AlgorithmGraph::num_type> AlgorithmGraph::indegree;
-vector<AlgorithmGraph::weight_type> AlgorithmGraph::dist;
-vector<AlgorithmGraph::num_type> AlgorithmGraph::prev;
-vector<bool> AlgorithmGraph::visit;
+AlgorithmGraph::AlgorithmGraph() : NOT_NODE(-1), INF(2147483647) {
+}
+
+AlgorithmGraph* AlgorithmGraph::getInstance() {
+    // According to C++11, static field constructor is thread-safe
+    static AlgorithmGraph instance;
+    return &instance;
+}
 
 void AlgorithmGraph::test() {
     cout << "Test AlgorithmGraph:\n\nCreate graph:\n";
     cin.clear();
-    auto g = createGraphFromInput();
+
+    auto algorithmGraph = AlgorithmGraph::getInstance();
+    auto g = algorithmGraph->createGraphFromInput();
 
     // Test once algorithm at each time
-    //testTopoSort(g);
-    //testDijkstra(g);
-    //testPrim(g);
-    //testHungarian(g);
-    //testKM(g);
-    //testEdmondKarp(g);
+    //algorithmGraph->testTopoSort(g);
+    //algorithmGraph->testDijkstra(g);
+    //algorithmGraph->testPrim(g);
+    //algorithmGraph->testHungarian(g);
+    //algorithmGraph->testKM(g);
+    //algorithmGraph->testEdmondKarp(g);
 
     delete g;
 }

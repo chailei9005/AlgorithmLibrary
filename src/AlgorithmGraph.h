@@ -7,6 +7,7 @@ NS_BEGIN
 
 /*
 Contains algorithms for graph.
+This is a singleton.
 
 For usage, see function test().
 */
@@ -14,6 +15,19 @@ class AlgorithmGraph {
 public:
     typedef Graph::num_type num_type;
     typedef Graph::weight_type weight_type;
+
+    ~AlgorithmGraph();
+    
+    /*
+    Forbid copy
+    */
+    AlgorithmGraph(const AlgorithmGraph &m) = delete;
+    AlgorithmGraph& operator=(const AlgorithmGraph &m) = delete;
+
+    /*
+    Return the only instance
+    */
+    static AlgorithmGraph* getInstance();
 
     /*
     Topological sorting.
@@ -41,8 +55,8 @@ public:
     0 0 0 1
     0 1 0 0
     */
-    static bool topoSort(Graph *g, std::vector<num_type> &res);
-    static void testTopoSort(Graph *g);
+    bool topoSort(Graph *g, std::vector<num_type> &res);
+    void testTopoSort(Graph *g);
 
     /*
     Dijkstra algorithm
@@ -87,9 +101,9 @@ public:
     From node 2 to 6 (length: 8): 2 -> 4 -> 7 -> 6
     From node 2 to 7 (length: 7): 2 -> 4 -> 7
     */
-    static void dijkstra(Graph *g, const num_type &src);
-    static void printPathTo(const num_type &des, const std::vector<num_type> &prev_);
-    static void testDijkstra(Graph *g);
+    void dijkstra(Graph *g, const num_type &src);
+    void printPathTo(const num_type &des, const std::vector<num_type> &prev_);
+    void testDijkstra(Graph *g);
 
     /*
     Prim algorithm to find minimum spanning tree (undirected graph).
@@ -112,8 +126,8 @@ public:
     The edges of the minimum spanning tree:
     (0, 1), (1, 2), (4, 3), (1, 4), (7, 5), (7, 6), (4, 7),
     */
-    static void prim(Graph *g);
-    static void testPrim(Graph *g);
+    void prim(Graph *g);
+    void testPrim(Graph *g);
 
     /*
     Hungarian algorithm to find the maximum matching number
@@ -163,13 +177,9 @@ public:
     0 0 1 0 0 0 0 0
     4
     */
-    static num_type hungarian(const num_type leftN,
-                              std::vector<num_type> &match,
-                              Graph *g);
-    static bool findPath1(const num_type src,
-                          std::vector<num_type> &match,
-                          Graph *g);
-    static void testHungarian(Graph *g);
+    num_type hungarian(const num_type leftN, std::vector<num_type> &match, Graph *g);
+    bool findPath1(const num_type src, std::vector<num_type> &match, Graph *g);
+    void testHungarian(Graph *g);
 
     /*
     Kuhn¨CMunkres algorithm to find optimum(maximum sum of weight)
@@ -244,15 +254,11 @@ public:
     Min matching costs: 21
     Min matching edges: (4, 5), (3, 6), (1, 7), (2, 8), (0, 9),
     */
-    static weight_type km(const num_type leftN,
-                          std::vector<num_type> &match,
-                          Graph *g,
-                          const bool max = true);
-    static bool findPath2(const num_type src,
-                          std::vector<weight_type> &val,
-                          std::vector<num_type> &match,
-                          Graph *g);
-    static void testKM(Graph *g);
+    weight_type km(const num_type leftN, std::vector<num_type> &match,
+                   Graph *g, const bool max = true);
+    bool findPath2(const num_type src, std::vector<weight_type> &val,
+                   std::vector<num_type> &match, Graph *g);
+    void testKM(Graph *g);
 
     /*
     Edmond-Karp's algorithm to solve maximum flow problem.
@@ -284,50 +290,45 @@ public:
     0 0 3 0 0 7
     0 0 0 0 0 0
     */
-    static weight_type EdmondKarp(const num_type &src,
-                                  const num_type &des,
-                                  Graph *g);
-    static weight_type getIncreaseFromPath(const num_type &src,
-                                           const num_type &des,
-                                           Graph *g);
-    static void testEdmondKarp(Graph *g);
+    weight_type EdmondKarp(const num_type &src, const num_type &des, Graph *g);
+    weight_type getIncreaseFromPath(const num_type &src, const num_type &des, Graph *g);
+    void testEdmondKarp(Graph *g);
 
 private:
-    /*
-    Constants.
-    */
-    static const num_type NOT_NODE;
-    static const weight_type INF;
+    const num_type NOT_NODE;
+    const weight_type INF;
+
+    std::vector<num_type> indegree;
+    std::vector<weight_type> dist;
+    std::vector<num_type> prev;
+    std::vector<bool> visit;
 
     /*
-    Fields for searching algorithms.
+    Private constructor for singleton.
     */
-    static std::vector<num_type> indegree;
-    static std::vector<weight_type> dist;
-    static std::vector<num_type> prev;
-    static std::vector<bool> visit;
+    AlgorithmGraph();
 
     /*
     Create a graph object from command input.
 
     @return a pointer to the graph created
     */
-    static sl::Graph* createGraphFromInput();
+    sl::Graph* createGraphFromInput();
 
     /*
     Initialize global arrays.
     */
-    static void initGlobals(const num_type &nodeNum);
+    void initGlobals(const num_type &nodeNum);
 
     /*
     Check if all the nodes have been visited.
     */
-    static bool isAllVisit();
+    bool isAllVisit();
 
     /*
     Get an un-visited node that has the smallest dist value.
     */
-    static num_type getMinNotVisit(const Graph *g);
+    num_type getMinNotVisit(const Graph *g);
 
 public:
     /*
