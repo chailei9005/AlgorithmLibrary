@@ -141,9 +141,10 @@ private:
 
     @param node the current processing node
     @param row the current processing row
-    @param res the solutions will be stored in this field
+    @param res all solutions will be stored in this field
+    @return true if one solution is found, false otherwise
     */
-    static void enumerate(NQueenNode &node, const int row, std::vector<NQueenNode> &res);
+    static bool enumerate(NQueenNode &node, const int row, std::vector<NQueenNode> &res);
 
 public:
     /*

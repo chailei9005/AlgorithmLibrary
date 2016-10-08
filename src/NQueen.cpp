@@ -136,10 +136,11 @@ void NQueen::solveWithEnumeration(const int n, vector<NQueenNode> &res) {
     enumerate(start, 0, res);
 }
 
-void NQueen::enumerate(NQueenNode &node, const int row, vector<NQueenNode> &res) {
+bool NQueen::enumerate(NQueenNode &node, const int row, vector<NQueenNode> &res) {
     auto size = node.getSize();
     if (row == size) {
         res.push_back(node);
+        return true;
     } else {
         for (auto col = 0; col < size; ++col) {
             node[row] = col;
@@ -150,10 +151,12 @@ void NQueen::enumerate(NQueenNode &node, const int row, vector<NQueenNode> &res)
                     break;
                 }
             }
-            if (!conflict) {
-                enumerate(node, row + 1, res);
+            if (!conflict && enumerate(node, row + 1, res)) {
+                // Comment the line below to get all solutions, otherwise get only one solution
+                //return true;
             }
         }
+        return false;
     }
 }
 
