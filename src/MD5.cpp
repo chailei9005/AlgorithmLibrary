@@ -12,16 +12,17 @@ using std::ostringstream;
 using std::string;
 using sl::MD5;
 
-const char MD5::hex[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-const MD5::UInt32 MD5::s[64] =
-{
+MD5::~MD5() {
+}
+
+MD5::MD5() : hex("0123456789abcdef"),
+s({
     7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
     5,  9, 14, 20, 5,  9, 14, 20, 5,  9, 14, 20, 5,  9, 14, 20,
     4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
     6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21
-};
-const MD5::UInt32 MD5::k[64] =
-{
+}),
+k({
     0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
     0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
     0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be,
@@ -38,7 +39,13 @@ const MD5::UInt32 MD5::k[64] =
     0x655b59c3, 0x8f0ccc92, 0xffeff47d, 0x85845dd1,
     0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1,
     0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391
-};
+}) {}
+
+MD5* MD5::getInstance() {
+    // According to C++11, static field constructor is thread-safe
+    static MD5 instance;
+    return &instance;
+}
 
 string MD5::encrypt(const string &msg) {
     UInt32 a = 0x67452301, b = 0xefcdab89;
@@ -137,7 +144,7 @@ void MD5::test() {
         cout << "Input message to be encrypted:" << endl;
         getline(cin, msg1);
         cout << "Message length: " << msg1.length() << endl;
-        cout << "MD5: " << MD5::encrypt(msg1) << endl << endl;
+        cout << "MD5: " << MD5::getInstance()->encrypt(msg1) << endl << endl;
     }
 
     // Read data from file
@@ -146,5 +153,5 @@ void MD5::test() {
     oss << ifs.rdbuf();
     string msg2 = oss.str();
     cout << "Message length: " << msg2.length() << endl;
-    cout << "MD5: " << MD5::encrypt(msg2) << endl << endl;
+    cout << "MD5: " << MD5::getInstance()->encrypt(msg2) << endl;
 }

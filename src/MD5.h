@@ -2,11 +2,13 @@
 
 #include "Base.h"
 #include <string>
+#include <vector>
 
 NS_BEGIN
 
 /*
 MD5 algorithm.
+This is a singleton.
 
 For usage, see function test().
 */
@@ -15,23 +17,41 @@ public:
     typedef uint32_t UInt32;
     typedef uint64_t UInt64;
 
+    ~MD5();
+
+    /*
+    Forbid copy
+    */
+    MD5(const MD5 &m) = delete;
+    MD5& operator=(const MD5 &m) = delete;
+
+    /*
+    Return the only instance
+    */
+    static MD5* getInstance();
+
     /*
     Encrypt the message using MD5 algorithm.
 
     @param msg the message to be encrypted
     @return the encrypted string
     */
-    static std::string encrypt(const std::string &msg);
+    std::string encrypt(const std::string &msg);
 
 private:
     // Hexadecimal character
-    static const char hex[16];
+    const std::string hex;
 
     // Left shift number
-    static const UInt32 s[64];
+    const std::vector<UInt32> s;
 
     // Constants in main loop
-    static const UInt32 k[64];
+    const std::vector<UInt32> k;
+
+    /*
+    Private constructor for singleton.
+    */
+    MD5();
 
     /*
     Pad the string to make the length of the string satisfy: #(length) mod 512 = 0.
@@ -41,7 +61,7 @@ private:
     @param groupNum the number of the groups
     @return the filled string stored in an array of 32-bit integer.
     */
-    static UInt32* pad(const std::string &str, UInt32 &groupNum);
+    UInt32* pad(const std::string &str, UInt32 &groupNum);
 
     /*
     Loop 64 times for each group and calculate a, b, c and d.
@@ -49,7 +69,7 @@ private:
     @param group the group to be processed.
     @param a/b/c/d the four 32-bit integer of cyphertext. 
     */
-    static void loop(const UInt32 *const group, UInt32 &a, UInt32 &b, UInt32 &c, UInt32 &d);
+    void loop(const UInt32 *const group, UInt32 &a, UInt32 &b, UInt32 &c, UInt32 &d);
 
     /*
     Map a 32-bit integer to its hexadecimal presentation.
@@ -57,7 +77,7 @@ private:
     @param num the 32-bit integer
     @return a string that stores the hexadecimal presentation. 
     */
-    static std::string toHexStr(const UInt32 num);
+    std::string toHexStr(const UInt32 num);
 
     /*
     Cycle shift left.
@@ -66,7 +86,7 @@ private:
     @param shiftCnt the shift count
     @return the number after shifted
     */
-    static UInt32 cycleShiftLeft(const UInt32 num, const UInt32 shiftCnt);
+    UInt32 cycleShiftLeft(const UInt32 num, const UInt32 shiftCnt);
 
 public:
     /*
