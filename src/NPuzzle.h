@@ -51,14 +51,40 @@ public:
     const std::vector<int>& getVal() const;
 
     /*
+    Return the heuristic value from the current node to the destination.
+
+    @param des the destination node
+    @return heuristic value from node n to the destination.
+    */
+    int getHeuristic(const NPuzzleNode *const des) const;
+
+    /*
     Get the adjacent node at the direction.
     Precondition: current node can move to the direction
 
     @param direc the direction
-    @return the adjacent node pointer (make sure to delete
-            because the pointer is allocated dynamically)
+    @return the adjacent node pointer (make sure to delete 
+            it because the pointer is allocated dynamically)
     */
-    NPuzzleNode* getAdjNode(const Direction &direc) const;
+    NPuzzleNode* getNeighbor(const Direction &direc) const;
+
+    /*
+    Get the adjacent node having the minimum heuristic value.
+
+    @param des the destination node
+    @param minDirec the minimum neighbor's direction will be stored in this field
+    @return the adjacent node pointer (make sure to delete
+            it because the pointer is allocated dynamically)
+    */
+    NPuzzleNode* getMinNeighbor(const NPuzzleNode *const des, Direction &minDirec) const;
+
+    /*
+    Get an adjacent node randomly
+
+    @return the adjacent node pointer (make sure to delete
+    it because the pointer is allocated dynamically)
+    */
+    NPuzzleNode* getRandNeighbor() const;
 
     /*
     Move the empty grid toward the direction
@@ -179,9 +205,16 @@ public:
     NPuzzle(const NPuzzleNode &src_, const NPuzzleNode &des_);
 
     /*
-    Calculate solution from node src to node des.
+    Solve the N-Puzzle problem using A* algorithm.
     */
-    void run();
+    void solveWithAStar();
+
+    /*
+    Solve the N-Puzzle problem using steepest hill climbing algorithm.
+
+    @return the local minimum heuristic value node
+    */
+    NPuzzleNode solveWithSteepestHillClimb();
 
     /*
     Get the solution path in direction form.
@@ -197,6 +230,12 @@ public:
     Get the total searched number.
     */
     int getSearchCount() const;
+
+    /*
+    Return the source or destination node.
+    */
+    const NPuzzleNode& getSrc() const;
+    const NPuzzleNode& getDes() const;
 
     /*
     Set the start node and end node
@@ -275,14 +314,6 @@ private:
     bool searchDetailEnable = false;
 
     /*
-    Return the heuristic value from the current node to the destination.
-
-    @param n the current node
-    @return heuristic value from node n to the goal.
-    */
-    int getHeuristic(const NPuzzleNode *const n) const;
-
-    /*
     Print the information of the current searching node.
     */
     void printSearchInfo(const NPuzzleNode *const cur) const;
@@ -301,6 +332,16 @@ private:
     Free the resources using in searching.
     */
     void freeResources();
+
+    /*
+    Test steepest hill climbing algorithm.
+    */
+    static void testSteepestHillClimb(NPuzzle &puzzle, const int caseCnt);
+
+    /*
+    Test A* algorithm.
+    */
+    static void testAStar(NPuzzle &puzzle);
 
 public:
     /*

@@ -27,7 +27,7 @@ void test() {
     //Random::test();
     //ArithmeticExpression::test();
     //MD5::test();
-    //NPuzzle::test();
+    NPuzzle::test();
     //NQueen::test();
     //Algorithm::test();
     //AlgorithmGraph::test();

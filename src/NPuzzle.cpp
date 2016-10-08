@@ -16,10 +16,6 @@ using sl::Direction;
 using sl::Timer;
 using sl::Algorithm;
 
-/*
-N-Puzzle node definition.
-*/
-
 NPuzzleNode::~NPuzzleNode() {
 }
 
@@ -96,10 +92,45 @@ bool NPuzzleNode::canMove(const Direction &direc) const {
     }
 }
 
-NPuzzleNode* NPuzzleNode::getAdjNode(const Direction &direc) const {
+NPuzzleNode* NPuzzleNode::getNeighbor(const Direction &direc) const {
     NPuzzleNode* n = new NPuzzleNode(*this);
     n->move(direc);
     return n;
+}
+
+NPuzzleNode* NPuzzleNode::getMinNeighbor(const NPuzzleNode *const des,
+                                         Direction &minDirec) const {
+    vector<NPuzzleNode*> neighbors;
+    int min = 2147483647;
+    for (int i = 1; i <= 4; ++i) {
+        auto direc = static_cast<Direction>(i);
+        if (canMove(direc)) {
+            NPuzzleNode *tmp = getNeighbor(direc);
+            neighbors.push_back(tmp);
+            auto h = tmp->getHeuristic(des);
+            if (h < min) {
+                min = h;
+                minDirec = direc;
+            }
+        } else {
+            neighbors.push_back(nullptr);
+        }
+    }
+    for (int i = 0; i < 4; ++i) {
+        if (i != minDirec - 1) {
+            delete neighbors[i];
+            neighbors[i] = nullptr;
+        }
+    }
+    return neighbors[minDirec - 1];
+}
+
+NPuzzleNode* NPuzzleNode::getRandNeighbor() const {
+    Direction direc;
+    do {
+        direc = static_cast<Direction>(Random::getInstance()->randLib(1, 4));
+    } while (!canMove(direc));
+    return getNeighbor(direc);
 }
 
 int NPuzzleNode::getRow(const int &i) const {
@@ -199,11 +230,6 @@ Direction NPuzzleNode::getDirection() const {
     return direc;
 }
 
-
-/*
-N-Puzzle algorithm definition
-*/
-
 NPuzzle::NPuzzle(const NPuzzleNode &src_, const NPuzzleNode &des_)
     : src(src_), des(des_), closeList(1000000, [](const NPuzzleNode *const &x) { return x->hash(); }) {
 }
@@ -221,6 +247,14 @@ const std::list<NPuzzleNode>& NPuzzle::getNodePath() const {
 
 int NPuzzle::getSearchCount() const {
     return searchedCnt;
+}
+
+const NPuzzleNode& NPuzzle::getSrc() const {
+    return src;
+}
+
+const NPuzzleNode& NPuzzle::getDes() const {
+    return des;
 }
 
 void NPuzzle::setStartNode(const NPuzzleNode &n) {
@@ -249,7 +283,7 @@ void NPuzzle::setSearchDetailEnable(const bool e) {
     searchDetailEnable = e;
 }
 
-void NPuzzle::run() {
+void NPuzzle::solveWithAStar() {
     searchedCnt = 0;
     openList.push(&src);
     while (!openList.empty()) {
@@ -284,13 +318,13 @@ void NPuzzle::run() {
         for (int i = 1; i <= 4; ++i) {  // Traverse adj
             Direction d = Direction(i);
             if (cur->canMove(d)) {
-                NPuzzleNode *adj = cur->getAdjNode(d);
+                NPuzzleNode *adj = cur->getNeighbor(d);
                 alloc.push_back(adj);
                 if (!isVisit(adj)) {
                     adj->setParent(cur);
                     adj->setDirection(d);
                     adj->setG(cur->getG() + 1);
-                    adj->setH(getHeuristic(adj));
+                    adj->setH(adj->getHeuristic(&des));
                     openList.push(adj);
                 }
             }
@@ -298,13 +332,22 @@ void NPuzzle::run() {
     }
 }
 
-void NPuzzle::freeResources() {
-    for (NPuzzleNode *n : alloc) {
-        delete n;
+NPuzzleNode NPuzzle::solveWithSteepestHillClimb() {
+    NPuzzleNode *cur = &src;
+    while (1) {
+        Direction direc = NONE;
+        NPuzzleNode *next = cur->getMinNeighbor(&des, direc);
+        alloc.push_back(next);
+        if (next->getHeuristic(&des) >= cur->getHeuristic(&des)) {
+            constructPath(cur);
+            auto node = *cur;
+            freeResources();
+            return node;
+        }
+        next->setParent(cur);
+        next->setDirection(direc);
+        cur = next;
     }
-    alloc.clear();
-    openList.clear();
-    closeList.clear();
 }
 
 void NPuzzle::constructPath(const NPuzzleNode *n) {
@@ -321,23 +364,23 @@ void NPuzzle::constructPath(const NPuzzleNode *n) {
     }
 }
 
+void NPuzzle::freeResources() {
+    for (NPuzzleNode *n : alloc) {
+        delete n;
+    }
+    alloc.clear();
+    openList.clear();
+    closeList.clear();
+}
+
 bool NPuzzle::isVisit(NPuzzleNode *const n) const {
     return closeList.has(n);
     //return closeList.find(n) != closeList.end();  // STL version
 }
 
-int NPuzzle::getHeuristic(const NPuzzleNode *const n) const {
-    const auto &val = n->getVal();
-    const auto &desVal = des.getVal();
-    const auto &size = n->getSize();
-
-    // Number of nodes whose next node is in a wrong position
-    int wrongNext = 0;
-    for (int i = 0; i < size - 1; i++) {
-        if (val[i] + 1 != val[i + 1]) {
-            wrongNext++;
-        }
-    }
+int NPuzzleNode::getHeuristic(const NPuzzleNode *const des) const {
+    const auto &desVal = des->getVal();
+    const auto &size = getSize();
 
     // Number of nodes which are in a wrong position
     int wrong = 0;
@@ -351,10 +394,10 @@ int NPuzzle::getHeuristic(const NPuzzleNode *const n) const {
     int manhatten = 0, geometric = 0;
     for (int i = 0; i < size; ++i) {
         if (val[i]) {  // Escape value 0
-            int curR = n->getRow(i);
-            int curC = n->getCol(i);
-            int desR = n->getRow(val[i] - 1);
-            int desC = n->getCol(val[i] - 1);
+            int curR = getRow(i);
+            int curC = getCol(i);
+            int desR = getRow(val[i] - 1);
+            int desC = getCol(val[i] - 1);
             int dR = curR > desR ? curR - desR : desR - curR;
             int dC = curC > desC ? curC - desC : desC - curC;
             manhatten += dR + dC;
@@ -362,31 +405,35 @@ int NPuzzle::getHeuristic(const NPuzzleNode *const n) const {
         }
     }
 
-    return 5 * (1 * wrongNext + 0 * wrong + 2 * manhatten + 1 * geometric);
+    return 1 * (0 * wrong + 1 * manhatten + 0 * geometric);
 }
 
 void NPuzzle::test() {
     printf("Test N-Puzzle:\n\n");
 
-    // 3*3
-    //NPuzzleNode src({5, 1, 7, 4, 3, 6, 0, 2, 8}, 3, 3);
-    //NPuzzleNode des({1, 2, 3, 4, 5, 6, 7, 8, 0}, 3, 3);
+#define ORDER 3
 
-    // 4*4
-    //NPuzzleNode src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15}, 4, 4);
-    //NPuzzleNode des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0}, 4, 4);
+#if ORDER == 2  // 2*2
 
-    // 4*5
-    //NPuzzleNode src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 0, 19}, 4, 5);
-    //NPuzzleNode des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 0}, 4, 5);
+    NPuzzleNode src({1, 2, 0, 3}, 2, 2);
+    NPuzzleNode des({1, 2, 3, 0}, 2, 2);
 
-    // 5*4
-    //NPuzzleNode src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 0, 19}, 5, 4);
-    //NPuzzleNode des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 0}, 5, 4);
+#elif ORDER == 3  // 3*3
 
-    // 5*5
+    NPuzzleNode src({1, 2, 3, 4, 5, 6, 7, 0, 8}, 3, 3);
+    NPuzzleNode des({1, 2, 3, 4, 5, 6, 7, 8, 0}, 3, 3);
+
+#elif ORDER == 4  // 4*4
+
+    NPuzzleNode src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15}, 4, 4);
+    NPuzzleNode des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0}, 4, 4);
+
+#elif ORDER == 5  // 5*5
+
     NPuzzleNode src({14, 0, 24, 13, 23, 21, 20, 22, 18, 11, 6, 1, 16, 3, 10, 7, 17, 4, 8, 2, 9, 15, 19, 5, 12}, 5, 5);
     NPuzzleNode des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0}, 5, 5);
+
+#endif
 
     // Rearrage
     src.shuffle();
@@ -397,18 +444,65 @@ void NPuzzle::test() {
     puzzle.setDirecPathEnable(true);
     puzzle.setNodePathEnable(false);
 
-    // Run
-    printf("Searching...\n");
+    const int caseCnt = 500;
+    testSteepestHillClimb(puzzle, caseCnt);
+    testAStar(puzzle);
+}
+
+void NPuzzle::testSteepestHillClimb(NPuzzle &puzzle, const int caseCnt) {
+    NPuzzleNode src = puzzle.getSrc();
+    NPuzzleNode des = puzzle.getDes();
+
     Timer timer;
-    puzzle.run();
+    double time = 0;
+    int sucCnt = 0;
+    auto pathDirec = puzzle.getDirectionPath();
+    auto pathNode = puzzle.getNodePath();
 
-    // Get result
+    printf("Compute using steepest hill climbing...\n");
+    for (int i = 0; i < caseCnt; ++i) {
+        timer.reset();
+        auto tmp = puzzle.solveWithSteepestHillClimb();
+        time += timer.elapse();
+        if (tmp == des) {
+            pathDirec = puzzle.getDirectionPath();
+            pathNode = puzzle.getNodePath();
+            ++sucCnt;
+        }
+    }
+
+    printf("Compute finished.\n");
+    printf(" Begin node: %s\n", src.toString().c_str());
+    printf("   End node: %s\n", des.toString().c_str());
+    printf("Case amount: %d\n", caseCnt);
+    printf("Success rate: %.2lf%%\n", 100 * (double)sucCnt / caseCnt);
+    printf("Average time elapse: %.3lf ms\n", time / caseCnt);
+    printf("Path length: %d\n", (int)pathDirec.size());
+    for (const auto &d : pathDirec) {
+        src.move(d);
+    }
+    printf("Path correctness check: %s\n", src == des ? "pass" : "failed");
+    printf("Path of directions:\n");
+    int cnt = 0;
+    for (const auto &d : pathDirec) {
+        if (cnt++) printf(",");
+        printf("%d", d);
+    }
+    printf("\n\n");
+}
+
+void NPuzzle::testAStar(NPuzzle &puzzle) {
+    NPuzzleNode src = puzzle.getSrc();
+    NPuzzleNode des = puzzle.getDes();
+
+    printf("Compute using A* searching...\n");
+    Timer timer;
+    puzzle.solveWithAStar();
     auto time = timer.elapse();
-    const auto &pathDirec = puzzle.getDirectionPath();
-    const auto &pathNode = puzzle.getNodePath();
+    auto pathDirec = puzzle.getDirectionPath();
+    auto pathNode = puzzle.getNodePath();
 
-    // Print result
-    printf("\nSearching finished.\n");
+    printf("Compute finished.\n");
     printf(" Begin node: %s\n", src.toString().c_str());
     printf("   End node: %s\n", des.toString().c_str());
     printf("Time elapse: %.3lf ms\n", time);
