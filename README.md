@@ -22,7 +22,7 @@ A library containing some data structures and algorithms written in c/c++.
 |[Arithmetic Expression](https://en.wikipedia.org/wiki/Shunting-yard_algorithm)|[ArithmeticExpression.h](./src/ArithmeticExpression.h) [ArithmeticExpression.cpp](./src/ArithmeticExpression.cpp)|arithemetic expression calculation|
 |[MD5](https://en.wikipedia.org/wiki/MD5) [MD5(CN)](http://baike.baidu.com/link?url=bO26fMBDaRRQZkoObKjuCAHRLG_JkvfvCOVWdBfXZhiiwqLvUHfFRJaBHg9xLDwPf5iXAWafVgy7BxjSFCQDaa)|[MD5.h](./src/MD5.h) [MD5.cpp](./src/MD5.cpp)|message encrypt|
 |[N-Puzzle Problem](https://en.wikipedia.org/wiki/15_puzzle)|[NPuzzle.h](./src/NPuzzle.h) [NPuzzle.cpp](./src/NPuzzle.cpp)|[GUI demo](https://github.com/stevennL/NPuzzle-AI); [中文博客](http://blog.csdn.net/qq_22885773/article/details/52144827)|
-|[N-Queens Problem](https://en.wikipedia.org/wiki/Eight_queens_puzzle)|[NQueen.h](./src/NQueen.h) [NQueen.cpp](./src/NQueen.cpp)|solve using [hill climbing algorithm](https://en.wikipedia.org/wiki/Hill_climbing)|
+|[N-Queens Problem](https://en.wikipedia.org/wiki/Eight_queens_puzzle)|[NQueen.h](./src/NQueen.h) [NQueen.cpp](./src/NQueen.cpp)|solve using [hill climbing](https://en.wikipedia.org/wiki/Hill_climbing) and [simulated annealing](https://en.wikipedia.org/wiki/Simulated_annealing) algorithm|
 |[Factorial](https://en.wikipedia.org/wiki/Factorial)|[Algorithm::factorial()](./src/Algorithm.cpp)|20! is max (return unsigned long long)|
 |[Binary Search](https://en.wikipedia.org/wiki/Binary_search_algorithm)|[Algorithm::binarySearch()](./src/Algorithm.cpp)|find first or last appeared position|
 |[Permutation](https://en.wikipedia.org/wiki/Permutation)|[Algorithm::nextPermutation()](./src/Algorithm.cpp)|non-recursive version|

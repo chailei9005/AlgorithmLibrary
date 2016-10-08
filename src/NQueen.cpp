@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <stdexcept>
 #include <sstream>
+#include <cmath>
 
 using std::string;
 using std::vector;
@@ -31,8 +32,8 @@ void NQueenNode::checkValid(const std::vector<int> &val_) const {
     }
 }
 
-unsigned NQueenNode::conflictCount() const {
-    unsigned cnt = 0;
+int NQueenNode::conflictCount() const {
+    int cnt = 0;
     for (auto i = 0; i < size; ++i) {
         for (auto j = i + 1; j < size; ++j) {
             if (val[i] != -1 && val[j] != -1 && hasConflict(i, j)) {
@@ -51,7 +52,7 @@ bool NQueenNode::hasConflict(const int row1, const int row2) const {
 
 NQueenNode NQueenNode::getMinConflictNeighbor() const {
     NQueenNode res = *this, tmp = *this;
-    unsigned min = conflictCount();
+    auto min = conflictCount();
     for (auto row = 0; row < size; ++row) {
         for (auto col = 0; col < size; ++col) {
             if (col != val[row]) {
@@ -157,26 +158,26 @@ void NQueen::enumerate(NQueenNode &node, const int row, vector<NQueenNode> &res)
 }
 
 NQueenNode NQueen::solveWithSteepestHillClimb(const NQueenNode &start) {
-    NQueenNode cur = start;
+    auto cur = start;
     while (1) {
-        auto min = cur.getMinConflictNeighbor();
-        if (min.conflictCount() >= cur.conflictCount()) {
-            return cur;
+        auto next = cur.getMinConflictNeighbor();
+        if (next.conflictCount() >= cur.conflictCount()) {
+            return next;
         }
-        cur = min;
+        cur = next;
     }
 }
 
 NQueenNode NQueen::solveWithFirstChoiceHillClimb(const NQueenNode &start) {
     auto size = start.getSize();
-    NQueenNode cur = start;
+    auto cur = start;
     while (1) {
         int cnt = 0;
         auto curConflict = cur.conflictCount();
         while (1) {
-            auto min = cur.getRandNeighbor();
-            if (min.conflictCount() < curConflict) {
-                cur = min;
+            auto next = cur.getRandNeighbor();
+            if (next.conflictCount() < curConflict) {
+                cur = next;
                 break;
             }
             if (++cnt >= size * size * 2) {  // Maximum iterate times
@@ -199,6 +200,28 @@ NQueenNode NQueen::solveWithRandRestartHillClimb(const int n) {
     }
 }
 
+NQueenNode NQueen::solveWithSA(const NQueenNode &start) {
+    auto cur = start;
+    double temperature = 50;
+    while (1) {
+        temperature *= 0.95;
+        if (temperature < 1e-9) {
+            return cur;
+        }
+        auto next = cur.getRandNeighbor();
+        int delta = next.conflictCount() - cur.conflictCount();
+        if (delta < 0) {
+            cur = next;
+        } else {
+            double p = exp(-delta / temperature);
+            double num = Random::getInstance()->randLib(1, 100);
+            if (num <= 100 * p) {
+                cur = next;
+            }
+        }
+    }
+}
+
 void NQueen::test() {
     printf("Test N-Queen:\n\n");
 
@@ -211,12 +234,12 @@ void NQueen::test() {
 
     const int caseCnt = 500;
     Timer timer;
-    NQueenNode resNode(vector<int>(n, -1));
 
     // Steepest hill climbing
     printf("\nCompute using steepest hill climbing...\n");
     double time = 0;
     int sucCnt = 0;
+    NQueenNode resNode = vector<int>(n, -1);
     for (int i = 0; i < caseCnt; ++i) {
         timer.reset();
         auto tmp = NQueen::solveWithSteepestHillClimb(NQueenNode::getRandNode(n));
@@ -236,6 +259,7 @@ void NQueen::test() {
     // First choice hill climbing
     printf("\nCompute using first choice hill climbing...\n");
     time = sucCnt = 0;
+    resNode = vector<int>(n, -1);
     for (int i = 0; i < caseCnt; ++i) {
         timer.reset();
         auto tmp = NQueen::solveWithFirstChoiceHillClimb(NQueenNode::getRandNode(n));
@@ -255,9 +279,30 @@ void NQueen::test() {
     // Random restart choice hill climbing
     printf("\nCompute using random restart hill climbing...\n");
     time = sucCnt = 0;
+    resNode = vector<int>(n, -1);
     for (int i = 0; i < caseCnt; ++i) {
         timer.reset();
         auto tmp = NQueen::solveWithRandRestartHillClimb(n);
+        time += timer.elapse();
+        if (tmp.conflictCount() == 0) {
+            resNode = tmp;
+            ++sucCnt;
+        }
+    }
+    printf("Compute finished.\n");
+    printf("Case amount: %d\n", caseCnt);
+    printf("Success rate: %.2lf%%\n", 100 * (double)sucCnt / caseCnt);
+    printf("Average time elapse: %.3lf ms\n", time / caseCnt);
+    printf("One solution: (conflict amount: %d)\n", resNode.conflictCount());
+    printf("%s\n%s\n", resNode.toPrettyString().c_str(), resNode.toString().c_str());
+
+    // Simulated annealing
+    printf("\nCompute using simulated annealing...\n");
+    time = sucCnt = 0;
+    resNode = vector<int>(n, -1);
+    for (int i = 0; i < caseCnt; ++i) {
+        timer.reset();
+        auto tmp = NQueen::solveWithSA(NQueenNode::getRandNode(n));
         time += timer.elapse();
         if (tmp.conflictCount() == 0) {
             resNode = tmp;

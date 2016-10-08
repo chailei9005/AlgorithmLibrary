@@ -29,7 +29,7 @@ public:
     /*
     Return the amount of conflict queens.
     */
-    unsigned conflictCount() const;
+    int conflictCount() const;
 
     /*
     Test if the queens in two rows collide with each other.
@@ -126,6 +126,14 @@ public:
     @return the solution node
     */
     static NQueenNode solveWithRandRestartHillClimb(const int n);
+
+    /*
+    Solve the N-Queen problem using simulated annealing algorithm.
+
+    @param start the initial node
+    @return the solution node
+    */
+    static NQueenNode solveWithSA(const NQueenNode &start);
 
 private:
     /*
