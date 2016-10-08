@@ -245,7 +245,7 @@ void NQueen::testWithCases(const int size, const int caseCnt,
     }
     printf("Compute finished.\n");
     printf(" Case amount: %d\n", caseCnt);
-    printf("Success rate: %.2lf%%\n", 100 * (double)sucCnt / caseCnt);
+    printf("Success rate: %.3lf%%\n", 100 * (double)sucCnt / caseCnt);
     printf("   Time cost: %.2lf ms/case\n", time / caseCnt);
     printf("One solution: (conflict amount: %d)\n", resNode.conflictCount());
     printf("%s\n%s\n", resNode.toPrettyString().c_str(), resNode.toString().c_str());
@@ -276,7 +276,7 @@ void NQueen::test() {
         return;
     }
 
-    const int caseCnt = 500;
+    const int caseCnt = 1000;
     testWithCases(n, caseCnt, [&]() { return NQueen::solveWithSteepestHillClimb(NQueenNode::getRandNode(n)); }, "steepest hill climbing");
     testWithCases(n, caseCnt, [&]() { return NQueen::solveWithFirstChoiceHillClimb(NQueenNode::getRandNode(n)); }, "first choice hill climbing");
     testWithCases(n, caseCnt, [&]() { return NQueen::solveWithRandRestartHillClimb(NQueenNode::getRandNode(n)); }, "random restart hill climbing");

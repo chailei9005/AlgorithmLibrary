@@ -513,7 +513,7 @@ void NPuzzle::testWithCases(NPuzzle &puzzle, const int caseCnt,
     printf("  Begin node: %s\n", src.toString().c_str());
     printf("    End node: %s\n", des.toString().c_str());
     printf(" Case amount: %d\n", caseCnt);
-    printf("Success rate: %.2lf%%\n", 100 * (double)sucCnt / caseCnt);
+    printf("Success rate: %.3lf%%\n", 100 * (double)sucCnt / caseCnt);
     printf("   Time cost: %.2lf ms/case\n\n", time / caseCnt);
 }
 
