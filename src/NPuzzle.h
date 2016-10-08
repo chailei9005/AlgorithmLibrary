@@ -72,11 +72,10 @@ public:
     Get the adjacent node having the minimum heuristic value.
 
     @param des the destination node
-    @param minDirec the minimum neighbor's direction will be stored in this field
     @return the adjacent node pointer (make sure to delete
             it because the pointer is allocated dynamically)
     */
-    NPuzzleNode* getMinNeighbor(const NPuzzleNode *const des, Direction &minDirec) const;
+    NPuzzleNode* getMinNeighbor(const NPuzzleNode *const des) const;
 
     /*
     Get an adjacent node randomly
@@ -217,6 +216,20 @@ public:
     NPuzzleNode solveWithSteepestHillClimb();
 
     /*
+    Solve the N-Puzzle problem using first choice hill climbing algorithm.
+
+    @return the local minimum heuristic value node
+    */
+    NPuzzleNode solveWithFirstChoicetHillClimb();
+
+    /*
+    Solve the N-Puzzle problem using simulated annealing algorithm.
+
+    @return the local minimum heuristic value node
+    */
+    NPuzzleNode solveWithSA();
+
+    /*
     Get the solution path in direction form.
     */
     const std::list<Direction>& getDirectionPath() const;
@@ -259,9 +272,7 @@ public:
     void setSearchDetailEnable(const bool e);
 
 private:
-    /*
-    Comparator for hash table
-    */
+    // Comparator for hash table
     struct cmpHashTable {
         bool operator()(const NPuzzleNode *const &a,
                         const NPuzzleNode *const &b) const {
@@ -269,17 +280,13 @@ private:
         }
     };
 
-    /*
-    Hash table declaration.
-    */
+    // Hash table declaration
     typedef HashTable<NPuzzleNode*, cmpHashTable> hash_table;
     //typedef std::unordered_set<NPuzzleNode*,
     //                           std::function<unsigned long long(const NPuzzleNode *const &)>,
     //                           cmpHashTable> hash_table;  // STL version
 
-    /*
-    Comparator for binary heap
-    */
+    // Comparator for binary heap
     struct cmpBinaryHeap {
         bool operator()(const NPuzzleNode *const &a,
                         const NPuzzleNode *const &b) const {
@@ -288,13 +295,12 @@ private:
         }
     };
 
-    /*
-    Min-root binary heap declaration.
-    */
+    // Min-root binary heap declaration
     typedef BinaryHeap<NPuzzleNode*, cmpBinaryHeap> min_heap;
-    //typedef std::priority_queue<NPuzzleNode*, std::vector<NPuzzleNode*>, cmpBinaryHeap> min_heap;  // STL version
+    //typedef std::priority_queue<NPuzzleNode*,
+    //                            std::vector<NPuzzleNode*>,
+    //                            cmpBinaryHeap> min_heap;  // STL version
 
-    // Start node and end node
     NPuzzleNode src;
     NPuzzleNode des;
 
@@ -334,9 +340,16 @@ private:
     void freeResources();
 
     /*
-    Test steepest hill climbing algorithm.
+    Test an algorithm running many cases.
+
+    @param puzzle the puzzle object
+    @param caseCnt the amount of case
+    @param f the algorithm function
+    @param info the name of the algorithm
     */
-    static void testSteepestHillClimb(NPuzzle &puzzle, const int caseCnt);
+    static void testWithCases(NPuzzle &puzzle, const int caseCnt,
+                              const std::function<NPuzzleNode(void)> &f,
+                              const std::string &info);
 
     /*
     Test A* algorithm.
