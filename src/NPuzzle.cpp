@@ -513,8 +513,8 @@ void NPuzzle::testWithCases(NPuzzle &puzzle, const int caseCnt,
     printf("  Begin node: %s\n", src.toString().c_str());
     printf("    End node: %s\n", des.toString().c_str());
     printf(" Case amount: %d\n", caseCnt);
-    printf("Success rate: %.3lf%%\n", 100 * (double)sucCnt / caseCnt);
-    printf("Average cost: %.3lf ms\n\n", time / caseCnt);
+    printf("Success rate: %.2lf%%\n", 100 * (double)sucCnt / caseCnt);
+    printf("   Time cost: %.2lf ms/case\n\n", time / caseCnt);
 }
 
 void NPuzzle::testAStar(NPuzzle &puzzle) {
@@ -527,11 +527,11 @@ void NPuzzle::testAStar(NPuzzle &puzzle) {
     auto pathDirec = puzzle.getDirectionPath();
     auto pathNode = puzzle.getNodePath();
     printf("Compute finished.\n");
-    printf("       Begin node: %s\n", src.toString().c_str());
-    printf("         End node: %s\n", des.toString().c_str());
-    printf("        Time cost: %.3lf ms\n", time);
-    printf("   Searched nodes: %d\n", puzzle.getSearchCount());
-    printf("Compute Efficency: %.3lf nodes/ms\n", puzzle.getSearchCount() / time);
+    printf("    Begin node: %s\n", src.toString().c_str());
+    printf("      End node: %s\n", des.toString().c_str());
+    printf("     Time cost: %.2lf ms\n", time);
+    printf("Searched nodes: %d\n", puzzle.getSearchCount());
+    printf("Search Efficency: %.2lf nodes/ms\n", puzzle.getSearchCount() / time);
     printf("Path length: %d\n", (int)pathDirec.size());
     for (const auto &d : pathDirec) {
         src.move(d);

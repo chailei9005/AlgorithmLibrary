@@ -3,6 +3,7 @@
 #include "Base.h"
 #include <vector>
 #include <string>
+#include <functional>
 
 NS_BEGIN
 
@@ -122,10 +123,10 @@ public:
     /*
     Solve the N-Queen problem using random restart hill climbing algorithm.
 
-    @param n the amount of queens
+    @param start the initial node
     @return the solution node
     */
-    static NQueenNode solveWithRandRestartHillClimb(const int n);
+    static NQueenNode solveWithRandRestartHillClimb(const NQueenNode &start);
 
     /*
     Solve the N-Queen problem using simulated annealing algorithm.
@@ -145,6 +146,26 @@ private:
     @return true if one solution is found, false otherwise
     */
     static bool enumerate(NQueenNode &node, const int row, std::vector<NQueenNode> &res);
+
+    /*
+    Test an algorithm running many cases.
+
+    @param size the amount of queens
+    @param caseCnt the amount of case
+    @param f the algorithm function
+    @param info the name of the algorithm
+    */
+    static void testWithCases(const int size,
+                              const int caseCnt,
+                              const std::function<NQueenNode (void)> &f,
+                              const std::string &info);
+
+    /*
+    Test enumeration algorithm.
+
+    @param size the amount of queens
+    */
+    static void testEnumeration(const int size);
 
 public:
     /*

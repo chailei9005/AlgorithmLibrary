@@ -190,10 +190,11 @@ NQueenNode NQueen::solveWithFirstChoiceHillClimb(const NQueenNode &start) {
     }
 }
 
-NQueenNode NQueen::solveWithRandRestartHillClimb(const int n) {
+NQueenNode NQueen::solveWithRandRestartHillClimb(const NQueenNode &start) {
+    auto size = start.getSize();
     int cnt = 0;
     while (1) {
-        auto res = NQueen::solveWithSteepestHillClimb(NQueenNode::getRandNode(n));
+        auto res = NQueen::solveWithSteepestHillClimb(NQueenNode::getRandNode(size));
         if (res.conflictCount() == 0) {
             return res;
         }
@@ -225,9 +226,49 @@ NQueenNode NQueen::solveWithSA(const NQueenNode &start) {
     }
 }
 
+void NQueen::testWithCases(const int size, const int caseCnt,
+                           const std::function<NQueenNode(void)> &f,
+                           const std::string &info) {
+    Timer timer;
+    printf("\nCompute using %s...\n", info.c_str());
+    double time = 0;
+    int sucCnt = 0;
+    NQueenNode resNode = vector<int>(size, -1);
+    for (int i = 0; i < caseCnt; ++i) {
+        timer.reset();
+        auto tmp = f();
+        time += timer.elapse();
+        if (tmp.conflictCount() == 0) {
+            resNode = tmp;
+            ++sucCnt;
+        }
+    }
+    printf("Compute finished.\n");
+    printf(" Case amount: %d\n", caseCnt);
+    printf("Success rate: %.2lf%%\n", 100 * (double)sucCnt / caseCnt);
+    printf("   Time cost: %.2lf ms/case\n", time / caseCnt);
+    printf("One solution: (conflict amount: %d)\n", resNode.conflictCount());
+    printf("%s\n%s\n", resNode.toPrettyString().c_str(), resNode.toString().c_str());
+}
+
+void NQueen::testEnumeration(const int size) {
+    printf("\nCompute using enumeration...\n");
+    vector<NQueenNode> resList;
+    Timer timer;
+    NQueen::solveWithEnumeration(size, resList);
+    auto time = timer.elapse();
+    printf("Compute finished.\n");
+    printf("Time cost: %.2lf ms\n", time);
+    printf("Solution amount: %d\n", (int)resList.size());
+    printf("One solution:");
+    for (unsigned i = 0; i < 1; ++i) {  // Only print one solutions
+        printf("\nAnswer #%d: (conflict amount: %d)\n", i + 1, resList[i].conflictCount());
+        printf("%s\n%s\n", resList[i].toPrettyString().c_str(), resList[i].toString().c_str());
+    }
+}
+
 void NQueen::test() {
     printf("Test N-Queen:\n\n");
-
     int n;
     printf("Input queens amount n(n>=4): ");
     if (scanf("%d", &n) != 1 || n < 4) {
@@ -236,101 +277,9 @@ void NQueen::test() {
     }
 
     const int caseCnt = 500;
-    Timer timer;
-
-    // Steepest hill climbing
-    printf("\nCompute using steepest hill climbing...\n");
-    double time = 0;
-    int sucCnt = 0;
-    NQueenNode resNode = vector<int>(n, -1);
-    for (int i = 0; i < caseCnt; ++i) {
-        timer.reset();
-        auto tmp = NQueen::solveWithSteepestHillClimb(NQueenNode::getRandNode(n));
-        time += timer.elapse();
-        if (tmp.conflictCount() == 0) {
-            resNode = tmp;
-            ++sucCnt;
-        }
-    }
-    printf("Compute finished.\n");
-    printf("Case amount: %d\n", caseCnt);
-    printf("Success rate: %.2lf%%\n", 100 * (double)sucCnt / caseCnt);
-    printf("Average time elapse: %.3lf ms\n", time / caseCnt);
-    printf("One solution: (conflict amount: %d)\n", resNode.conflictCount());
-    printf("%s\n%s\n", resNode.toPrettyString().c_str(), resNode.toString().c_str());
-
-    // First choice hill climbing
-    printf("\nCompute using first choice hill climbing...\n");
-    time = sucCnt = 0;
-    resNode = vector<int>(n, -1);
-    for (int i = 0; i < caseCnt; ++i) {
-        timer.reset();
-        auto tmp = NQueen::solveWithFirstChoiceHillClimb(NQueenNode::getRandNode(n));
-        time += timer.elapse();
-        if (tmp.conflictCount() == 0) {
-            resNode = tmp;
-            ++sucCnt;
-        }
-    }
-    printf("Compute finished.\n");
-    printf("Case amount: %d\n", caseCnt);
-    printf("Success rate: %.2lf%%\n", 100 * (double)sucCnt / caseCnt);
-    printf("Average time elapse: %.3lf ms\n", time / caseCnt);
-    printf("One solution: (conflict amount: %d)\n", resNode.conflictCount());
-    printf("%s\n%s\n", resNode.toPrettyString().c_str(), resNode.toString().c_str());
-
-    // Random restart choice hill climbing
-    printf("\nCompute using random restart hill climbing...\n");
-    time = sucCnt = 0;
-    resNode = vector<int>(n, -1);
-    for (int i = 0; i < caseCnt; ++i) {
-        timer.reset();
-        auto tmp = NQueen::solveWithRandRestartHillClimb(n);
-        time += timer.elapse();
-        if (tmp.conflictCount() == 0) {
-            resNode = tmp;
-            ++sucCnt;
-        }
-    }
-    printf("Compute finished.\n");
-    printf("Case amount: %d\n", caseCnt);
-    printf("Success rate: %.2lf%%\n", 100 * (double)sucCnt / caseCnt);
-    printf("Average time elapse: %.3lf ms\n", time / caseCnt);
-    printf("One solution: (conflict amount: %d)\n", resNode.conflictCount());
-    printf("%s\n%s\n", resNode.toPrettyString().c_str(), resNode.toString().c_str());
-
-    // Simulated annealing
-    printf("\nCompute using simulated annealing...\n");
-    time = sucCnt = 0;
-    resNode = vector<int>(n, -1);
-    for (int i = 0; i < caseCnt; ++i) {
-        timer.reset();
-        auto tmp = NQueen::solveWithSA(NQueenNode::getRandNode(n));
-        time += timer.elapse();
-        if (tmp.conflictCount() == 0) {
-            resNode = tmp;
-            ++sucCnt;
-        }
-    }
-    printf("Compute finished.\n");
-    printf("Case amount: %d\n", caseCnt);
-    printf("Success rate: %.2lf%%\n", 100 * (double)sucCnt / caseCnt);
-    printf("Average time elapse: %.3lf ms\n", time / caseCnt);
-    printf("One solution: (conflict amount: %d)\n", resNode.conflictCount());
-    printf("%s\n%s\n", resNode.toPrettyString().c_str(), resNode.toString().c_str());
-
-    // Enumeration
-    printf("\nCompute using enumeration...\n");
-    vector<NQueenNode> resList;
-    timer.reset();
-    NQueen::solveWithEnumeration(n, resList);
-    time = timer.elapse();
-    printf("Compute finished.\n");
-    printf("Time elapse: %.3lf ms\n", time);
-    printf("Solution amount: %d\n", (int)resList.size());
-    printf("One solution:");
-    for (unsigned i = 0; i < 1; ++i) {  // Only print one solutions
-        printf("\nAnswer #%d: (conflict amount: %d)\n", i + 1, resList[i].conflictCount());
-        printf("%s\n%s\n", resList[i].toPrettyString().c_str(), resList[i].toString().c_str());
-    }
+    testWithCases(n, caseCnt, [&]() { return NQueen::solveWithSteepestHillClimb(NQueenNode::getRandNode(n)); }, "steepest hill climbing");
+    testWithCases(n, caseCnt, [&]() { return NQueen::solveWithFirstChoiceHillClimb(NQueenNode::getRandNode(n)); }, "first choice hill climbing");
+    testWithCases(n, caseCnt, [&]() { return NQueen::solveWithRandRestartHillClimb(NQueenNode::getRandNode(n)); }, "random restart hill climbing");
+    testWithCases(n, caseCnt, [&]() { return NQueen::solveWithSA(NQueenNode::getRandNode(n)); }, "simulated annealing");
+    testEnumeration(n);
 }
