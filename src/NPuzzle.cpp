@@ -228,11 +228,11 @@ Direction NPuzzleNode::getDirection() const {
     return direc;
 }
 
-NPuzzle::NPuzzle(const NPuzzleNode &src_, const NPuzzleNode &des_)
-    : src(src_), des(des_), closeList(1000000, [](const NPuzzleNode *const &x) { return x->hash(); }) {
+NPuzzle::~NPuzzle() {
 }
 
-NPuzzle::~NPuzzle() {
+NPuzzle::NPuzzle(const NPuzzleNode &src_, const NPuzzleNode &des_)
+    : src(src_), des(des_), closeList(1000000, [](const NPuzzleNode *const &x) { return x->hash(); }) {
 }
 
 const std::list<Direction>& NPuzzle::getDirectionPath() const {
@@ -247,20 +247,16 @@ int NPuzzle::getSearchCount() const {
     return searchedCnt;
 }
 
-const NPuzzleNode& NPuzzle::getSrc() const {
+const NPuzzleNode& NPuzzle::getStartNode() const {
     return src;
 }
 
-const NPuzzleNode& NPuzzle::getDes() const {
+const NPuzzleNode& NPuzzle::getEndNode() const {
     return des;
 }
 
 void NPuzzle::setStartNode(const NPuzzleNode &n) {
     src = n;
-}
-
-void NPuzzle::setEndNode(const NPuzzleNode &n) {
-    des = n;
 }
 
 void NPuzzle::printSearchInfo(const NPuzzleNode *const cur) const {
@@ -273,12 +269,13 @@ void NPuzzle::setNodePathEnable(const bool e) {
     nodePathEnable = e;
 }
 
-void NPuzzle::setDirecPathEnable(const bool e) {
-    direcPathEnable = e;
-}
-
 void NPuzzle::setSearchDetailEnable(const bool e) {
     searchDetailEnable = e;
+}
+
+void NPuzzle::shuffleStartNode() {
+    src = des;
+    src.shuffle();
 }
 
 void NPuzzle::solveWithAStar() {
@@ -397,9 +394,7 @@ void NPuzzle::constructPath(const NPuzzleNode *n) {
         if (nodePathEnable) {
             pathNode.push_front(*n);
         }
-        if (direcPathEnable) {
-            pathDirec.push_front(n->getDirection());
-        }
+        pathDirec.push_front(n->getDirection());
         n = n->getParent();
     }
 }
@@ -471,55 +466,53 @@ void NPuzzle::test() {
 
 #elif ORDER == 5  // 5*5
 
-    NPuzzleNode src({14, 0, 24, 13, 23, 21, 20, 22, 18, 11, 6, 1, 16, 3, 10, 7, 17, 4, 8, 2, 9, 15, 19, 5, 12}, 5, 5);
+    NPuzzleNode src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0, 24}, 5, 5);
     NPuzzleNode des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0}, 5, 5);
+
+#elif ORDER == 6  // 6*6
+
+    NPuzzleNode src({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 0}, 6, 6);
+    NPuzzleNode des({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 0}, 6, 6);
 
 #endif
 
-    // Rearrage
-    src.shuffle();
-
-    // Create a puzzle calculator
     NPuzzle puzzle(src, des);
     puzzle.setSearchDetailEnable(false);
-    puzzle.setDirecPathEnable(true);
     puzzle.setNodePathEnable(false);
 
     const int caseCnt = 1000;
-    testWithCases(puzzle, caseCnt, [&]() { return puzzle.solveWithSteepestHillClimb(); }, "steepest hill climbing");
-    testWithCases(puzzle, caseCnt, [&]() { return puzzle.solveWithFirstChoicetHillClimb(); }, "first choice hill climbing");
-    testWithCases(puzzle, caseCnt, [&]() { return puzzle.solveWithSA(); }, "simulated annealing");
+    testWithCases(puzzle, caseCnt, [](NPuzzle &p) { return p.solveWithSteepestHillClimb(); }, "steepest hill climbing");
+    testWithCases(puzzle, caseCnt, [](NPuzzle &p) { return p.solveWithFirstChoicetHillClimb(); }, "first choice hill climbing");
+    testWithCases(puzzle, caseCnt, [](NPuzzle &p) { return p.solveWithSA(); }, "simulated annealing");
     testAStar(puzzle);
 }
 
 void NPuzzle::testWithCases(NPuzzle &puzzle, const int caseCnt,
-                            const std::function<NPuzzleNode(void)> &f,
+                            const std::function<NPuzzleNode(NPuzzle &p)> &f,
                             const std::string &info) {
-    NPuzzleNode src = puzzle.getSrc();
-    NPuzzleNode des = puzzle.getDes();
     Timer timer;
     double time = 0;
     int sucCnt = 0;
     printf("Compute using %s...\n", info.c_str());
     for (int i = 0; i < caseCnt; ++i) {
+        puzzle.shuffleStartNode();
         timer.reset();
-        NPuzzleNode tmp = f();
+        NPuzzleNode res = f(puzzle);
         time += timer.elapse();
-        if (tmp == des) {
+        if (res == puzzle.getEndNode()) {
             ++sucCnt;
         }
     }
     printf("Compute finished.\n");
-    printf("  Begin node: %s\n", src.toString().c_str());
-    printf("    End node: %s\n", des.toString().c_str());
     printf(" Case amount: %d\n", caseCnt);
     printf("Success rate: %.3lf%%\n", 100 * (double)sucCnt / caseCnt);
     printf("   Time cost: %.2lf ms/case\n\n", time / caseCnt);
 }
 
 void NPuzzle::testAStar(NPuzzle &puzzle) {
-    NPuzzleNode src = puzzle.getSrc();
-    NPuzzleNode des = puzzle.getDes();
+    puzzle.shuffleStartNode();
+    NPuzzleNode src = puzzle.getStartNode();
+    NPuzzleNode des = puzzle.getEndNode();
     printf("Compute using A* searching...\n");
     Timer timer;
     puzzle.solveWithAStar();
@@ -543,13 +536,15 @@ void NPuzzle::testAStar(NPuzzle &puzzle) {
         if (cnt++) printf(",");
         printf("%d", d);
     }
-    printf("\nPath of nodes:\n");
-    int num = 53 / src.getSize();
-    cnt = 0;
-    for (const auto &d : pathNode) {
-        printf("->%s", d.toString().c_str());
-        if (++cnt % num == 0) {
-            printf("\n");
+    if (!pathNode.empty()) {
+        printf("\nPath of nodes:\n");
+        int num = 53 / src.getSize();
+        cnt = 0;
+        for (const auto &d : pathNode) {
+            printf("->%s", d.toString().c_str());
+            if (++cnt % num == 0) {
+                printf("\n");
+            }
         }
     }
     printf("\n");

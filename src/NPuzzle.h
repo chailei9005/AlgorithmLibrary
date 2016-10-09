@@ -245,16 +245,15 @@ public:
     int getSearchCount() const;
 
     /*
-    Return the source or destination node.
-    */
-    const NPuzzleNode& getSrc() const;
-    const NPuzzleNode& getDes() const;
-
-    /*
-    Set the start node and end node
+    Set the start node
     */
     void setStartNode(const NPuzzleNode &n);
-    void setEndNode(const NPuzzleNode &n);
+
+    /*
+    Get the start node and end node
+    */
+    const NPuzzleNode& getStartNode() const;
+    const NPuzzleNode& getEndNode() const;
 
     /*
     Set whether to construct result path represented by nodes.
@@ -262,14 +261,14 @@ public:
     void setNodePathEnable(const bool e);
 
     /*
-    Set whether to construct result path represented by directions.
-    */
-    void setDirecPathEnable(const bool e);
-
-    /*
     Set whether to show search details.
     */
     void setSearchDetailEnable(const bool e);
+
+    /*
+    Shuffle the start node.
+    */
+    void shuffleStartNode();
 
 private:
     // Comparator for hash table
@@ -316,7 +315,6 @@ private:
     unsigned searchedCnt = 0;
 
     bool nodePathEnable = false;
-    bool direcPathEnable = true;
     bool searchDetailEnable = false;
 
     /*
@@ -348,7 +346,7 @@ private:
     @param info the name of the algorithm
     */
     static void testWithCases(NPuzzle &puzzle, const int caseCnt,
-                              const std::function<NPuzzleNode(void)> &f,
+                              const std::function<NPuzzleNode(NPuzzle &p)> &f,
                               const std::string &info);
 
     /*
