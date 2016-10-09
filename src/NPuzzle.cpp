@@ -259,6 +259,10 @@ void NPuzzle::setStartNode(const NPuzzleNode &n) {
     src = n;
 }
 
+void NPuzzle::setEndNode(const NPuzzleNode &n) {
+    des = n;
+}
+
 void NPuzzle::printSearchInfo(const NPuzzleNode *const cur) const {
     printf("Searching: %s G:%d H:%d F:%d Total nodes: %d\n",
            cur->toString().c_str(), cur->getG(), cur->getH(),
@@ -290,7 +294,6 @@ void NPuzzle::solveWithAStar() {
             cur = openList.top();
             openList.pop();
         } while (!openList.empty() && isVisit(cur));
-
         // If all the nodes in the open list is in the
         // close list, then there is no available path
         // between the two nodes.
@@ -303,13 +306,11 @@ void NPuzzle::solveWithAStar() {
         if (searchDetailEnable) {
             printSearchInfo(cur);
         }
-
         if (*cur == des) {
             constructPath(cur);
             freeResources();
             return;
         }
-
         for (int i = 1; i <= 4; ++i) {
             Direction d = Direction(i);
             if (cur->canMove(d)) {

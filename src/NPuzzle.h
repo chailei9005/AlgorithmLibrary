@@ -245,13 +245,10 @@ public:
     int getSearchCount() const;
 
     /*
-    Set the start node
+    Set and get the start node and the end node
     */
     void setStartNode(const NPuzzleNode &n);
-
-    /*
-    Get the start node and end node
-    */
+    void setEndNode(const NPuzzleNode &n);
     const NPuzzleNode& getStartNode() const;
     const NPuzzleNode& getEndNode() const;
 
