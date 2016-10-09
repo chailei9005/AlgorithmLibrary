@@ -51,7 +51,7 @@ $ make
 $ make run
 ```
 
-main.cpp:
+[main.cpp](./src/main.cpp):
 
 ```c++
 #include "Base.h"
