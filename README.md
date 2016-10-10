@@ -2,7 +2,7 @@
 
 A library containing some data structures and algorithms written in c/c++.
 
-## Getting started
+## Getting Started
 
 Compile and run:
 
